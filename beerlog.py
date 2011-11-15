@@ -27,7 +27,7 @@ def require_auth(callback):
     return auth
 
 def connect_db():
-    connection = connectionForURI("%s:/%s" % (app.config['DB_DRIVER'], app.config['DB_NAME']))
+    connection = connectionForURI("%s:///%s" % (app.config['DB_DRIVER'], app.config['DB_NAME']))
     sqlhub.processConnection = connection
     return True
 
