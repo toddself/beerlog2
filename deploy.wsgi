@@ -1,4 +1,4 @@
-import os
+import os, sys
 os.environ['BEERLOG_SETTINGS'] = '/var/www_apps/beerlog/settings.cfg'
-os.environ['PYTHONPATH'] += '/var/www_apps/beerlog'
+sys.path.append('/www_apps/beerlog')
 from beerlog import app
