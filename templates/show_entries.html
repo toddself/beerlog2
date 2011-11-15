@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block body %}
+	{% if session.logged_in %}
+		<p><a href="add">Create Post</a>
+	{% endif %}
+	<ul class="entries">
+		{% for entry in entries %}
+			<li><h2>{{ entry.title }}</h2>{{ entry.body|safe }}<br>{{ entry.post_on }}</li>
+		{% else %}
+			<li><em>Unbelievable. No entries here so far</em></li>
+		{% endfor %}
+	</ul>
+{% endblock %}
+					

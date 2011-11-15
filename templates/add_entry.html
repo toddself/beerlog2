@@ -1,0 +1,23 @@
+{% from "_formhelper.html" import render_field %}
+{% extends "layout.html" %}
+{% block body %}
+	<form id="postform" action="{{ url_for('add_entry') }}" method="post" class="add-entry">
+		<dl>
+			{{ render_field(form.title) }}
+			<dt>Body
+			<dd><div id=editor data-dojo-type="dijit.Editor" style="width:450px;min-height:100px;" data-dojo-props="extraPlugins:['foreColor','hiliteColor','|','createLink','insertImage','fullscreen','viewsource','newpage']"></div>			
+			{{ render_field(form.post) }}
+			{{ render_field(form.post_on) }}	
+		</dl>
+		<p><input type=button value="Create Post" onclick="submitform();">
+		<script>
+			function submitform(){
+				var e = dijit.byId('editor');
+				var p = document.getElementById('post');
+				p.value = e.getValue();
+				var f = document.getElementById('postform');
+				f.submit();
+			}
+		</script>
+	</form>
+{% endblock %}
