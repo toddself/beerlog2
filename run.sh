@@ -6,4 +6,4 @@ then
     CFG="settings.cfg"
 fi
 
-BEERLOG_SETTINGS=$CFG /usr/bin/env python flaskr.py
+BEERLOG_SETTINGS=$CFG /usr/bin/env python beerlog.py
