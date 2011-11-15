@@ -103,7 +103,7 @@ class BeerlogTestCase(unittest.TestCase):
         rv = self.make_good_post()
         assert "this is a good post" in rv.data
         rv = self.make_bad_post_date()
-        assert "Please input a date/time value" in rv.data
+        assert "%Y-%m-%d %H:%M" in rv.data
         
         
 
