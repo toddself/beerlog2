@@ -6,7 +6,7 @@ import os
 from datetime import datetime
 from functools import wraps
 
-from flask import Flask, request, session, g, redirect, url_for, abort, \
+from flask import Flask, request, session, redirect, url_for, \
     render_template, flash
 from sqlobject import connectionForURI, sqlhub, AND
 
@@ -27,7 +27,7 @@ def require_auth(callback):
     return auth
 
 def connect_db():
-    connection = connectionForURI("%s:///%s" % (app.config['DB_DRIVER'], app.config['DB_NAME']))
+    connection = connectionForURI("%s:%s" % (app.config['DB_DRIVER'], app.config['DB_NAME']))
     sqlhub.processConnection = connection
     return True
 
@@ -67,7 +67,7 @@ def add_entry():
         flash("New entry was sucessfully added")
         return redirect(url_for('show_entries'))
     else:
-        return render_template('add_entry.html', form=post)
+        return render_template('add_entry.html', data={'form': post, 'date': datetime.now()})
 
 @require_auth
 @app.route('/admin')

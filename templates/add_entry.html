@@ -1,23 +1,69 @@
 {% from "_formhelper.html" import render_field %}
 {% extends "layout.html" %}
 {% block body %}
+	<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6.0/dojo/dojo.xd.js" data-dojo-config="isDebug: true,parseOnLoad: true"></script>
+	<script type="text/javascript">
+	    dojo.require("dijit.form.TimeTextBox");
+	    dojo.require("dijit.form.DateTextBox");
+		dojo.require("dijit.Editor");
+		dojo.require("dijit._editor.plugins.TextColor");
+		dojo.require("dijit._editor.plugins.LinkDialog");
+		dojo.require("dijit._editor.plugins.FullScreen");
+		dojo.require("dijit._editor.plugins.ViewSource");
+		dojo.require("dijit._editor.plugins.NewPage");
+
+	    dojo.addOnLoad(function() {
+	        new dijit.form.TimeTextBox({
+	            name: "prog_val",
+	            value: new Date(),
+	            constraints: {
+	                timePattern: 'HH:mm',
+	                clickableIncrement: 'T00:15:00',
+	                visibleIncrement: 'T00:15:00',
+	                visibleRange: 'T01:00:00'
+	            }
+	        },
+	        "time_post_on");
+	    });
+	
+		function format_dates(time, date){
+			var hours = time.getHours() >= 10 ? time.getHours() : "0" + time.getHours();
+			var minutes = time.getMinutes() >= 10 ? time.getMinutes() : "0" + time.getMinutes();
+			var year = date.getFullYear();
+			var month = date.getMonth() >= 10 ? date.getMonth() : "0" + date.getMonth();
+			var day = date.getDay() >= 10 ? date.getDay() : "0" + date.getDay();
+			return year+"-"+month+"-"+day+" "+hours+":"+minutes;
+		}
+
+		function submitform(){
+			var e = dijit.byId('editor');
+			var p = document.getElementById('post');
+			p.value = e.get('value');
+		
+			var t = dijit.byId('time_post_on').get('value');
+			var d = dijit.byId('date_post_on').get('value');
+			
+			var po = document.getElementById('post_on')
+			po.value = format_dates(t,d);
+		
+			var f = document.getElementById('postform');
+			f.submit();
+		}
+
+	</script>
+
 	<form id="postform" action="{{ url_for('add_entry') }}" method="post" class="add-entry">
 		<dl>
-			{{ render_field(form.title) }}
+			{{ render_field(data.form.title) }}
 			<dt>Body
-			<dd><div id=editor data-dojo-type="dijit.Editor" style="width:450px;min-height:100px;" data-dojo-props="extraPlugins:['foreColor','hiliteColor','|','createLink','insertImage','fullscreen','viewsource','newpage']"></div>			
-			{{ render_field(form.post) }}
-			{{ render_field(form.post_on) }}	
+			<dd><div id="editor" data-dojo-type="dijit.Editor" style="width:450px;min-height:100px;" data-dojo-props="extraPlugins:['foreColor','hiliteColor','|','createLink','insertImage','fullscreen']"></div>			
+			<dt>Time/Date
+			<dd><input id="time_post_on" value="{{ data.date.strftime("%H:%M") }}">
+				<input type="text" name="date_post_on" id="date_post_on" value="{{ data.date.strftime("%Y-%m-%d")}}" dojoType="dijit.form.DateTextBox" required="true" />
+			{{ render_field(data.form.post) }}
+			{{ render_field(data.form.post_on) }}	
+			{{ render_field(data.form.is_draft) }}					
 		</dl>
 		<p><input type=button value="Create Post" onclick="submitform();">
-		<script>
-			function submitform(){
-				var e = dijit.byId('editor');
-				var p = document.getElementById('post');
-				p.value = e.getValue();
-				var f = document.getElementById('postform');
-				f.submit();
-			}
-		</script>
 	</form>
 {% endblock %}

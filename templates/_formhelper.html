@@ -1,5 +1,5 @@
 {% macro render_field(field) %}
-	{% if field.type == "HiddenField" %}
+	{% if field.widget.input_type == "hidden" %}
 		{{ field(**kwargs)|safe }}
 	{% else %}
 		<dt>{{ field.label }}

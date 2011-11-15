@@ -13,9 +13,9 @@ class Users(SQLObject):
     email = UnicodeCol(length=255)
     alias = UnicodeCol(length=255, default="")
     password = UnicodeCol(length=255, default="sdlfjskdfjskdfjsadf")
-    created_on = DateCol(default=datetime.now())
-    last_modified = DateCol(default=datetime.now())
-    last_login = DateCol(default=datetime.now())
+    created_on = DateTimeCol(default=datetime.now())
+    last_modified = DateTimeCol(default=datetime.now())
+    last_login = DateTimeCol(default=datetime.now())
     
     def set_pass(self, salt, password_value):
         password = hashlib.sha256("%s%s" % (salt, password_value)).hexdigest()
@@ -28,9 +28,9 @@ class Entry(SQLObject):
     title = UnicodeCol(length=255)
     body = UnicodeCol()
     tags = RelatedJoin('Tag')
-    post_on = DateCol(default=datetime.now())
-    created_on = DateCol(default=datetime.now())
-    last_modified = DateCol(default=datetime.now())
+    post_on = DateTimeCol(default=datetime.now())
+    created_on = DateTimeCol(default=datetime.now())
+    last_modified = DateTimeCol(default=datetime.now())
     draft = BoolCol(default=False)
     author = ForeignKey('Users')
 
