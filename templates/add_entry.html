@@ -56,7 +56,7 @@
 		<dl>
 			{{ render_field(data.form.title) }}
 			<dt>Body
-			<dd><div id="editor" data-dojo-type="dijit.Editor" style="width:450px;min-height:100px;" data-dojo-props="extraPlugins:['foreColor','hiliteColor','|','createLink','insertImage','fullscreen']"></div>			
+			<dd><div id="editor" data-dojo-type="dijit.Editor" style="width:450px;min-height:100px;" data-dojo-props="extraPlugins:['insertImage','fullscreen']"></div>			
 			<dt>Time/Date
 			<dd><input id="time_post_on" value="{{ data.date.strftime("%H:%M") }}">
 				<input type="text" name="date_post_on" id="date_post_on" value="{{ data.date.strftime("%Y-%m-%d")}}" dojoType="dijit.form.DateTextBox" required="true" />

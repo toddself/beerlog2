@@ -15,6 +15,9 @@ from forms import PostForm
 
 app = Flask(__name__)
 app.config.from_envvar('BEERLOG_SETTINGS')
+if app.config['DB_DRIVER'] == 'sqlite':
+    app.config['DB_NAME'] = os.path.join(os.getcwd(), app.config['DB_NAME'])
+    app.config['DB_PROTOCOL'] = '://'
 
 def require_auth(callback):
     @wraps(callback)
@@ -27,7 +30,7 @@ def require_auth(callback):
     return auth
 
 def connect_db():
-    connection = connectionForURI("%s:%s" % (app.config['DB_DRIVER'], app.config['DB_NAME']))
+    connection = connectionForURI("%s%s%s" % (app.config['DB_DRIVER'], app.config['DB_PROTOCOL'], app.config['DB_NAME']))
     sqlhub.processConnection = connection
     return True
 
