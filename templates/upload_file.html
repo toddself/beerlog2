@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>B(eer)Log</title>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css" />
+	</head>
+	<body>		
+		<div class="page">
+			<form method=post enctype="multipart/form-data" action="/upload" class=add_entry>
+				<dl>
+					<dt>Image:
+					<dd><input type=file name=file><input type=submit>	
+					{% if data %}
+						<dt>Thumbnail filename:
+						<dd>{{ data.thumb }}
+						<dt>Full size:
+						<dd>{{ data.img }}
+					{% endif %}
+				</dl>
+		</form>
+		</div>
+	</body>
+</html>
