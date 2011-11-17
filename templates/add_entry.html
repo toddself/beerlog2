@@ -6,11 +6,6 @@
 	    dojo.require("dijit.form.TimeTextBox");
 	    dojo.require("dijit.form.DateTextBox");
 		dojo.require("dijit.Editor");
-		dojo.require("dijit._editor.plugins.TextColor");
-		dojo.require("dijit._editor.plugins.LinkDialog");
-		dojo.require("dijit._editor.plugins.FullScreen");
-		dojo.require("dijit._editor.plugins.ViewSource");
-		dojo.require("dijit._editor.plugins.NewPage");
 
 	    dojo.addOnLoad(function() {
 	        new dijit.form.TimeTextBox({
@@ -55,8 +50,8 @@
 	<form id="postform" action="{{ url_for('add_entry') }}" method="post" class="add-entry">
 		<dl>
 			{{ render_field(data.form.title) }}
-			<dt>Body
-			<dd><div id="editor" data-dojo-type="dijit.Editor" style="width:450px;min-height:100px;" data-dojo-props="extraPlugins:['insertImage','fullscreen']"></div>			
+			<dt>Body</dt>
+			<div dojoType="dijit.Editor" id="editor1" onChange="console.log('editor1 onChange handler: ' + arguments[0])"plugins="['cut','copy','paste', '|', 'indent', 'outdent', 'justifyLeft', 'justifyCenter', 'justifyRight']"></div>
 			<dt>Time/Date
 			<dd><input id="time_post_on" value="{{ data.date.strftime("%H:%M") }}">
 				<input type="text" name="date_post_on" id="date_post_on" value="{{ data.date.strftime("%Y-%m-%d")}}" dojoType="dijit.form.DateTextBox" required="true" />
@@ -66,5 +61,7 @@
 		</dl>
 		<p><input type=button value="Create Post" onclick="submitform();">
 	</form>
-	<iframe src=/upload width=500 height=150 scrolling=no frameBorder=0></iframe>
+{% endblock %}
+{% block iframe %}
+<iframe src=/upload frameBorder=0 scrolling=0 width=800 height=200 style="margin: 2em auto;"></iframe>
 {% endblock %}

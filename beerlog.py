@@ -109,7 +109,7 @@ def upload_image():
             except OSError:
                 os.makedirs(app.config['TEMP_UPLOAD_FOLDER'])
             fn.save(filename)                      
-            extension = filename.rsplit('.', 1)            
+            extension = filename.rsplit('.', 1)[1]          
             s3_image_name = "%s.%s" % (hashlib.md5(filename).hexdigest(), 
                                        extension)
             s3_thumb_name = "%s%s" % (hashlib.md5(filename).hexdigest(), 
@@ -127,7 +127,8 @@ def upload_image():
                                     data={'thumb': s3_thumb_name, 
                                           'img': s3_image_name})
         else:
-            return render_template('upload_file.html', data={'thumb': "error", 'img': "error'"})
+            flash("You either didn't supply a file or it wasn't a valid image")
+            return render_template('upload_file.html')
     else:
         return render_template('upload_file.html')
 

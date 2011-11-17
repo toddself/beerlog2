@@ -2,6 +2,7 @@ import os
 import beerlog
 import unittest
 import tempfile
+import hashlib
 
 class BeerlogTestCase(unittest.TestCase):
     
@@ -54,6 +55,9 @@ class BeerlogTestCase(unittest.TestCase):
             post='this should not work',
             post_on=""
             ), follow_redirects=True)
+    
+    def make_image_post(self):
+        return self.app.post
         
     def test_empty_db(self):
         rv = self.app.get('/')
@@ -104,6 +108,13 @@ class BeerlogTestCase(unittest.TestCase):
         assert "this is a good post" in rv.data
         rv = self.make_bad_post_date()
         assert "%Y-%m-%d %H:%M" in rv.data
+        
+    def test_upload_image(self):
+        rv = self.login(beerlog.app.config['ADMIN_USERNAME'], beerlog.app.config['ADMIN_PASSWORD'])
+        assert "You were logged in" in rv.data
+        rv = self.make_image_post()
+        assert hashlib.md5('test_image.png') in rv.data
+        
         
         
 
