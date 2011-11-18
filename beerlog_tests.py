@@ -4,13 +4,16 @@ import unittest
 import tempfile
 import hashlib
 
+from werkzeug.datastructures import FileStorage
+
 class BeerlogTestCase(unittest.TestCase):
     
     def setUp(self):
         self.db_fd, beerlog.app.config['DB_NAME'] = tempfile.mkstemp()
         beerlog.app.config['TESTING'] = True
         self.app = beerlog.app.test_client()
-        beerlog.init_db()
+        beerlog.connect_db(beerlog.app.config)
+        beerlog.init_db(beerlog.app.config)
     
     def tearDown(self):
         os.unlink(beerlog.app.config['DB_NAME'])
@@ -56,8 +59,24 @@ class BeerlogTestCase(unittest.TestCase):
             post_on=""
             ), follow_redirects=True)
     
-    def make_image_post(self):
-        return self.app.post
+    def make_good_image_post(self):
+        return self.app.post('/upload', data=dict(
+            file=self.make_image_object(True)
+        ))
+    
+    def make_bad_image_post(self):
+        return self.app.post('/upload', data=dict(
+            file=self.make_image_object(False)
+        ))
+        
+    def make_image_object(self, good):
+        if good:
+            fn = 'test_image.png'
+        else:
+            fn = 'console.sh'
+        
+        fh = open(fn, "rb")
+        return FileStorage(fh, fn)
         
     def test_empty_db(self):
         rv = self.app.get('/')
@@ -112,11 +131,10 @@ class BeerlogTestCase(unittest.TestCase):
     def test_upload_image(self):
         rv = self.login(beerlog.app.config['ADMIN_USERNAME'], beerlog.app.config['ADMIN_PASSWORD'])
         assert "You were logged in" in rv.data
-        rv = self.make_image_post()
-        assert hashlib.md5('test_image.png') in rv.data
-        
-        
-        
+        rv = self.make_good_image_post()
+        assert "Success" in rv.data
+        rv = self.make_bad_image_post()
+        assert "valid image" in rv.data
 
 if __name__ == '__main__':
     unittest.main()
