@@ -2,11 +2,14 @@
 <html>
 	<head>
 		<title>B(eer)Log</title>
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
-		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css" />
+		<link rel="stylesheet" type="text/css" 
+		      href="{{ url_for('static', filename='style.css') }}">
+		<link rel="stylesheet" 
+			  href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/nihilo/nihilo.css">
 	</head>
-	<body class="claro">
+	<body class="nihilo">
 		<div class="page">
+			{% block header %} 
 			<h1>B(eer)Log</h1>
 			<div class="metanav">
 				{% if not session.logged_in %}
@@ -15,11 +18,11 @@
 					<a href="{{ url_for('logout') }}">log out</a>
 				{% endif %}
 			</div>
+			{% endblock %}
 			{% for message in get_flashed_messages() %}
 				<div class="flash">{{ message }}</div>
 			{% endfor %}
 			{% block body %}{% endblock %}
 		</div>
-			{% block iframe %}{% endblock %}
 	</body>
 </html>

@@ -1,11 +1,23 @@
 {% from "_formhelper.html" import render_field %}
 {% extends "layout.html" %}
+{% block header %}
+{{ super() }}
+{% endblock %}
 {% block body %}
-	<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6.0/dojo/dojo.xd.js" data-dojo-config="isDebug: true,parseOnLoad: true"></script>
+	<script 
+		src="http://ajax.googleapis.com/ajax/libs/dojo/1.6.0/dojo/dojo.xd.js" 
+		data-dojo-config="isDebug: true, parseOnLoad: true"></script>
 	<script type="text/javascript">
 	    dojo.require("dijit.form.TimeTextBox");
 	    dojo.require("dijit.form.DateTextBox");
 		dojo.require("dijit.Editor");
+		dojo.require('dojox.editor.plugins.Blockquote');
+		dojo.require('dijit._editor.plugins.TextColor');
+		dojo.require('dijit._editor.plugins.ViewSource');
+		dojo.require('dijit._editor.plugins.LinkDialog');
+		dojo.require('dojox.editor.plugins.ToolbarLineBreak');
+		dojo.require('dijit._editor.plugins.FontChoice');
+
 
 	    dojo.addOnLoad(function() {
 	        new dijit.form.TimeTextBox({
@@ -22,11 +34,15 @@
 	    });
 	
 		function format_dates(time, date){
-			var hours = time.getHours() >= 10 ? time.getHours() : "0" + time.getHours();
-			var minutes = time.getMinutes() >= 10 ? time.getMinutes() : "0" + time.getMinutes();
+			var gH = time.getHours();
+			var gM = time.getMinutes();
+			var gMo = date.getMonth();
+			var gD = date.getDay();
+			var hours = gH >= 10 ? gH : "0" + gH;
+			var minutes = gM >= 10 ? gM : "0" + gM;
 			var year = date.getFullYear();
-			var month = date.getMonth() >= 10 ? date.getMonth() : "0" + date.getMonth();
-			var day = date.getDay() >= 10 ? date.getDay() : "0" + date.getDay();
+			var month = gMo >= 10 ? gMo : "0" + gMo;
+			var day = gD >= 10 ? gD : "0" + gD;
 			return year+"-"+month+"-"+day+" "+hours+":"+minutes;
 		}
 
@@ -47,21 +63,36 @@
 
 	</script>
 
-	<form id="postform" action="{{ url_for('add_entry') }}" method="post" class="add-entry">
+	<form id="postform" action="{{ url_for('add_entry') }}" 
+		  method="post" class="add-entry">
 		<dl>
-			{{ render_field(data.form.title) }}
+			{{ render_field(data.form.title, class="title") }}
 			<dt>Body</dt>
-			<div dojoType="dijit.Editor" id="editor1" onChange="console.log('editor1 onChange handler: ' + arguments[0])"plugins="['cut','copy','paste', '|', 'indent', 'outdent', 'justifyLeft', 'justifyCenter', 'justifyRight']"></div>
+			<div style="font-weight: normal;" 
+				dojoType="dijit.Editor" id="editor1" 
+				plugins="[
+							'undo', 'redo', 'cut','copy','paste', '|', 
+							'bold', 'italic', 'underline', 'strikethrough', '|',
+							'indent', 'outdent', 'blockquote', '|',
+							'justifyLeft', 'justifyCenter', 'justifyRight', '|',
+							'insertImage', 'createLink', '|',
+						    'foreColor', 'hiliteColor', 'viewsource', '||',
+							'fontName', 'fontSize',
+						]">
+			</div>
 			<dt>Time/Date
-			<dd><input id="time_post_on" value="{{ data.date.strftime("%H:%M") }}">
-				<input type="text" name="date_post_on" id="date_post_on" value="{{ data.date.strftime("%Y-%m-%d")}}" dojoType="dijit.form.DateTextBox" required="true" />
+			<dd><input id="time_post_on" 
+					   value="{{ data.date.strftime("%H:%M") }}">
+				<input type="text" name="date_post_on" id="date_post_on" 
+				       value="{{ data.date.strftime("%Y-%m-%d")}}" 
+				       dojoType="dijit.form.DateTextBox" required="true" />
 			{{ render_field(data.form.post) }}
 			{{ render_field(data.form.post_on) }}	
 			{{ render_field(data.form.is_draft) }}					
 		</dl>
 		<p><input type=button value="Create Post" onclick="submitform();">
 	</form>
-{% endblock %}
-{% block iframe %}
-<iframe src=/upload frameBorder=0 scrolling=0 width=800 height=200 style="margin: 2em auto;"></iframe>
+	
+	<iframe src=/upload class=upload></iframe>
+	
 {% endblock %}
