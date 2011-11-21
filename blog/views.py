@@ -2,62 +2,76 @@ from __future__ import division
 from __future__ import absolute_import
 import hashlib
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 
+from flask import render_template, url_for, redirect, request, flash, session
 from werkzeug import secure_filename
+from sqlobject import AND, SQLObjectNotFound
+
 from blog.models import Entry, Tag
 from blog.forms import EntryForm
+from settings import TIME_FORMAT
 
-@app.route('/')
-def show_entries():
-    entries = Entry.select(Entry.q.draft==False).orderBy("-post_on")
+def get_entry(entry_id=None, day=None, month=None, year=None, slug=None):
+    if entry_id:
+        entries = Entry.select(AND(Entry.q.id == entry_id,
+                                   Entry.q.deleted == False,
+                                   Entry.q.draft == False))
+    elif day and month and year:
+        time_string = "%s-%s-%s" % (year, month, days)
+        start_date = datetime.strptime(time_string, TIME_FORMAT)
+        end_date = start_date + timedelta(days=1)
+        if slug:
+            entries = Entry.select(AND(Entry.q.draft == False,
+                                        Entry.q.slug == slug,
+                                        Entry.q.deleted == False,
+                                        AND(Entry.q.post_on > start_time,
+                                            Entry.q.post_on < end_time)))
+        else:
+            entries = Entry.select(AND(Entry.q.draft == False,
+                                       Entry.q.deleted == False,
+                                       AND(Entry.q.post_on > start_time,
+                                           Entry.q.post_on < end_time))
+                                   ).orderBy("-post_on")
+    else:
+        entries = Entry.select(AND(Entry.q.draft == False,
+                                   Entry.q.deleted == False)
+                               ).orderBy("-post_on")
+
     return render_template('show_entries.html', entries=entries)
 
-@app.route('/upload', methods=['POST', 'GET'])
-@require_auth
-def upload_image():
-    if request.method == 'POST':
-        fn = request.files['file']
-        if fn and allowed_file(fn.filename, app.config['ALLOWED_EXTENSIONS']):
-            filename = os.path.join(app.config['TEMP_UPLOAD_FOLDER'], 
-                      secure_filename(fn.filename))
-            try:
-                os.stat(app.config['TEMP_UPLOAD_FOLDER'])
-            except OSError:
-                os.makedirs(app.config['TEMP_UPLOAD_FOLDER'])
-            fn.save(filename)                      
-            
-            image, thumb = store_image(app.config, filename)
-            
-            return render_template('upload_file.html', 
-                                    data={'thumb': thumb, 'img': image})
-        else:
-            flash("You either didn't supply a file or it wasn't a valid image")
-            return render_template('upload_file.html')
-    else:
-        return render_template('upload_file.html')
-
-@app.route('/add', methods=['POST', 'GET'])
-@require_auth
-def add_entry():
-    post = PostForm(request.form)    
+def edit_entry(entry_id=-1):
+    post = EntryForm(request.form)
     if request.method == 'POST' and post.validate():
-        entry = Entry(title=post.title.data,
-                      body=post.post.data,
-                      author=session.get('user_id'),
-                      post_on=post.post_on.data)
-        flash("New entry was sucessfully added")
-        return redirect(url_for('show_entries'))
+        try:
+            entry = Entry.get(entry_id)
+        except SQLObjectNotFound:
+            entry = Entry(title=post.title.data,
+                          body=post.post.data,
+                          author=session.get('user_id'),
+                          post_on=post.post_on.data,
+                          draft=post.is_draft.data)
+            flash("New entry <em>%s</em> was sucessfully added" % entry.title)
+        else:
+            entry.title = post.title.data
+            entry.body = post.post.data
+            entry.author = session.get('user_id')
+            entry.post_on = post.post_on.data
+            entry.last_modified = datetime.now()
+            entry.draft = post.is_draft.data
+            entry.deleted = post.is_deleted.data
+            flash("<em>%s</em> was updated" % entry.title)
+        return redirect(url_for('get_entry', entry_id=entry.id))
     else:
-        return render_template('add_entry.html', 
+        return render_template('edit_entry.html',
                                data={'form': post, 'date': datetime.now()})
 
-
-@app.route('/admin')
-@require_auth
-def admin():
-    if not session.get('logged_in'):
-        flash("You must be logged in")
-        return redirect(url_for('add_entry'))
+def delete_entry(entry_id=None):
+    if not entry_id:
+        flash("You have to specify a post to delete")
     else:
-        pass
+        entry = Entry.get(entry_id)
+        entry.deleted = True
+        flash("Entry %s has been marked as deleted. (This means it can \
+               be recovered!)")
+        return redirect(url_for('get_entry'))

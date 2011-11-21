@@ -11,7 +11,7 @@ from boto import connect_s3
 from boto.s3.key import Key
 from flask import session, flash, redirect, url_for
 
-from models import Entry, Users, Tag
+from blog.models import Entry, Users, Tag
 
 def store_image(config, filename):
     extension = filename.rsplit('.', 1)[1]
@@ -59,16 +59,6 @@ def resize_image(filename, t_m_l):
         thumb = StringIO()
         im.save(thumb, 'JPEG')
         return thumb
-
-def require_auth(callback):
-    @wraps(callback)
-    def auth(*args, **kwargs):
-        if session.get('logged_in'):
-            return callback(*args, **kwargs)
-        else:
-            flash("You must be authenicated to access this section")
-            return redirect(url_for('show_entries'))
-    return auth
     
 def connect_db(config):
     init = False    

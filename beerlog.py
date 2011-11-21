@@ -4,17 +4,20 @@ import hashlib
 import os
 from datetime import datetime
 
-from flask import Flask, request, session, redirect, url_for, \
-    render_template, flash
-from sqlobject import AND
-from werkzeug import secure_filename
+from flask import Flask
 
-from blog.models import Entry, Users, Tag
-from blog.forms import PostForm
-from utils import *
+# TODO REFACTOR COMMON OUT OF EXISTANCE
+from common import connect_db, init_db
+
+from blog.views import get_entry, edit_entry, delete_entry
+from blog.models import Users
+# from images.views import get_image, add_image, delete_image
+
+# TODO USER EDITOR
+from admin.views import login, logout, require_auth
 
 app = Flask(__name__)
-app.config.from_envvar('BEERLOG_SETTINGS')
+app.config.from_pyfile('settings.py')
 
 if app.config['DB_DRIVER'] == 'sqlite':
     app.config['DB_NAME'] = os.path.join(os.getcwd(), app.config['DB_NAME'])
@@ -28,37 +31,29 @@ def before_request():
 def teardown_request(exception):
     pass
 
-# login and logout
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    error = None
-    if request.method == 'POST':
-        pclear = request.form['password']
-        key = app.config['PASSWORD_SALT']
-        pcrypt = hashlib.sha256("%s%s" % (key, pclear)).hexdigest()
-        u_req = Users.select(
-            AND(
-                Users.q.email==request.form['username'],
-                Users.q.password==pcrypt
-                )
-            )
+# admin routing
+app.add_url_rule('/login', view_func=login, methods=['POST', 'GET'])
+app.add_url_rule('/logout', view_func=logout)
 
-        if not list(u_req):
-            error = 'Invalid username'
-        else:
-            session['logged_in'] = True
-            session['user_id'] = u_req[0].id
-            flash('You were logged in')
-            return redirect(url_for('show_entries'))
+# unauthenticated blog views
+app.add_url_rule('/', view_func=get_entry)
+app.add_url_rule('/entry/<entry_id>/', view_func=get_entry)
+app.add_url_rule('/entry/<year>/<month>/<day>/', view_func=get_entry)
+app.add_url_rule('/entry/<year>/<month>/<day>/<slug>/', view_func=get_entry)
 
-    return render_template('login.html', error=error)
+# authenticated blog views
+app.add_url_rule('/entry/edit/',
+                  view_func=require_auth(edit_entry),
+                  methods=['POST', 'GET'])
+app.add_url_rule('/entry/edit/<entry_id>/',
+                 view_func=require_auth(edit_entry),
+                 methods=['POST', 'GET'])
+app.add_url_rule('/entry/edit/<entry_id>/delete/',
+                 view_func=require_auth(delete_entry))
 
-@app.route('/logout')
-def logout():
-    session.pop('logged_in', None)
-    session.pop('user_id', None)
-    flash('You were logged out')
-    return redirect(url_for('show_entries'))
+
+
+
 
 if __name__ == '__main__':
     app.run()

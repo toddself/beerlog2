@@ -63,7 +63,7 @@
 
 	</script>
 
-	<form id="postform" action="{{ url_for('add_entry') }}" 
+	<form id="postform" action="{{ url_for('edit_entry') }}" 
 		  method="post" class="add-entry">
 		<dl>
 			{{ render_field(data.form.title, class="title") }}
@@ -88,7 +88,8 @@
 				       dojoType="dijit.form.DateTextBox" required="true" />
 			{{ render_field(data.form.post) }}
 			{{ render_field(data.form.post_on) }}	
-			{{ render_field(data.form.is_draft) }}					
+			{{ render_field(data.form.is_draft) }}	
+			{{ render_field(data.form.is_deleted) }}				
 		</dl>
 		<p><input type=button value="Create Post" onclick="submitform();">
 	</form>
