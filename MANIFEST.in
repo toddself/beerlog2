@@ -1,0 +1,2 @@
+recursive-include beerlog/templates *
+recursive-include beerlog/static *
