@@ -14,7 +14,7 @@ def is_valid_user(form, field):
     except SQLObjectNotFound:
         raise validators.ValidationError("Not a valid user")
 
-class PostForm(Form):
+class EntryForm(Form):
     title = TextField('Title', [validators.Length(min=1, max=255, message="You must provide a title")])
     post = TextAreaField('Post', [validators.Length(min=4, max=1048576, message="Cat got your tongue?")], widget=HiddenInput())
     post_on = DateTimeField('Post On', format="%Y-%m-%d %H:%M", widget=HiddenInput())
