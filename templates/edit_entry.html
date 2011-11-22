@@ -36,14 +36,16 @@
 		function format_dates(time, date){
 			var gH = time.getHours();
 			var gM = time.getMinutes();
-			var gMo = date.getMonth();
-			var gD = date.getDay();
+			var gMo = date.getMonth()+1;
+			var gD = date.getDate();
 			var hours = gH >= 10 ? gH : "0" + gH;
 			var minutes = gM >= 10 ? gM : "0" + gM;
 			var year = date.getFullYear();
 			var month = gMo >= 10 ? gMo : "0" + gMo;
 			var day = gD >= 10 ? gD : "0" + gD;
-			return year+"-"+month+"-"+day+" "+hours+":"+minutes;
+			var theTime = year+"-"+month+"-"+day+" "+hours+":"+minutes;
+			return theTime;
+			
 		}
 
 		function submitform(){

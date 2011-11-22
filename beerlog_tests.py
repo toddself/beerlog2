@@ -1,11 +1,13 @@
 import os
-import beerlog
 import unittest
 import tempfile
 import hashlib
+from datetime import datetime
 
 from werkzeug.datastructures import FileStorage
-from common import init_db
+
+import beerlog
+from blog.models import get_slug_from_title
 
 class BeerlogTestCase(unittest.TestCase):
     
@@ -105,6 +107,14 @@ class BeerlogTestCase(unittest.TestCase):
     def test_slug_generation(self):
         self.good_login()
         rv = self.make_good_post()
+        assert "this is a good post" in rv.data
+        slug = get_slug_from_title("this is a good post")
+        url = "/entry/%s/%s/%s/%s/" % (datetime.now().year,
+                                                   datetime.now().month,
+                                                   datetime.now().day,
+                                                   slug)
+        rv = self.app.get(url)
+        print rv.data
         assert "this is a good post" in rv.data
         
 

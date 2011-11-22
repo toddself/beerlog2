@@ -30,7 +30,7 @@ class Entry(SQLObject):
     title = UnicodeCol(length=255)
     body = UnicodeCol()
     tags = RelatedJoin('Tag')
-    slug = UnicodeCol(length=255)
+    slug = UnicodeCol(length=255, default="")
     post_on = DateTimeCol(default=datetime.now())
     created_on = DateTimeCol(default=datetime.now())
     last_modified = DateTimeCol(default=datetime.now())

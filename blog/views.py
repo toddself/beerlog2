@@ -18,20 +18,20 @@ def get_entry(entry_id=None, day=None, month=None, year=None, slug=None):
                                    Entry.q.deleted == False,
                                    Entry.q.draft == False))
     elif day and month and year:
-        time_string = "%s-%s-%s" % (year, month, days)
+        time_string = "%s-%s-%s 00:00" % (year, month, day)
         start_date = datetime.strptime(time_string, TIME_FORMAT)
         end_date = start_date + timedelta(days=1)
         if slug:
             entries = Entry.select(AND(Entry.q.draft == False,
                                         Entry.q.slug == slug,
                                         Entry.q.deleted == False,
-                                        AND(Entry.q.post_on > start_time,
-                                            Entry.q.post_on < end_time)))
+                                        AND(Entry.q.post_on > start_date,
+                                            Entry.q.post_on < end_date)))
         else:
             entries = Entry.select(AND(Entry.q.draft == False,
                                        Entry.q.deleted == False,
-                                       AND(Entry.q.post_on > start_time,
-                                           Entry.q.post_on < end_time))
+                                       AND(Entry.q.post_on > start_date,
+                                           Entry.q.post_on < end_date))
                                    ).orderBy("-post_on")
     else:
         entries = Entry.select(AND(Entry.q.draft == False,
@@ -63,6 +63,11 @@ def edit_entry(entry_id=-1):
             flash("<em>%s</em> was updated" % entry.title)
         return redirect(url_for('get_entry', entry_id=entry.id))
     else:
+        try:
+            entry = Entry.get(entry_id)
+        except SQLObjectNotFound:
+            pass
+            
         return render_template('edit_entry.html',
                                data={'form': post, 'date': datetime.now()})
 
