@@ -41,6 +41,6 @@ def require_auth(callback):
         if session.get('logged_in'):
             return callback(*args, **kwargs)
         else:
-            flash("You must be authenicated to access this section")
-            return redirect(url_for('show_entries'))
+            flash("You must be authenticated to access this section")
+            return redirect(url_for('get_entry'))
     return auth

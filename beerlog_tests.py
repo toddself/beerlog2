@@ -7,9 +7,11 @@ from datetime import datetime
 from werkzeug.datastructures import FileStorage
 
 import beerlog
-from blog.models import get_slug_from_title
+from blog.models import get_slug_from_title, Entry, Users
 
 class BeerlogTestCase(unittest.TestCase):
+    
+    post_date = "2011-01-01 11:45"
     
     def setUp(self):
         self.db_fd, beerlog.app.config['DB_NAME'] = tempfile.mkstemp()
@@ -30,25 +32,25 @@ class BeerlogTestCase(unittest.TestCase):
     def logout(self):
         return self.app.get('/logout', follow_redirects=True)
     
-    def make_good_post(self):
+    def make_good_post(self, redirect=True):
         return self.app.post('/entry/edit/', data=dict(
             title='this is a good post',
             post="yessss",
-            post_on="2011-01-01 01:10"
-            ), follow_redirects=True)  
+            post_on=self.post_date
+            ), follow_redirects=redirect)  
     
     def make_bad_post_title(self):
         return self.app.post('/entry/edit/', data=dict(
             title='',
             post='this should not work',
-            post_on="2011-01-01 01:10"
+            post_on=self.post_date
             ), follow_redirects=True)
     
     def make_bad_post_body(self):
         return self.app.post('/entry/edit/', data=dict(
             title='this should not work',
             post='',
-            post_on="2011-01-01 01:10"
+            post_on=self.post_date
             ), follow_redirects=True)
     
     def make_bad_post_date(self):
@@ -83,7 +85,8 @@ class BeerlogTestCase(unittest.TestCase):
         assert "You were logged in" in rv.data
 
     def test_admin_created(self):
-        user = beerlog.Users.select(beerlog.Users.q.email==beerlog.app.config['ADMIN_USERNAME'])[0]
+        username = beerlog.app.config['ADMIN_USERNAME']
+        user = Users.select(Users.q.email==username)[0]
         assert user.email == beerlog.app.config['ADMIN_USERNAME']
         
     def test_empty_db(self):
@@ -108,23 +111,40 @@ class BeerlogTestCase(unittest.TestCase):
         self.good_login()
         rv = self.make_good_post()
         assert "this is a good post" in rv.data
+        date = datetime.strptime(self.post_date, "%Y-%m-%d %H:%M")
         slug = get_slug_from_title("this is a good post")
-        url = "/entry/%s/%s/%s/%s/" % (datetime.now().year,
-                                                   datetime.now().month,
-                                                   datetime.now().day,
-                                                   slug)
+        url = "/entry/%s/%s/%s/%s/" % (date.year, 
+                                       date.month,
+                                       date.day,
+                                       slug)
         rv = self.app.get(url)
-        print rv.data
         assert "this is a good post" in rv.data
-        
-
     
-    # def test_post_unauthenticated(self):
-    #     rv = self.logout()
-    #     assert "You were logged out" in rv.data
-    #     rv = self.make_good_post()
-    #     assert "must be authenicated" in rv.data
-    #     
+    def test_post_unauthenticated(self):
+            rv = self.logout()
+            assert "You were logged out" in rv.data
+            rv = self.make_good_post()
+            assert "must be authenticated" in rv.data
+    
+    def test_post_delete_authenticated(self):
+        self.good_login()
+        rv = self.make_good_post(redirect=False)
+        post_id = rv.location.rsplit('/')[-2]
+        rv = self.app.get('/entry/edit/%s/delete/' % post_id, 
+                          follow_redirects=True)
+        assert "marked as deleted" in rv.data
+        
+        
+    def test_post_delete_unauthenticated(self):
+        self.good_login()
+        rv = self.make_good_post(redirect=False)
+        post_id = rv.location.rsplit('/')[-2]
+        rv = self.logout()
+        assert "You were logged out" in rv.data
+        rv = self.app.get('/entry/edit/%s/delete/' % post_id, 
+                          follow_redirects=True)
+        assert "must be authenticated" in rv.data
+        
     # def test_post_no_title(self):
     #     rv = self.login(beerlog.app.config['ADMIN_USERNAME'], beerlog.app.config['ADMIN_PASSWORD'])
     #     assert "You were logged in" in rv.data

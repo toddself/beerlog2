@@ -51,9 +51,5 @@ app.add_url_rule('/entry/edit/<entry_id>/',
 app.add_url_rule('/entry/edit/<entry_id>/delete/',
                  view_func=require_auth(delete_entry))
 
-
-
-
-
 if __name__ == '__main__':
     app.run()

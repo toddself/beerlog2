@@ -77,6 +77,6 @@ def delete_entry(entry_id=None):
     else:
         entry = Entry.get(entry_id)
         entry.deleted = True
-        flash("Entry %s has been marked as deleted. (This means it can \
-               be recovered!)")
+        flash("Entry <em>%s</em> has been marked as deleted. (This means it can \
+               be recovered!)" % entry.title)
         return redirect(url_for('get_entry'))
