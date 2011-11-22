@@ -3,21 +3,14 @@ from __future__ import absolute_import
 
 from sqlobject import SQLObjectNotFound
 
-from blog.models import Users
-from wtforms import Form, TextField, TextAreaField, DateTimeField,\
-                    BooleanField, validators
-from wtforms.widgets import HiddenInput
-
-def is_valid_user(form, field):
-    try:
-        Users.get(field.data)
-    except SQLObjectNotFound:
-        raise validators.ValidationError("Not a valid user")
+from wtforms import Form, TextField, TextAreaField, BooleanField, validators
+from wtforms.ext.dateutil.fields import DateTimeField
 
 class EntryForm(Form):
     title = TextField('Title', [validators.Length(min=1, max=255, message="You must provide a title")])
-    post = TextAreaField('Post', [validators.Length(min=4, max=1048576, message="Cat got your tongue?")], widget=HiddenInput())
-    post_on = DateTimeField('Post On', format="%Y-%m-%d %H:%M", widget=HiddenInput())
+    body = TextAreaField('Body', [validators.Length(min=4, max=1048576, message="The body is required")])
+    time = DateTimeField('Time', display_format="%H:%M")
+    date = DateTimeField('Date', display_format="%m/%d/%Y")
     is_draft = BooleanField('Draft?')
     is_deleted = BooleanField('Delete?')
     

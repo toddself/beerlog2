@@ -3,15 +3,20 @@ import unittest
 import tempfile
 import hashlib
 from datetime import datetime
+from random import choice as r_choice
+from string import ascii_uppercase as au
 
 from werkzeug.datastructures import FileStorage
 
 import beerlog
+from settings import TIME_FORMAT
 from blog.models import get_slug_from_title, Entry, Users
 
 class BeerlogTestCase(unittest.TestCase):
     
     post_date = "2011-01-01 11:45"
+    post_body = "This is a test of the posting function"
+    post_title = "This is a !test!@post!!!"
     
     def setUp(self):
         self.db_fd, beerlog.app.config['DB_NAME'] = tempfile.mkstemp()
@@ -32,52 +37,18 @@ class BeerlogTestCase(unittest.TestCase):
     def logout(self):
         return self.app.get('/logout', follow_redirects=True)
     
-    def make_good_post(self, redirect=True):
+    def create_post(self, title, body, date, redirect=True):
         return self.app.post('/entry/edit/', data=dict(
-            title='this is a good post',
-            post="yessss",
-            post_on=self.post_date
+            title=title,
+            post=body,
+            post_on=date
             ), follow_redirects=redirect)  
     
-    def make_bad_post_title(self):
-        return self.app.post('/entry/edit/', data=dict(
-            title='',
-            post='this should not work',
-            post_on=self.post_date
-            ), follow_redirects=True)
-    
-    def make_bad_post_body(self):
-        return self.app.post('/entry/edit/', data=dict(
-            title='this should not work',
-            post='',
-            post_on=self.post_date
-            ), follow_redirects=True)
-    
-    def make_bad_post_date(self):
-        return self.app.post('/entry/edit/', data=dict(
-            title='this should not work',
-            post='this should not work',
-            post_on=""
-            ), follow_redirects=True)
-    
-    def make_good_image_post(self):
+    def create_image(self, filepath, follow=True):
+        fh = open(fn, 'rb')
         return self.app.post('/upload', data=dict(
-            file=self.make_image_object(True)
+            file=FileStorage(fh, fn)
         ))
-    
-    def make_bad_image_post(self):
-        return self.app.post('/upload', data=dict(
-            file=self.make_image_object(False)
-        ))
-        
-    def make_image_object(self, good):
-        if good:
-            fn = 'test_image.png'
-        else:
-            fn = 'console.sh'
-        
-        fh = open(fn, "rb")
-        return FileStorage(fh, fn)
         
     def good_login(self):
         rv = self.login(beerlog.app.config['ADMIN_USERNAME'], 
@@ -104,78 +75,87 @@ class BeerlogTestCase(unittest.TestCase):
     
     def test_post_authenticated(self):
         self.good_login()
-        rv = self.make_good_post()
-        assert "this is a good post" in rv.data
+        rv = self.create_post(self.post_title, self.post_body, self.post_date)
+        assert self.post_title in rv.data
 
     def test_slug_generation(self):
         self.good_login()
-        rv = self.make_good_post()
-        assert "this is a good post" in rv.data
-        date = datetime.strptime(self.post_date, "%Y-%m-%d %H:%M")
-        slug = get_slug_from_title("this is a good post")
+        rv = self.create_post(self.post_title, self.post_body, self.post_date)
+        assert self.post_title in rv.data
+        date = datetime.strptime(self.post_date, TIME_FORMAT)
+        slug = get_slug_from_title(self.post_title)
         url = "/entry/%s/%s/%s/%s/" % (date.year, 
                                        date.month,
                                        date.day,
                                        slug)
         rv = self.app.get(url)
-        assert "this is a good post" in rv.data
+        assert self.post_title in rv.data
     
     def test_post_unauthenticated(self):
             rv = self.logout()
             assert "You were logged out" in rv.data
-            rv = self.make_good_post()
+            rv = self.create_post(self.post_title, 
+                                  self.post_body, 
+                                  self.post_date)
             assert "must be authenticated" in rv.data
     
     def test_post_delete_authenticated(self):
         self.good_login()
-        rv = self.make_good_post(redirect=False)
+        rv = self.create_post(self.post_title, 
+                              self.post_body, 
+                              self.post_date, 
+                              False)
         post_id = rv.location.rsplit('/')[-2]
         rv = self.app.get('/entry/edit/%s/delete/' % post_id, 
                           follow_redirects=True)
         assert "marked as deleted" in rv.data
         
-        
     def test_post_delete_unauthenticated(self):
         self.good_login()
-        rv = self.make_good_post(redirect=False)
+        rv = self.create_post(self.post_title, 
+                              self.post_body, 
+                              self.post_date, 
+                              False)
         post_id = rv.location.rsplit('/')[-2]
         rv = self.logout()
         assert "You were logged out" in rv.data
         rv = self.app.get('/entry/edit/%s/delete/' % post_id, 
                           follow_redirects=True)
         assert "must be authenticated" in rv.data
+    
+    def test_multiple_posts_per_day(self):
+        self.good_login()
+        post_title2 = "post two"
+        test_date = datetime.strptime(self.post_date, TIME_FORMAT)
+        self.create_post(self.post_title, self.post_body, self.post_date)
+        self.create_post(post_title2, self.post_body, self.post_date)
+        rv = self.app.get('/entry/%s/%s/%s/' % (test_date.year,
+                                                test_date.month,
+                                                test_date.day))
+        assert self.post_title in rv.data
+        assert post_title2 in rv.data
         
-    # def test_post_no_title(self):
-    #     rv = self.login(beerlog.app.config['ADMIN_USERNAME'], beerlog.app.config['ADMIN_PASSWORD'])
-    #     assert "You were logged in" in rv.data
-    #     rv = self.make_good_post()
-    #     assert "this is a good post" in rv.data
-    #     rv = self.make_bad_post_title()
-    #     assert "You must provide a title" in rv.data
-    # 
-    # def test_post_no_body(self):
-    #     rv = self.login(beerlog.app.config['ADMIN_USERNAME'], beerlog.app.config['ADMIN_PASSWORD'])
-    #     assert "You were logged in" in rv.data
-    #     rv = self.make_good_post()
-    #     assert "this is a good post" in rv.data
-    #     rv = self.make_bad_post_body()
-    #     assert "Cat got your tongue?" in rv.data
-    # 
-    # def test_post_no_date(self):
-    #     rv = self.login(beerlog.app.config['ADMIN_USERNAME'], beerlog.app.config['ADMIN_PASSWORD'])
-    #     assert "You were logged in" in rv.data
-    #     rv = self.make_good_post()
-    #     assert "this is a good post" in rv.data
-    #     rv = self.make_bad_post_date()
-    #     assert "%Y-%m-%d %H:%M" in rv.data
-    #     
-    # def test_upload_image(self):
-    #     rv = self.login(beerlog.app.config['ADMIN_USERNAME'], beerlog.app.config['ADMIN_PASSWORD'])
-    #     assert "You were logged in" in rv.data
-    #     rv = self.make_good_image_post()
-    #     assert "Success" in rv.data
-    #     rv = self.make_bad_image_post()
-    #     assert "valid image" in rv.data
+        
+    def test_bad_posts(self):
+        self.good_login()
+        # missing title
+        rv = self.create_post("", self.post_body, self.post_date)
+        assert "You must provide a title" in rv.data
+        # missing body
+        rv = self.create_post(self.post_body, "", self.post_date)
+        assert "The body is required" in rv.data
+        # too short body
+        rv = self.create_post(self.post_body, "ta", self.post_date)
+        assert "The body is required" in rv.data
+        # too long body
+        rv = self.create_post(self.post_body, 
+                              ''.join(r_choice(au) for x in range(1048577)), 
+                              self.post_date)
+        assert "The body is required" in rv.data
+        # malformed date
+        rv = self.create_post(self.post_body, self.post_body, "AHAHAHHAHA")
+        assert TIME_FORMAT in rv.data
+                
 
 if __name__ == '__main__':
     unittest.main()

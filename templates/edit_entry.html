@@ -4,96 +4,45 @@
 {{ super() }}
 {% endblock %}
 {% block body %}
-	<script 
-		src="http://ajax.googleapis.com/ajax/libs/dojo/1.6.0/dojo/dojo.xd.js" 
-		data-dojo-config="isDebug: true, parseOnLoad: true"></script>
-	<script type="text/javascript">
-	    dojo.require("dijit.form.TimeTextBox");
-	    dojo.require("dijit.form.DateTextBox");
-		dojo.require("dijit.Editor");
-		dojo.require('dojox.editor.plugins.Blockquote');
-		dojo.require('dijit._editor.plugins.TextColor');
-		dojo.require('dijit._editor.plugins.ViewSource');
-		dojo.require('dijit._editor.plugins.LinkDialog');
-		dojo.require('dojox.editor.plugins.ToolbarLineBreak');
-		dojo.require('dijit._editor.plugins.FontChoice');
-
-
-	    dojo.addOnLoad(function() {
-	        new dijit.form.TimeTextBox({
-	            name: "prog_val",
-	            value: new Date(),
-	            constraints: {
-	                timePattern: 'HH:mm',
-	                clickableIncrement: 'T00:15:00',
-	                visibleIncrement: 'T00:15:00',
-	                visibleRange: 'T01:00:00'
-	            }
-	        },
-	        "time_post_on");
-	    });
+	<script>
+		jQuery(function(){
+			$("#time").timePicker({
+				startTime: "{{ data.date.strftime('%H:%M') }}",  // Using string. Can take string or Date object.
+				endTime: new Date(0, 0, 0, 15, 30, 0),  // Using Date object.
+				show24Hours: true,
+				separator:':',
+				step: 15});
+		});
 	
-		function format_dates(time, date){
-			var gH = time.getHours();
-			var gM = time.getMinutes();
-			var gMo = date.getMonth()+1;
-			var gD = date.getDate();
-			var hours = gH >= 10 ? gH : "0" + gH;
-			var minutes = gM >= 10 ? gM : "0" + gM;
-			var year = date.getFullYear();
-			var month = gMo >= 10 ? gMo : "0" + gMo;
-			var day = gD >= 10 ? gD : "0" + gD;
-			var theTime = year+"-"+month+"-"+day+" "+hours+":"+minutes;
-			return theTime;
-			
-		}
-
-		function submitform(){
-			var e = dijit.byId('editor1');
-			var p = document.getElementById('post');
-			p.value = e.get('value');
+		$(function() {
+			$( "#datepicker" ).datepicker();
+		});
 		
-			var t = dijit.byId('time_post_on').get('value');
-			var d = dijit.byId('date_post_on').get('value');
-			
-			var po = document.getElementById('post_on')
-			po.value = format_dates(t,d);
+		jQuery().ready(function(){
+			var options = {
+				imgPath: "/static/images/",
+				content: '{{ data.entry.body|safe }}',
+				buttonSet: 'format|class|bold|underline|italic|spacer|orderedList|unorderedList|indent|oudent|spacer|justify|spacer|link|image|table|spacer|toggle'
+			};
+			$('#editor').rte(options);
+		});
 		
-			var f = document.getElementById('postform');
-			f.submit();
-		}
-
 	</script>
 
 	<form id="postform" action="{{ url_for('edit_entry') }}" 
 		  method="post" class="add-entry">
 		<dl>
-			{{ render_field(data.form.title, class="title") }}
-			<dt>Body</dt>
-			<div style="font-weight: normal;" 
-				dojoType="dijit.Editor" id="editor1" 
-				plugins="[
-							'undo', 'redo', 'cut','copy','paste', '|', 
-							'bold', 'italic', 'underline', 'strikethrough', '|',
-							'indent', 'outdent', 'blockquote', '|',
-							'justifyLeft', 'justifyCenter', 'justifyRight', '|',
-							'insertImage', 'createLink', '|',
-						    'foreColor', 'hiliteColor', 'viewsource', '||',
-							'fontName', 'fontSize',
-						]">
-			</div>
+			{{ render_field(data.form.title, class="title", value=data.entry.title) }}
+			{{ render_field(data.form.body, rows="25", id="editor") }}
 			<dt>Time/Date
-			<dd><input id="time_post_on" 
-					   value="{{ data.date.strftime("%H:%M") }}">
-				<input type="text" name="date_post_on" id="date_post_on" 
-				       value="{{ data.date.strftime("%Y-%m-%d")}}" 
-				       dojoType="dijit.form.DateTextBox" required="true" />
-			{{ render_field(data.form.post) }}
-			{{ render_field(data.form.post_on) }}	
-			{{ render_field(data.form.is_draft) }}	
-			{{ render_field(data.form.is_deleted) }}				
+			<dd>{{ data.form.time(id="time", value=data.date.strftime("%H:%M"))}}
+				{{ data.form.date(id="datepicker", value=data.date.strftime("%m/%d/%Y"))}}
+			<dt><br>
+			<dd>
+				 {{ data.form.is_draft() }}<strong>{{ data.form.is_draft.label }}<strong>
+				{{ data.form.is_deleted() }}<strong>{{ data.form.is_deleted.label }}</strong>
 		</dl>
-		<p><input type=button value="Create Post" onclick="submitform();">
+		<p><input type=submit value="Create Post">
 	</form>
 	
 	<iframe src=/upload class=upload></iframe>

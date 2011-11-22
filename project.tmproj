@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>beerlog.py</string>
+	<string>admin/views.py</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -21,77 +21,89 @@
 	<integer>150</integer>
 	<key>metaData</key>
 	<dict>
+		<key>admin/views.py</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>38</integer>
+				<key>line</key>
+				<integer>43</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>beerlog.py</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>32</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>30</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>20</integer>
+			<integer>0</integer>
 		</dict>
-<<<<<<< HEAD
-		<key>blog/__init__.py</key>
-=======
-		<key>beerlog_tests.py</key>
+		<key>blog/models.py</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>47</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>24</integer>
+				<integer>0</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>78</integer>
+			<integer>0</integer>
 		</dict>
 		<key>blog/views.py</key>
->>>>>>> 498a949935bb7cedc0a8bacb8ac061923af7931a
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-<<<<<<< HEAD
-				<integer>0</integer>
+				<integer>42</integer>
 				<key>line</key>
-				<integer>0</integer>
-=======
-				<integer>28</integer>
-				<key>line</key>
-				<integer>20</integer>
->>>>>>> 498a949935bb7cedc0a8bacb8ac061923af7931a
+				<integer>79</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>23</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>59</integer>
+				<key>line</key>
+				<integer>79</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>42</integer>
+				<key>line</key>
+				<integer>79</integer>
+			</dict>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
-<<<<<<< HEAD
 		<string>beerlog.py</string>
-		<string>blog/__init__.py</string>
-=======
-		<string>beerlog_tests.py</string>
-		<string>beerlog.py</string>
+		<string>blog/models.py</string>
 		<string>blog/views.py</string>
->>>>>>> 498a949935bb7cedc0a8bacb8ac061923af7931a
+		<string>admin/views.py</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<false/>
 	<key>windowFrame</key>
-<<<<<<< HEAD
-	<string>{{40, 53}, {1791, 1063}}</string>
-=======
-	<string>{{11, 43}, {1324, 823}}</string>
->>>>>>> 498a949935bb7cedc0a8bacb8ac061923af7931a
+	<string>{{48, 91}, {1703, 1053}}</string>
 </dict>
 </plist>

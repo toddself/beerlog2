@@ -1,0 +1,32 @@
+.rte{
+	border: solid silver 1px;
+	padding:0;
+	margin-bottom:10px;
+}
+.rte iframe{
+	margin:0.2em;
+}
+.rte .toolbar{
+	vertical-align:top;
+	background:#F5f5F5;
+	padding:0.2em;
+	text-align:left;
+	border-bottom:solid silver 1px;
+}
+.rte .toolbar img, .rte .toolbar a, .rte .toolbar select{
+	vertical-align:middle;
+	border:none;
+	text-decoration:none;
+	font-family:Arial, Courier;
+	font-size:10px;
+}
+.rte .toolbar img:hover{
+	opacity:0.6;
+	filter:alpha(opacity=60);
+}
+.rte iframe, .rte textarea{
+	border-width:0;
+	border-style:none;
+	margin:auto;
+	width:100%;
+}

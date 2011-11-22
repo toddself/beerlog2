@@ -46,15 +46,17 @@ def edit_entry(entry_id=-1):
         try:
             entry = Entry.get(entry_id)
         except SQLObjectNotFound:
+            post_on = datetime.combine(post.date.data.date(),
+                                       post.time.data.time())
             entry = Entry(title=post.title.data,
-                          body=post.post.data,
+                          body=post.body.data,
                           author=session.get('user_id'),
-                          post_on=post.post_on.data,
+                          post_on=post_on,
                           draft=post.is_draft.data)
             flash("New entry <em>%s</em> was sucessfully added" % entry.title)
         else:
             entry.title = post.title.data
-            entry.body = post.post.data
+            entry.body = post.body.data
             entry.author = session.get('user_id')
             entry.post_on = post.post_on.data
             entry.last_modified = datetime.now()
@@ -66,10 +68,18 @@ def edit_entry(entry_id=-1):
         try:
             entry = Entry.get(entry_id)
         except SQLObjectNotFound:
-            pass
+            entry = {'title': '',
+                     'body': '',
+                     'deleted': False,
+                     'draft': False}
+            date = datetime.now()
+        else:
+            date = entry.post_on
             
         return render_template('edit_entry.html',
-                               data={'form': post, 'date': datetime.now()})
+                               data={'form': post, 
+                                     'date': datetime.now(),
+                                     'entry': entry})
 
 def delete_entry(entry_id=None):
     if not entry_id:

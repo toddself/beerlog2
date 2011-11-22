@@ -8,6 +8,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=['Flask','PIL', 'WTForms', 
-                      'Flask-WTF', 'Boto', 'SQLObject', 'Fabric'],
+                      'Flask-WTF', 'Boto', 'SQLObject', 'Fabric', 
+                      'python-dateutil', ],
                       
     )

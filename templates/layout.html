@@ -2,12 +2,17 @@
 <html>
 	<head>
 		<title>B(eer)Log</title>
-		<link rel="stylesheet" type="text/css" 
-		      href="{{ url_for('static', filename='style.css') }}">
-		<link rel="stylesheet" 
-			  href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/nihilo/nihilo.css">
+		
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='timePicker.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='jquery-ui-1.8.16.custom.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='rte.css') }}">
+		<script src="{{ url_for('static', filename='jquery-1.7.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='jquery-ui-1.8.16.custom.min.js' )}}"></script>
+		<script src="{{ url_for('static', filename='jquery.timePicker.min.js' )}}"></script>
+		<script src="{{ url_for('static', filename='jquery.rte.js' )}}"></script>
 	</head>
-	<body class="nihilo">
+	<body>
 		<div class="page">
 			{% block header %} 
 			<h1>B(eer)Log</h1>
