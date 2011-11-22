@@ -1,13 +1,16 @@
 {% extends "layout.html" %}
+{% block header %}
+{{ super() }}
+{% endblock %}
 {% block body %}
 	{% if session.logged_in %}
-		<p><a href="add">Create Post</a>
+		<p><a href="/entry/edit/">Create Post</a>
 	{% endif %}
-	<ul class="entries">
+	<ul>
 		{% for entry in entries %}
 			<li><h2>{{ entry.title }}</h2>{{ entry.body|safe }}<br>{{ entry.post_on }}</li>
 		{% else %}
-			<li><em>Unbelievable. No entries here so far</em></li>
+			<li><em>No entries matched your request</em></li>
 		{% endfor %}
 	</ul>
 {% endblock %}

@@ -33,16 +33,40 @@
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>20</integer>
 		</dict>
+<<<<<<< HEAD
 		<key>blog/__init__.py</key>
+=======
+		<key>beerlog_tests.py</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
+				<integer>47</integer>
+				<key>line</key>
+				<integer>24</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>78</integer>
+		</dict>
+		<key>blog/views.py</key>
+>>>>>>> 498a949935bb7cedc0a8bacb8ac061923af7931a
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+<<<<<<< HEAD
 				<integer>0</integer>
 				<key>line</key>
 				<integer>0</integer>
+=======
+				<integer>28</integer>
+				<key>line</key>
+				<integer>20</integer>
+>>>>>>> 498a949935bb7cedc0a8bacb8ac061923af7931a
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -52,12 +76,22 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
+<<<<<<< HEAD
 		<string>beerlog.py</string>
 		<string>blog/__init__.py</string>
+=======
+		<string>beerlog_tests.py</string>
+		<string>beerlog.py</string>
+		<string>blog/views.py</string>
+>>>>>>> 498a949935bb7cedc0a8bacb8ac061923af7931a
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<false/>
 	<key>windowFrame</key>
+<<<<<<< HEAD
 	<string>{{40, 53}, {1791, 1063}}</string>
+=======
+	<string>{{11, 43}, {1324, 823}}</string>
+>>>>>>> 498a949935bb7cedc0a8bacb8ac061923af7931a
 </dict>
 </plist>

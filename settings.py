@@ -24,3 +24,6 @@ IMAGE_FULL_SIZE = 800.0
 IMAGE_THUMBNAIL_EXT = '_thumb.jpg'
 TEMP_UPLOAD_FOLDER = '/tmp/beerlog/'
 ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png', 'gif'])
+
+# MISC
+TIME_FORMAT = "%Y-%m-%d %H:%M"
