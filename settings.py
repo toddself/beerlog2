@@ -26,4 +26,5 @@ TEMP_UPLOAD_FOLDER = '/tmp/beerlog/'
 ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png', 'gif'])
 
 # MISC
-TIME_FORMAT = "%Y-%m-%d %H:%M"
+DATE_FORMAT = "%Y-%m-%d"
+TIME_FORMAT = "%H:%M"

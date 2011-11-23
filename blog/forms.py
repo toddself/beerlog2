@@ -11,6 +11,7 @@ class EntryForm(Form):
     body = TextAreaField('Body', [validators.Length(min=4, max=1048576, message="The body is required")])
     time = DateTimeField('Time', display_format="%H:%M")
     date = DateTimeField('Date', display_format="%m/%d/%Y")
+    tags = TextField('Tags')
     is_draft = BooleanField('Draft?')
     is_deleted = BooleanField('Delete?')
     

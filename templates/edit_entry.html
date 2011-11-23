@@ -27,6 +27,21 @@
 			$('#editor').rte(options);
 		});
 		
+		function onAddTag(tag) {
+			alert("Added a tag: " + tag);
+		}
+		function onRemoveTag(tag) {
+			alert("Removed a tag: " + tag);
+		}
+		
+		function onChangeTag(input,tag) {
+			alert("Changed a tag: " + tag);
+		}
+		
+		$(function() {
+			$('#tags').tagsInput();
+		});
+		
 	</script>
 
 	<form id="postform" action="{{ url_for('edit_entry') }}" 
@@ -37,9 +52,20 @@
 			<dt>Time/Date
 			<dd>{{ data.form.time(id="time", value=data.date.strftime("%H:%M"))}}
 				{{ data.form.date(id="datepicker", value=data.date.strftime("%m/%d/%Y"))}}
+				{% if data.form.time.errors %}
+				<ul class="errors">
+					{% for error in data.form.time.errors %}<li>{{ error }}{% endfor %}
+			    </ul>
+				{% endif %}
+				{% if data.form.date.errors %}
+				<ul class="errors">
+					{% for error in data.form.date.errors %}<li>{{ error }}{% endfor %}
+			    </ul>
+				{% endif %}
+			{{ render_field(data.form.tags, class="tags", id="tags", value=data.tags) }}
 			<dt><br>
 			<dd>
-				 {{ data.form.is_draft() }}<strong>{{ data.form.is_draft.label }}<strong>
+				{{ data.form.is_draft() }}<strong>{{ data.form.is_draft.label }}<strong>
 				{{ data.form.is_deleted() }}<strong>{{ data.form.is_deleted.label }}</strong>
 		</dl>
 		<p><input type=submit value="Create Post">
