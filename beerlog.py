@@ -43,9 +43,9 @@ app.add_url_rule('/entry/<year>/<month>/<day>/<slug>/', view_func=get_entry)
 
 # authenticated blog views
 app.add_url_rule('/entry/edit/',
-                  view_func=require_auth(edit_entry),
-                  methods=['POST', 'GET'])
-app.add_url_rule('/entry/edit/<entry_id>/',
+                 view_func=require_auth(edit_entry),
+                 methods=['POST', 'GET'])
+app.add_url_rule('/entry/edit/<entry_id>/', 
                  view_func=require_auth(edit_entry),
                  methods=['POST', 'GET'])
 app.add_url_rule('/entry/edit/<entry_id>/delete/',

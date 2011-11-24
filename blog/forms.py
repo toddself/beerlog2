@@ -3,8 +3,15 @@ from __future__ import absolute_import
 
 from sqlobject import SQLObjectNotFound
 
-from wtforms import Form, TextField, TextAreaField, BooleanField, validators
+from wtforms import Form, TextField, TextAreaField, BooleanField, HiddenField, \
+                    validators, ValidationError
 from wtforms.ext.dateutil.fields import DateTimeField
+
+def is_int(form, field):
+    try:
+        int(field.data)
+    except ValueError:
+        raise ValidationError('Must be a valid integer')
 
 class EntryForm(Form):
     title = TextField('Title', [validators.Length(min=1, max=255, message="You must provide a title")])
@@ -14,4 +21,5 @@ class EntryForm(Form):
     tags = TextField('Tags')
     is_draft = BooleanField('Draft?')
     is_deleted = BooleanField('Delete?')
+    post_id = HiddenField('id', [is_int])
     

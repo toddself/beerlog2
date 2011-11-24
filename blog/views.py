@@ -44,7 +44,7 @@ def edit_entry(entry_id=-1):
     post = EntryForm(request.form)
     if request.method == 'POST' and post.validate():
         try:
-            entry = Entry.get(entry_id)
+            entry = Entry.get(post.post_id.data)
         except SQLObjectNotFound:
             post_on = datetime.combine(post.date.data.date(),
                                        post.time.data.time())
@@ -59,18 +59,19 @@ def edit_entry(entry_id=-1):
                     entry.addTag(t)
             flash("New entry <em>%s</em> was sucessfully added" % entry.title)
         else:
+            post_on = datetime.combine(post.date.data.date(),
+                                       post.time.data.time())
+            
             entry.title = post.title.data
             entry.body = post.body.data
             entry.author = session.get('user_id')
-            entry.post_on = post.post_on.data
+            entry.post_on = post_on
             entry.last_modified = datetime.now()
             entry.draft = post.is_draft.data
             entry.deleted = post.is_deleted.data
             if post.tags.data:
-                [entry.addTag(Tag(name=t)) for t in \
-                    post.tags.data.split(',') \
-                    if t not in [x.name for x in entry.tags]]
-                [entry.removeTag(t) for t in entry.tags if t not in new_tags]
+                [entry.removeTag(t) for t in entry.tags]
+                [entry.addTag(Tag(name=t)) for t in post.tags.data.split(',')]
             flash("<em>%s</em> was updated" % entry.title)
         return redirect(url_for('get_entry', entry_id=entry.id))
     else:
@@ -80,8 +81,9 @@ def edit_entry(entry_id=-1):
             entry = {'title': '',
                      'body': '',
                      'deleted': False,
-                     'draft': False}
-            tags = None
+                     'draft': False,
+                     'id': 0}
+            tags = ""
             date = datetime.now()
         else:
             date = entry.post_on

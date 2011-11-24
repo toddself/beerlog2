@@ -18,6 +18,7 @@ class BeerlogTestCase(unittest.TestCase):
     post_time = "11:45"
     post_body = "This is a test of the posting function"
     post_title = "This is a !test!@post!!!"
+    post_tags = "test, tags"
 
     def setUp(self):
         self.db_fd, beerlog.app.config['DB_NAME'] = tempfile.mkstemp()
@@ -38,12 +39,17 @@ class BeerlogTestCase(unittest.TestCase):
     def logout(self):
         return self.app.get('/logout', follow_redirects=True)
 
-    def create_post(self, title, body, date, time, redirect=True):
-        return self.app.post('/entry/edit/', data=dict(
+    def create_post(self, title, body, date, time, tags, redirect=True, pid=0):
+        if pid:
+            url = '/entry/edit/%s/' % pid
+        else:
+            url = '/entry/edit/'
+        return self.app.post(url, data=dict(
             title=title,
             body=body,
             date=date,
-            time=time
+            time=time,
+            tags=tags
             ), follow_redirects=redirect)
 
     def create_image(self, filepath, follow=True):
@@ -80,7 +86,8 @@ class BeerlogTestCase(unittest.TestCase):
         rv = self.create_post(self.post_title,
                               self.post_body,
                               self.post_date,
-                              self.post_time)
+                              self.post_time,
+                              self.post_tags)
         assert self.post_title in rv.data
 
     def test_slug_generation(self):
@@ -88,7 +95,8 @@ class BeerlogTestCase(unittest.TestCase):
         rv = self.create_post(self.post_title,
                               self.post_body,
                               self.post_date,
-                              self.post_time)
+                              self.post_time,
+                              self.post_tags)
         assert self.post_title in rv.data
         date = datetime.strptime(self.post_date, DATE_FORMAT)
         slug = get_slug_from_title(self.post_title)
@@ -105,8 +113,8 @@ class BeerlogTestCase(unittest.TestCase):
             rv = self.create_post(self.post_title,
                                   self.post_body,
                                   self.post_date,
-                                  self.post_time
-                                  )
+                                  self.post_time,
+                                  self.post_tags)
             assert "must be authenticated" in rv.data
 
     def test_post_delete_authenticated(self):
@@ -115,7 +123,9 @@ class BeerlogTestCase(unittest.TestCase):
                               self.post_body,
                               self.post_date,
                               self.post_time,
-                              False)
+                              self.post_tags,
+                              redirect=False)
+        print rv
         post_id = rv.location.rsplit('/')[-2]
         rv = self.app.get('/entry/edit/%s/delete/' % post_id,
                           follow_redirects=True)
@@ -127,6 +137,7 @@ class BeerlogTestCase(unittest.TestCase):
                               self.post_body,
                               self.post_date,
                               self.post_time,
+                              self.post_tags,
                               False)
         post_id = rv.location.rsplit('/')[-2]
         rv = self.logout()
@@ -142,17 +153,18 @@ class BeerlogTestCase(unittest.TestCase):
         self.create_post(self.post_title,
                          self.post_body,
                          self.post_date,
-                         self.post_time)
+                         self.post_time,
+                         self.post_tags)
         self.create_post(post_title2,
                          self.post_body,
                          self.post_date,
-                         self.post_time)
+                         self.post_time,
+                         self.post_tags)
         rv = self.app.get('/entry/%s/%s/%s/' % (test_date.year,
                                                 test_date.month,
                                                 test_date.day))
         assert self.post_title in rv.data
         assert post_title2 in rv.data
-
 
     def test_bad_posts(self):
         self.good_login()
@@ -160,38 +172,60 @@ class BeerlogTestCase(unittest.TestCase):
         rv = self.create_post("",
                               self.post_body,
                               self.post_date,
-                              self.post_time)
+                              self.post_time,
+                              self.post_tags)
         assert "You must provide a title" in rv.data
         # missing body
         rv = self.create_post(self.post_title,
                               "",
                               self.post_date,
-                              self.post_time)
+                              self.post_time,
+                              self.post_tags)
         assert "The body is required" in rv.data
         # too short body
         rv = self.create_post(self.post_title,
                               "ta",
                               self.post_date,
-                              self.post_time)
+                              self.post_time,
+                              self.post_tags)
         assert "The body is required" in rv.data
         # too long body
         rv = self.create_post(self.post_title,
                               ''.join(r_choice(au) for x in range(1048577)),
                               self.post_date,
-                              self.post_time)
+                              self.post_time,
+                              self.post_tags)
         assert "The body is required" in rv.data
         # malformed date
         rv = self.create_post(self.post_title,
                               self.post_body,
                               "AHAHAHHAHA",
-                              self.post_time)
+                              self.post_time,
+                              self.post_tags)
         assert "Invalid date/time input" in rv.data
         # malformed time
         rv = self.create_post(self.post_title,
                               self.post_body,
                               self.post_date,
-                              "HAHAHAAHAH")
+                              "HAHAHAAHAH",
+                              self.post_tags)
         assert "Invalid date/time input" in rv.data
+    
+    def test_post_edit(self):
+        rv = self.create_post(self.post_title,
+                              self.post_body,
+                              self.post_date,
+                              self.post_time,
+                              self.post_tags,
+                              False)
+        post_id = rv.location.rsplit('/')[-2]
+        rv = self.create_post("i am an edited post",
+                              self.post_body,
+                              self.post_date,
+                              self.post_time,
+                              self.post_tags,
+                              True)
+        assert "i am an edited post" in rv.data
 
 if __name__ == '__main__':
     unittest.main()

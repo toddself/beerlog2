@@ -67,6 +67,7 @@
 			<dd>
 				{{ data.form.is_draft() }}<strong>{{ data.form.is_draft.label }}<strong>
 				{{ data.form.is_deleted() }}<strong>{{ data.form.is_deleted.label }}</strong>
+			{{ data.form.post_id(value=data.entry.id) }}
 		</dl>
 		<p><input type=submit value="Create Post">
 	</form>
