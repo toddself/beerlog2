@@ -43,25 +43,22 @@ def get_entry(entry_id=None, day=None, month=None, year=None, slug=None):
 def edit_entry(entry_id=-1):
     post = EntryForm(request.form)
     if request.method == 'POST' and post.validate():
+        # valid call to post, lets make our post on time
+        post_on = datetime.combine(post.date.data.date(), post.time.data.time())        
         try:
+            # are we editing a post?
             entry = Entry.get(post.post_id.data)
         except SQLObjectNotFound:
-            post_on = datetime.combine(post.date.data.date(),
-                                       post.time.data.time())
+            # not an edit -- no post found by the id presented
             entry = Entry(title=post.title.data,
                           body=post.body.data,
                           author=session.get('user_id'),
                           post_on=post_on,
                           draft=post.is_draft.data)
             if post.tags.data:
-                for tag in post.tags.data.split(','):
-                    t = Tag(name=tag)
-                    entry.addTag(t)
+                [entry.addTag(Tag(name=t)) for t in post.tags.data.split(',')]
             flash("New entry <em>%s</em> was sucessfully added" % entry.title)
         else:
-            post_on = datetime.combine(post.date.data.date(),
-                                       post.time.data.time())
-            
             entry.title = post.title.data
             entry.body = post.body.data
             entry.author = session.get('user_id')

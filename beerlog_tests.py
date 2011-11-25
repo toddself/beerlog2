@@ -44,13 +44,14 @@ class BeerlogTestCase(unittest.TestCase):
             url = '/entry/edit/%s/' % pid
         else:
             url = '/entry/edit/'
-        return self.app.post(url, data=dict(
-            title=title,
-            body=body,
-            date=date,
-            time=time,
-            tags=tags
-            ), follow_redirects=redirect)
+        return self.app.post(url, 
+                             data=dict(title=title,
+                                       body=body,
+                                       date=date,
+                                       time=time,
+                                       tags=tags,
+                                       post_id=pid), 
+                             follow_redirects=redirect)
 
     def create_image(self, filepath, follow=True):
         fh = open(fn, 'rb')
@@ -91,46 +92,43 @@ class BeerlogTestCase(unittest.TestCase):
         assert self.post_title in rv.data
 
     def test_slug_generation(self):
-        self.good_login()
-        rv = self.create_post(self.post_title,
-                              self.post_body,
-                              self.post_date,
-                              self.post_time,
-                              self.post_tags)
-        assert self.post_title in rv.data
-        date = datetime.strptime(self.post_date, DATE_FORMAT)
-        slug = get_slug_from_title(self.post_title)
-        url = "/entry/%s/%s/%s/%s/" % (date.year,
-                                       date.month,
-                                       date.day,
-                                       slug)
-        rv = self.app.get(url)
-        assert self.post_title in rv.data
-
+         self.good_login()
+         rv = self.create_post(self.post_title,
+                               self.post_body,
+                               self.post_date,
+                               self.post_time,
+                               self.post_tags)
+         assert self.post_title in rv.data
+         date = datetime.strptime(self.post_date, DATE_FORMAT)
+         slug = get_slug_from_title(self.post_title)
+         url = "/entry/%s/%s/%s/%s/" % (date.year,
+                                        date.month,
+                                        date.day,
+                                        slug)
+         rv = self.app.get(url)
+         assert self.post_title in rv.data
+         
     def test_post_unauthenticated(self):
-            rv = self.logout()
-            assert "You were logged out" in rv.data
-            rv = self.create_post(self.post_title,
-                                  self.post_body,
-                                  self.post_date,
-                                  self.post_time,
-                                  self.post_tags)
-            assert "must be authenticated" in rv.data
-
+         rv = self.logout()
+         assert "You were logged out" in rv.data
+         rv = self.create_post(self.post_title,
+                               self.post_body,
+                               self.post_date,
+                               self.post_time,
+                               self.post_tags)
+         assert "must be authenticated" in rv.data
+         
     def test_post_delete_authenticated(self):
         self.good_login()
         rv = self.create_post(self.post_title,
                               self.post_body,
                               self.post_date,
                               self.post_time,
-                              self.post_tags,
-                              redirect=False)
-        print rv
-        post_id = rv.location.rsplit('/')[-2]
-        rv = self.app.get('/entry/edit/%s/delete/' % post_id,
+                              self.post_tags)
+        rv = self.app.get('/entry/edit/1/delete/',
                           follow_redirects=True)
         assert "marked as deleted" in rv.data
-
+    
     def test_post_delete_unauthenticated(self):
         self.good_login()
         rv = self.create_post(self.post_title,
@@ -139,13 +137,12 @@ class BeerlogTestCase(unittest.TestCase):
                               self.post_time,
                               self.post_tags,
                               False)
-        post_id = rv.location.rsplit('/')[-2]
         rv = self.logout()
         assert "You were logged out" in rv.data
-        rv = self.app.get('/entry/edit/%s/delete/' % post_id,
+        rv = self.app.get('/entry/edit/1/delete/',
                           follow_redirects=True)
         assert "must be authenticated" in rv.data
-
+    
     def test_multiple_posts_per_day(self):
         self.good_login()
         post_title2 = "post two"
@@ -165,7 +162,7 @@ class BeerlogTestCase(unittest.TestCase):
                                                 test_date.day))
         assert self.post_title in rv.data
         assert post_title2 in rv.data
-
+    
     def test_bad_posts(self):
         self.good_login()
         # missing title
@@ -209,22 +206,25 @@ class BeerlogTestCase(unittest.TestCase):
                               self.post_date,
                               "HAHAHAAHAH",
                               self.post_tags)
-        assert "Invalid date/time input" in rv.data
-    
+        assert "Invalid date/time input" in rv.data    
+
     def test_post_edit(self):
+        self.good_login()
         rv = self.create_post(self.post_title,
                               self.post_body,
                               self.post_date,
                               self.post_time,
                               self.post_tags,
-                              False)
-        post_id = rv.location.rsplit('/')[-2]
+                              redirect=False,
+                              pid=0)
+        
         rv = self.create_post("i am an edited post",
                               self.post_body,
                               self.post_date,
                               self.post_time,
                               self.post_tags,
-                              True)
+                              redirect=True,
+                              pid=1)
         assert "i am an edited post" in rv.data
 
 if __name__ == '__main__':
