@@ -10,7 +10,7 @@ from sqlobject import AND, SQLObjectNotFound
 
 from blog.models import Entry, Tag
 from blog.forms import EntryForm
-from settings import TIME_FORMAT
+from settings import DATE_FORMAT
 
 def get_entry(entry_id=None, day=None, month=None, year=None, slug=None):
     if entry_id:
@@ -18,8 +18,8 @@ def get_entry(entry_id=None, day=None, month=None, year=None, slug=None):
                                    Entry.q.deleted == False,
                                    Entry.q.draft == False))
     elif day and month and year:
-        time_string = "%s-%s-%s 00:00" % (year, month, day)
-        start_date = datetime.strptime(time_string, TIME_FORMAT)
+        time_string = "%s-%s-%s" % (year, month, day)
+        start_date = datetime.strptime(time_string, DATE_FORMAT)
         end_date = start_date + timedelta(days=1)
         if slug:
             entries = Entry.select(AND(Entry.q.draft == False,
@@ -44,7 +44,7 @@ def edit_entry(entry_id=-1):
     post = EntryForm(request.form)
     if request.method == 'POST' and post.validate():
         try:
-            entry = Entry.get(entry_id)
+            entry = Entry.get(post.post_id.data)
         except SQLObjectNotFound:
             post_on = datetime.combine(post.date.data.date(),
                                        post.time.data.time())
@@ -53,15 +53,25 @@ def edit_entry(entry_id=-1):
                           author=session.get('user_id'),
                           post_on=post_on,
                           draft=post.is_draft.data)
+            if post.tags.data:
+                for tag in post.tags.data.split(','):
+                    t = Tag(name=tag)
+                    entry.addTag(t)
             flash("New entry <em>%s</em> was sucessfully added" % entry.title)
         else:
+            post_on = datetime.combine(post.date.data.date(),
+                                       post.time.data.time())
+            
             entry.title = post.title.data
             entry.body = post.body.data
             entry.author = session.get('user_id')
-            entry.post_on = post.post_on.data
+            entry.post_on = post_on
             entry.last_modified = datetime.now()
             entry.draft = post.is_draft.data
             entry.deleted = post.is_deleted.data
+            if post.tags.data:
+                [entry.removeTag(t) for t in entry.tags]
+                [entry.addTag(Tag(name=t)) for t in post.tags.data.split(',')]
             flash("<em>%s</em> was updated" % entry.title)
         return redirect(url_for('get_entry', entry_id=entry.id))
     else:
@@ -71,15 +81,19 @@ def edit_entry(entry_id=-1):
             entry = {'title': '',
                      'body': '',
                      'deleted': False,
-                     'draft': False}
+                     'draft': False,
+                     'id': 0}
+            tags = ""
             date = datetime.now()
         else:
             date = entry.post_on
+            tags = ','.join([t.name for t in entry.tags])
             
         return render_template('edit_entry.html',
                                data={'form': post, 
                                      'date': datetime.now(),
-                                     'entry': entry})
+                                     'entry': entry,
+                                     'tags': tags})
 
 def delete_entry(entry_id=None):
     if not entry_id:
@@ -90,3 +104,6 @@ def delete_entry(entry_id=None):
         flash("Entry <em>%s</em> has been marked as deleted. (This means it can \
                be recovered!)" % entry.title)
         return redirect(url_for('get_entry'))
+        
+def get_tag(start):
+    pass

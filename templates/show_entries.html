@@ -8,8 +8,18 @@
 	{% endif %}
 	<ul>
 		{% for entry in entries %}
-			<li><h2><a href="/entry/{{ entry.id }}/">{{ entry.title }}</a></h2>
-			{{ entry.body|safe }}<br>{{ entry.post_on }}</li>
+			<li>
+				<h2><a href="/entry/{{ entry.id }}/">{{ entry.title }}</a></h2>
+				{{ entry.body|safe }}<br>
+				{{ entry.post_on }}<br>
+				{% if entry.tags %}
+					<ul>
+						{% for tag in entry.tags %}
+							<li>{{ tag.name }}
+						{% endfor %}
+					</ul>
+				{% endif %}				
+			</li>
 		{% else %}
 			<li><em>No entries matched your request</em></li>
 		{% endfor %}
