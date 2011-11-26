@@ -3,19 +3,23 @@
 	<head>
 		<title>B(eer)Log</title>
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
-		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css" />
 	</head>
 	<body style="background: #fff !important;">
 		<div style="width: 35em; background: white;">
-			<form method=post enctype="multipart/form-data" action="/upload" class=add-entry>
+			{% if data.images %}
+				<div style="overflow: auto;">
+					{% for image in data.images %}
+						<img src="http://images.robotholocaust.com/{{ image }}" style="float: left; width: 75px; height: 75px;">
+					{% endfor %}
+				</div>
+			{% endif %}
+			<form method="post" enctype="multipart/form-data" action="{{ url_for('create_image')}}" class=add-entry>
 				<dl>
 					<dt>Image
 					<dd><input type=file name=file>
-					{% if data %}
-						<dt>Thumbnail filename:
-						<dd>{{ data.thumb }}
-						<dt>Full size:
-						<dd>{{ data.img }}
+					{% if data.filename %}
+						<dt>Image filename
+						<dd>http://images.robotholocaust.com/{{ data.filename }}
 					{% endif %}
 				</dl>
 				<p><input type=submit value="Upload image">

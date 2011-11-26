@@ -25,7 +25,7 @@ def login():
             session['logged_in'] = True
             session['user_id'] = u_req[0].id
             flash('You were logged in')
-            return redirect(url_for('get_entry'))
+            return redirect(url_for('list_entries'))
 
     return render_template('login.html', error=error)
 
@@ -33,7 +33,7 @@ def logout():
     session.pop('logged_in', None)
     session.pop('user_id', None)
     flash('You were logged out')
-    return redirect(url_for('get_entry'))
+    return redirect(url_for('list_entries'))
     
 def require_auth(callback):
     @wraps(callback)
@@ -42,5 +42,5 @@ def require_auth(callback):
             return callback(*args, **kwargs)
         else:
             flash("You must be authenticated to access this section")
-            return redirect(url_for('get_entry'))
+            return redirect(url_for('list_entries'))
     return auth

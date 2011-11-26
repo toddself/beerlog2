@@ -5,14 +5,13 @@ import os
 from datetime import datetime, timedelta
 
 from flask import render_template, url_for, redirect, request, flash, session
-from werkzeug import secure_filename
 from sqlobject import AND, SQLObjectNotFound
 
 from blog.models import Entry, Tag
 from blog.forms import EntryForm
 from settings import DATE_FORMAT
 
-def get_entry(entry_id=None, day=None, month=None, year=None, slug=None):
+def list_entries(entry_id=None, day=None, month=None, year=None, slug=None):
     if entry_id:
         entries = Entry.select(AND(Entry.q.id == entry_id,
                                    Entry.q.deleted == False,
@@ -70,7 +69,7 @@ def edit_entry(entry_id=-1):
                 [entry.removeTag(t) for t in entry.tags]
                 [entry.addTag(Tag(name=t)) for t in post.tags.data.split(',')]
             flash("<em>%s</em> was updated" % entry.title)
-        return redirect(url_for('get_entry', entry_id=entry.id))
+        return redirect(url_for('list_entries', entry_id=entry.id))
     else:
         try:
             entry = Entry.get(entry_id)
@@ -100,7 +99,7 @@ def delete_entry(entry_id=None):
         entry.deleted = True
         flash("Entry <em>%s</em> has been marked as deleted. (This means it can \
                be recovered!)" % entry.title)
-        return redirect(url_for('get_entry'))
+        return redirect(url_for('list_entries'))
         
 def get_tag(start):
     pass
