@@ -13,4 +13,3 @@ def deploy():
     with cd('/tmp/beerlog'):
         run('tar xzf /tmp/beerlog.tar,gz')
         run('/usr/bin/env python setup.py install')
-    

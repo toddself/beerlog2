@@ -22,4 +22,3 @@ class EntryForm(Form):
     is_draft = BooleanField('Draft?')
     is_deleted = BooleanField('Delete?')
     post_id = HiddenField('id', [is_int])
-    
