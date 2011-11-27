@@ -6,7 +6,6 @@ import hashlib
 from datetime import datetime
 
 from sqlobject import *
-from flask import Flask
 
 class Users(SQLObject):
     first_name = UnicodeCol(length=128, default="")
@@ -44,7 +43,7 @@ class Entry(SQLObject):
 
 class Tag(SQLObject):
     name = UnicodeCol(length=255)
-    entries = RelatedJoin('Entry')
+    entries = RelatedJoin('Entry')    
     
 def get_slug_from_title(title):
     return re.sub('[^A-Za-z0-9-]', '', re.sub('\s','-', title)).lower()

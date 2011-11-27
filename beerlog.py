@@ -8,8 +8,13 @@ from flask import Flask
 from sqlobject import connectionForURI, sqlhub
 from werkzeug.utils import secure_filename
 
+# blog stuff
 from blog.views import list_entries, edit_entry, delete_entry
+from blog.models import Users, Tag, Entry
+
+# image stuff
 from image.views import list_images, create_image
+from image.models import Image
 
 # TODO USER EDITOR
 from admin.views import login, logout, require_auth
@@ -36,6 +41,7 @@ def init_db(config):
     Entry.createTable()
     Users.createTable()
     Tag.createTable()
+    Image.createTable()
     admin = Users(email=config['ADMIN_USERNAME'])
     admin.set_pass(config['PASSWORD_SALT'], config['ADMIN_PASSWORD'])
 

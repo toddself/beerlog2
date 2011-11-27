@@ -40,8 +40,8 @@ def list_entries(entry_id=None, day=None, month=None, year=None, slug=None):
     return render_template('show_entries.html', entries=entries)
 
 def edit_entry(entry_id=-1):
-    post = EntryForm(request.form)
-    if request.method == 'POST' and post.validate():
+    post = EntryForm()
+    if post.validate_on_submit():
         # valid call to post, lets make our post on time
         post_on = datetime.combine(post.date.data.date(), post.time.data.time())        
         try:

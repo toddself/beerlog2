@@ -1,3 +1,4 @@
+{% from "_formhelper.html" import render_field %}
 <!DOCTYPE html>
 <html>
 	<head>
@@ -9,17 +10,17 @@
 			{% if data.images %}
 				<div style="overflow: auto;">
 					{% for image in data.images %}
-						<img src="http://images.robotholocaust.com/{{ image }}" style="float: left; width: 75px; height: 75px;">
+						<img src="{{ image.url }}" style="float: left; width: 75px; height: 75px;">
 					{% endfor %}
 				</div>
 			{% endif %}
 			<form method="post" enctype="multipart/form-data" action="{{ url_for('create_image')}}" class=add-entry>
 				<dl>
-					<dt>Image
-					<dd><input type=file name=file>
+					{{ data.form.csrf }}
+					{{ render_field(data.form.image) }}
 					{% if data.filename %}
 						<dt>Image filename
-						<dd>http://images.robotholocaust.com/{{ data.filename }}
+						<dd>{{ data.filename }}
 					{% endif %}
 				</dl>
 				<p><input type=submit value="Upload image">

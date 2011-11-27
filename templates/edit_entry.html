@@ -36,6 +36,7 @@
 	<form id="postform" action="{{ url_for('edit_entry') }}" 
 		  method="post" class="add-entry">
 		<dl>
+			{{ data.form.csrf }}
 			{{ render_field(data.form.title, class="title", value=data.entry.title) }}
 			{{ render_field(data.form.body, rows="25", id="editor") }}
 			<dt>Time/Date
