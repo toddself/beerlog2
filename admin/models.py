@@ -28,5 +28,4 @@ class Users(SQLObject):
 
 def generate_password(cleartext):
     cyphertext = hashlib.sha256("%s%s" % (PASSWORD_SALT, cleartext))
-    return cyphertext.hexdigest()
-        
+    return cyphertext.hexdigest()        
