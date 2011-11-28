@@ -14,16 +14,15 @@ DB_NAME = 'beerlog.db'
 DB_PROTOCOL = '://'
 
 # AWS
-AWS_ACCESS_KEY = '1HGDVNA54EDR3KAXT9G2'
-AWS_SECRET_KEY = 'ECbJ163uhGBOWkFCO2+l5dXZnXX7T7cajcjj2ohw'
+AWS_ACCESS_KEY = 'AKIAJI5XYXWZHUO5MZFA'
+AWS_SECRET_KEY = '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'
 AWS_BUCKET_NAME = 'images.robotholocaust.com'
 
 # IMAGES
-IMAGE_THUMBNAIL_SIZE = 200.0
 IMAGE_FULL_SIZE = 800.0
-IMAGE_THUMBNAIL_EXT = '_thumb.jpg'
 TEMP_UPLOAD_FOLDER = '/tmp/beerlog/'
 ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png', 'gif'])
+IMAGE_BASEPATH = 'http://images.robotholocaust.com'
 
 # MISC
 DATE_FORMAT = "%Y-%m-%d"

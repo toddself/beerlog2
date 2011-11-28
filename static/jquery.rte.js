@@ -517,15 +517,11 @@
 			return false;
 		},
 		insertImage: function(e){
-			var url = prompt('Insert image URL');
-			if(url){
-				var i = e.data.rte.createElement('img');
-				i.src = url;
-				e.data.rte.insertNode(i);
-			}
+		    var image_selector = window.open('/image', 'image_browser', "width=600, height=400, scrollbars=no");
+            image_selector.evt = e;
 			return false;
 		},
-		insertTable:function(e){
+		insertTable:function(windowe){
 			var size = prompt('Insert new table:\ngive size in terms of columns by rows.\nTable size: ','2x1');
 			if(size &&  size.length){
 				var t = e.data.rte.createElement('TABLE');

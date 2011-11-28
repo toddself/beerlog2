@@ -1,3 +1,4 @@
+{% from "_formhelper.html" import render_field %}
 {% extends "layout.html" %}
 {% block header %}
 {{ super() }}
@@ -7,10 +8,9 @@
 	{% if error %}<p class="error"><strong>Error:</strong> {{ error }}{% endif %}
 	<form action="{{ url_for('login') }}" method="post">
 		<dl>
-			<dt>Username:</dt>
-			<dd><input type="email" name="username" /></dd>
-			<dt>Password:</dt>
-			<dd><input type="password" name="password" /></dd>
+			{{ data.form.csrf }}
+			{{ render_field(data.form.email) }}
+			{{ render_field(data.form.password) }}
 			<dd><input type="submit" value="Login" />
 		</dl>
 	</form>

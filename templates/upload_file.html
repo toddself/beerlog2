@@ -1,3 +1,4 @@
+{% from "_formhelper.html" import render_field %}
 <!DOCTYPE html>
 <html>
 	<head>
@@ -6,20 +7,27 @@
 	</head>
 	<body style="background: #fff !important;">
 		<div style="width: 35em; background: white;">
-			{% if data.images %}
-				<div style="overflow: auto;">
-					{% for image in data.images %}
-						<img src="http://images.robotholocaust.com/{{ image }}" style="float: left; width: 75px; height: 75px;">
-					{% endfor %}
-				</div>
-			{% endif %}
 			<form method="post" enctype="multipart/form-data" action="{{ url_for('create_image')}}" class=add-entry>
 				<dl>
-					<dt>Image
-					<dd><input type=file name=file>
+					{{ data.form.csrf }}
+					{{ render_field(data.form.image) }}
+					<dt>Resize <span style="font-weight: normal;">(Max size is 800 pixels on longest side; proportions will be constrained)</span>
+						<dd> {{ data.form.width(size=3) }}x{{ data.form.height(size=3) }}
+					{{ render_field(data.form.caption, size=60) }}
+					{% if data.form.width.errors %}
+					<ul class="errors">
+						{% for error in data.form.width.errors %}<li>{{ error }}{% endfor %}
+					</ul>							
+					{% endif %}
+					{% if data.form.height.errors %}
+					<ul class="errors">
+						{% for error in data.form.height.errors %}<li>{{ error }}{% endfor %}
+					</ul>							
+					{% endif %}
+					
 					{% if data.filename %}
 						<dt>Image filename
-						<dd>http://images.robotholocaust.com/{{ data.filename }}
+						<dd>{{ data.filename }}
 					{% endif %}
 				</dl>
 				<p><input type=submit value="Upload image">
