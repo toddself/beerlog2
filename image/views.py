@@ -2,11 +2,12 @@ from datetime import datetime
 from StringIO import StringIO
 import hashlib
 import os
+from urlparse import urlparse
 
 from PIL import Image as PIL_Image
 from boto import connect_s3
 from boto.s3.key import Key
-from flask import render_template, request, flash
+from flask import render_template, request, flash, redirect, url_for
 from werkzeug import secure_filename
 
 from image.forms import ImageForm
@@ -14,16 +15,16 @@ from image.models import Image
 from settings import *
 
 def list_images():
-    images = Image.select()
-    image_form = ImageForm()
-    return render_template('upload_file.html', data={'images': images,
-                                                     'filename': "",
-                                                     'form': image_form})
+    images = list(Image.select())
+    return render_template('show_images.html', data={'images': images})
     
 def create_image():
     image_form = ImageForm(request.form) 
     if image_form.validate_on_submit():
         fn = image_form.image.file.filename
+        width = image_form.width.data
+        height = image_form.height.data
+        caption = image_form.caption.data
         if '.' in fn and fn.split('.', 1)[1].lower() in ALLOWED_EXTENSIONS:
             filename = os.path.join(TEMP_UPLOAD_FOLDER,
                                     secure_filename(fn))
@@ -33,42 +34,62 @@ def create_image():
             except OSError:
                 os.makedirs(TEMP_UPLOAD_FOLDER)
             image_form.image.file.save(filename)
-            image = store_image(filename, mime)
+            
+            if width and not height:
+                long_side = int(width)
+            elif height and not width:
+                long_side = int(height)
+            elif width and height:
+                if width >= height:
+                    long_side = int(width)
+                else:
+                    long_side = int(height)
+            else:
+                long_side = IMAGE_FULL_SIZE
+            
+            image, thumb_size = store_image(filename, mime, long_side)
             if image:
                 os.unlink(filename)
                 url = "%s/%s" % (IMAGE_BASEPATH, image)
-                img = Image(url=url)
+                img = Image(url=url, 
+                            width=thumb_size[0], 
+                            height=thumb_size[1],
+                            caption=caption)
                 flash("Image uploaded!")
             else:
                 flash("Couldn't store the image in S3. Please try again.")
             return render_template('upload_file.html',
                                     data={'filename': url,
-                                          'images': Image.select(),
                                           'form': image_form})
         else:
-            return render_template('upload_file.html', data={'form': image_form,
-                                                             'images': Image.select()})
+            return render_template('upload_file.html',
+                                   data={'form': image_form})
     else:
         
-        return render_template('upload_file.html', data={'images': Image.select(),
-                                                         'form': image_form})
+        return render_template('upload_file.html',
+                               data={'form': image_form})
 
-def delete_image(key):
+def delete_image(image_id):
+    img = Image.get(image_id)
+    key = urlparse(img.url).path.rsplit('/', 1)[1]
     bucket = connect_to_s3()
     k = bucket.get_key(key)
     if k:
         k.delete()
+        Image.delete(img.id)
+        flash("%s was deleted from S3 and the database.  It is unrecoverable." % key)
+        return redirect(url_for('list_entries'))
 
-def store_image(filename, mime):
+def store_image(filename, mime, long_side):
     extension = filename.rsplit('.', 1)[1]
     uploadtime = datetime.strftime(datetime.now(), '%Y-%m-%d-%H-%M')
     s3_image_name = "%s%s.%s" % (uploadtime,
                                  hashlib.md5(filename).hexdigest(),
                                  extension)
     bucket = connect_to_s3()
-    image_data = resize_image(filename, IMAGE_FULL_SIZE)
+    image_data, thumb_size = resize_image(filename, long_side)
     save_data(image_data, bucket, s3_image_name, mime)
-    return s3_image_name
+    return s3_image_name, thumb_size
 
 def save_data(data, bucket, s3_filename, mime):
     k = Key(bucket)
@@ -85,16 +106,18 @@ def connect_to_s3():
 
 def resize_image(filename, t_m_l):
     im = PIL_Image.open(filename)
-    if max(im.size) < IMAGE_FULL_SIZE:
+    if max(im.size) < t_m_l:
         image = StringIO()
-        return image
+        return image, im.size
     else:
         thumb_size = [0,0]
         max_l = im.size.index(max(im.size))
         min_l = im.size.index(min(im.size))
         thumb_size[max_l] = int(t_m_l)
-        thumb_size[min_l] = int(round((t_m_l / im.size[max_l]) * im.size[min_l]))
+        ratio = float(t_m_l) / float(im.size[max_l])
+        raw_min_l = ratio * float(im.size[min_l])
+        thumb_size[min_l] = int(round(raw_min_l))
         im.thumbnail(thumb_size, PIL_Image.ANTIALIAS)
         thumb = StringIO()
         im.save(thumb, 'JPEG')
-        return thumb
+        return thumb, thumb_size

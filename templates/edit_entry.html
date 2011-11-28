@@ -22,7 +22,7 @@
 			var options = {
 				imgPath: "/static/images/",
 				content: '{{ data.entry.body|safe }}',
-				buttonSet: 'format|class|bold|underline|italic|spacer|orderedList|unorderedList|indent|oudent|spacer|justify|spacer|link|image|table|spacer|toggle'
+				buttonSet: 'format|class|bold|underline|italic|spacer|orderedList|unorderedList|indent|outdent|spacer|justify|spacer|link|image|table|spacer|toggle'
 			};
 			$('#editor').rte(options);
 		});
@@ -32,7 +32,6 @@
 		});
 		
 	</script>
-
 	<form id="postform" action="{{ url_for('edit_entry') }}" 
 		  method="post" class="add-entry">
 		<dl>
@@ -62,6 +61,6 @@
 		<p><input type=submit value="Create Post">
 	</form>
 	
-	<iframe src=/image class=upload style="width: 100%"></iframe>
+	<iframe src=/image/add class=upload style="width: 100%; height: 300px;"></iframe>
 	
 {% endblock %}

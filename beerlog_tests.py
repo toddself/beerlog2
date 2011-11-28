@@ -1,3 +1,5 @@
+# TODO: ADD UNIT TESTING FOR IMAGE UPLOAD, BROWSE & DELETE
+
 import os
 import unittest
 import tempfile
@@ -55,9 +57,9 @@ class BeerlogTestCase(unittest.TestCase):
                              follow_redirects=redirect)
 
     def create_image(self, filepath, follow=True):
-        fh = open(fn, 'rb')
-        return self.app.post('/upload', data=dict(
-            file=FileStorage(fh, fn)
+        fh = open(filepath, 'rb')
+        return self.app.post('/image/add/', data=dict(
+            file=FileStorage(fh, filepath)
         ))
 
     def good_login(self):
@@ -227,6 +229,6 @@ class BeerlogTestCase(unittest.TestCase):
                               redirect=True,
                               pid=1)
         assert "i am an edited post" in rv.data
-
+    
 if __name__ == '__main__':
     unittest.main()

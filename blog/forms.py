@@ -4,14 +4,10 @@ from __future__ import absolute_import
 from sqlobject import SQLObjectNotFound
 
 from flaskext.wtf import Form, TextField, TextAreaField, BooleanField, \
-                         HiddenField, validators, ValidationError
-from wtforms.ext.dateutil.fields import DateTimeField
+                         IntegerField, validators, ValidationError
+from wtforms.widgets import HiddenInput
 
-def is_int(form, field):
-    try:
-        int(field.data)
-    except ValueError:
-        raise ValidationError('Must be a valid integer')
+from wtforms.ext.dateutil.fields import DateTimeField
 
 class EntryForm(Form):
     title = TextField('Title', 
@@ -27,4 +23,4 @@ class EntryForm(Form):
     tags = TextField('Tags')
     is_draft = BooleanField('Draft?')
     is_deleted = BooleanField('Delete?')
-    post_id = HiddenField('id', [is_int])
+    post_id = IntegerField('id', widget=HiddenInput())
