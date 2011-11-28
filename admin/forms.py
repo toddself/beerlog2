@@ -36,7 +36,7 @@ class UserForm(Form):
     first_name = TextField('First Name',
                            [Length(max=128, message="128 character max"),
                            Required(message="You must provide a first name")])
-    last_name = TextField('First Name',
+    last_name = TextField('Last Name',
                           [Length(max=128, message="128 character max"),
                           Required(message="You must provide a last name")])
     email = EmailField('E-Mail', 
@@ -46,7 +46,17 @@ class UserForm(Form):
                       [Length(max=255, message="255 character max"),
                       Optional()])
     avatar = URLField("Avatar", [Optional()])
-    user_id = IntegerField(widget=HiddenInput())    
+                          
+class CreateUserForm(UserForm):             
+    password = PasswordField("Password",
+                           [Required(message="You must supply a password"),
+                           EqualTo('password2', message="Passwords must match"),
+                           Length(max=255, message="255 character max")])
+    password2 = PasswordField("Verify Password",
+                            [Required(message="You must verify your password")])                      
+
+class EditUserForm(UserForm):
+    user_id = IntegerField(widget=HiddenInput())
     
 class LoginForm(Form):
     email = EmailField("Username",

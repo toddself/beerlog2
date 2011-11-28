@@ -64,7 +64,7 @@ def teardown_request(exception):
 app.add_url_rule('/login', view_func=login, methods=['POST', 'GET'])
 app.add_url_rule('/logout', view_func=logout)
 app.add_url_rule('/admin/users/edit/', 
-                 view_func=require_auth(edit_user),
+                 view_func=require_admin(edit_user),
                  methods=['POST', 'GET'])
 app.add_url_rule('/admin/users/edit/<user_id>/',
                  view_func=require_auth(edit_user),

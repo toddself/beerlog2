@@ -6,7 +6,7 @@ from flask import request, flash, redirect, render_template, url_for, session
 from sqlobject import AND, SQLObjectNotFound
 
 from admin.models import Users, generate_password
-from admin.forms import LoginForm, UserForm, ChangePasswordForm
+from admin.forms import LoginForm, EditUserForm, CreateUserForm, ChangePasswordForm
 from image.models import Image
 
 def login():
@@ -58,6 +58,7 @@ def require_admin(callback):
         if error:
             flash("You must be an admin to access this function")
             return redirect(url_for('list_entries'))
+    return admin
 
 def change_password(user_id=0):
     pass_form = ChangePasswordForm()
@@ -94,11 +95,14 @@ def list_users(user_id=0):
     return render_template('list_users.html', data={'users': users})
 
 def edit_user(user_id=-1):
-    user_form = UserForm()
+    if user_id > 0:
+        user_form = EditUserForm()
+    else:
+        user_form = CreateUserForm()
     if user_form.validate_on_submit():
         try:
             user = Users.get(user_form.user_id.data)
-        except SQLObjectNotFound:
+        except (SQLObjectNotFound, AttributeError):
             user = Users(first_name = user_form.first_name.data,
                          last_name = user_form.last_name.data,
                          email = user_form.email.data,
@@ -115,7 +119,7 @@ def edit_user(user_id=-1):
             user.last_modified = datetime.now()
             try:
                 avatar = list(Image.select(Image.q.url==user_form.avatar.data))[0]
-            except SQLObjectNotFound:
+            except (SQLObjectNotFound, IndexError):
                 pass
             else:
                 user.avatar = avatar
@@ -129,8 +133,7 @@ def edit_user(user_id=-1):
                     'last_name': '',
                     'email': '',
                     'password': '',
-                    'avatar': '',
-                    'id': -1}
+                    'avatar': ''}
         return render_template('edit_user.html', data={'form': user_form,
                                                        'user': user})
 
