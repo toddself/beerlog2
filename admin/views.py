@@ -5,30 +5,20 @@ from datetime import datetime
 from flask import request, flash, redirect, render_template, url_for, session
 from sqlobject import AND, SQLObjectNotFound
 
-from settings import PASSWORD_SALT
-from admin.models import Users
+from admin.models import Users, generate_password
 from admin.forms import LoginForm, UserForm, ChangePasswordForm
 from image.models import Image
-
-def generate_password(cleartext):
-    cyphertext = hashlib.sha256("%s%s" % (PASSWORD_SALT, cleartext))
-    return cyphertext.hexdigest()
 
 def login():
     error = None
     login_form = LoginForm()
     if login_form.validate_on_submit():
-        pcrypt = generate_password(login_form.password.data)
-        u_req = Users.select(AND(Users.q.email==login_form.email.data,
-                                 Users.q.password==pcrypt))
-        if not list(u_req):
-            error = 'Invalid username or password. Please try again'
-        else:
-            u_req[0].last_login = datetime.now()
-            session['logged_in'] = True
-            session['user_id'] = u_req[0].id
-            flash('You were logged in')
-            return redirect(url_for('list_entries'))
+        u_req = Users.get(login_form.user_id.data)
+        u_req.last_login = datetime.now()
+        session['logged_in'] = True
+        session['user_id'] = u_req.id
+        flash('You were logged in')
+        return redirect(url_for('list_entries'))
     return render_template('login.html', data={"form": login_form,
                                                "error": error})
 

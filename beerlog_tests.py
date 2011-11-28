@@ -12,7 +12,8 @@ from werkzeug.datastructures import FileStorage
 
 import beerlog
 from settings import DATE_FORMAT
-from blog.models import get_slug_from_title, Entry, Users
+from blog.models import get_slug_from_title, Entry
+from admin.models import Users
 
 class BeerlogTestCase(unittest.TestCase):
 
@@ -35,7 +36,7 @@ class BeerlogTestCase(unittest.TestCase):
 
     def login(self, username, password):
         return self.app.post('/login', data=dict(
-            username=username,
+            email=username,
             password=password
         ), follow_redirects=True)
 
@@ -81,9 +82,15 @@ class BeerlogTestCase(unittest.TestCase):
         rv = self.logout()
         assert "You were logged out" in rv.data
         rv = self.login('adminx', 'admin')
-        assert "Invalid username" in rv.data
-        rv = self.login('admin', 'adminx')
-        assert "Invalid username" in rv.data
+        assert "Invalid e-mail address" in rv.data
+        rv = self.login('admin@admin.com', 'adminx')
+        assert "Invalid username/password" in rv.data
+        # try to fake out the form by providing a user_id
+        rv = self.app.post('/login', data=dict(
+            email=beerlog.app.config['ADMIN_USERNAME'],       
+            password=beerlog.app.config['ADMIN_PASSWORD'],
+            user_id=1), follow_redirects=True)
+        assert "Invalid username/password" in rv.data
 
     def test_post_authenticated(self):
         self.good_login()
