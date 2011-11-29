@@ -10,7 +10,7 @@ ADMIN_PASSWORD = 'testtesttest'
 
 # DB
 DB_DRIVER = 'sqlite'
-DB_NAME = 'beerlog.db'
+DB_NAME = '/var/www_apps/beerlog/beerlog.db'
 DB_PROTOCOL = '://'
 
 # AWS
