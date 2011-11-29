@@ -9,6 +9,6 @@ setup(
     zip_safe=False,
     install_requires=['Flask','PIL', 'WTForms', 
                       'Flask-WTF', 'Boto', 'SQLObject', 'Fabric', 
-                      'python-dateutil', ],
+                      'python-dateutil==1.5', ],
                       
     )
