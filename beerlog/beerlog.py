@@ -1,5 +1,3 @@
-from __future__ import division
-from __future__ import absolute_import
 import hashlib
 import os
 from datetime import datetime
@@ -23,7 +21,7 @@ from admin.views import login, logout, require_auth, list_users, edit_user, \
 from admin.models import Users
 
 app = Flask(__name__)
-app.config.from_pyfile('/var/www_apps/beerlog/settings.py')
+app.config.from_pyfile('settings.py')
 
 if app.config['DB_DRIVER'] == 'sqlite':
     app.config['DB_NAME'] = os.path.join(os.getcwd(), app.config['DB_NAME'])

@@ -8,6 +8,7 @@ from sqlobject import AND, SQLObjectNotFound
 from admin.models import Users, generate_password
 from admin.forms import LoginForm, EditUserForm, CreateUserForm, ChangePasswordForm
 from image.models import Image
+from settings import PASSWORD_SALT
 
 def login():
     error = None

@@ -1,5 +1,3 @@
-from __future__ import division
-from __future__ import absolute_import
 import hashlib
 import os
 from datetime import datetime, timedelta
@@ -9,7 +7,7 @@ from sqlobject import AND, SQLObjectNotFound
 
 from blog.models import Entry, Tag
 from blog.forms import EntryForm
-from settings import DATE_FORMAT
+from settings import *
 
 def list_entries(entry_id=None, day=None, month=None, year=None, slug=None):
     if entry_id:
