@@ -10,9 +10,9 @@ from boto.s3.key import Key
 from flask import render_template, request, flash, redirect, url_for
 from werkzeug import secure_filename
 
-from image.forms import ImageForm
-from image.models import Image
-from settings import *
+from beerlog.image.forms import ImageForm
+from beerlog.image.models import Image
+from beerlog.settings import *
 
 def list_images():
     images = list(Image.select())

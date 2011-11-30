@@ -4,8 +4,8 @@ from datetime import datetime
 
 from sqlobject import *
 
-from image.models import Image
-from settings import PASSWORD_SALT
+from beerlog.image.models import Image
+from beerlog.settings import PASSWORD_SALT
 
 class Users(SQLObject):
     first_name = UnicodeCol(length=128, default="")

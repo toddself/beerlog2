@@ -8,17 +8,17 @@ from sqlobject.dberrors import OperationalError
 from werkzeug.utils import secure_filename
 
 # blog stuff
-from blog.views import list_entries, edit_entry, delete_entry
-from blog.models import Tag, Entry
+from beerlog.blog.views import list_entries, edit_entry, delete_entry
+from beerlog.blog.models import Tag, Entry
 
 # image stuff
-from image.views import list_images, create_image, delete_image
-from image.models import Image
+from beerlog.image.views import list_images, create_image, delete_image
+from beerlog.image.models import Image
 
 #admin stuff
-from admin.views import login, logout, require_auth, list_users, edit_user, \
+from beerlog.admin.views import login, logout, require_auth, list_users, edit_user, \
                         delete_user, require_admin, change_password
-from admin.models import Users
+from beerlog.admin.models import Users
 
 app = Flask(__name__)
 app.config.from_pyfile('settings.py')

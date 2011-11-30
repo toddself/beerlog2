@@ -9,7 +9,7 @@ from flaskext.wtf.html5 import URLField, IntegerField, EmailField
 from wtforms.widgets import HiddenInput
 from wtforms.ext.dateutil.fields import DateTimeField
 
-from admin.models import Users, generate_password
+from beerlog.admin.models import Users, generate_password
 
 class ValidPasswordForUser():
     def __init__(self, message=None):

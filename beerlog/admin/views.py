@@ -5,10 +5,10 @@ from datetime import datetime
 from flask import request, flash, redirect, render_template, url_for, session
 from sqlobject import AND, SQLObjectNotFound
 
-from admin.models import Users, generate_password
-from admin.forms import LoginForm, EditUserForm, CreateUserForm, ChangePasswordForm
-from image.models import Image
-from settings import PASSWORD_SALT
+from beerlog.admin.models import Users, generate_password
+from beerlog.admin.forms import LoginForm, EditUserForm, CreateUserForm, ChangePasswordForm
+from beerlog.image.models import Image
+from beerlog.settings import PASSWORD_SALT
 
 def login():
     error = None

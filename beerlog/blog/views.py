@@ -5,9 +5,9 @@ from datetime import datetime, timedelta
 from flask import render_template, url_for, redirect, request, flash, session
 from sqlobject import AND, SQLObjectNotFound
 
-from blog.models import Entry, Tag
-from blog.forms import EntryForm
-from settings import *
+from beerlog.blog.models import Entry, Tag
+from beerlog.blog.forms import EntryForm
+from beerlog.settings import *
 
 def list_entries(entry_id=None, day=None, month=None, year=None, slug=None):
     if entry_id:
