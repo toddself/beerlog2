@@ -4,7 +4,7 @@ setup(
     name='beerlog',
     version='0.50',
     long_description=__doc__,
-    packages=['beerlog'],
+    packages=['beerlog', 'beerlog.blog', 'beerlog.admin', 'beerlog.image'],
     include_package_data=True,
     zip_safe=False,
     data_files=[('/var/www_apps/', ['beerlog.wsgi'])],
