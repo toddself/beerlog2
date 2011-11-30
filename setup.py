@@ -7,7 +7,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
-    data_files=[('/var/www_apps/', ['beerlog.wsgi'])]
+    data_files=[('/var/www_apps/', ['beerlog.wsgi'])],
     install_requires=['Flask',
                       'PIL',
                       'WTForms',
