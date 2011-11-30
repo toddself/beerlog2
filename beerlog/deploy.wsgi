@@ -1,3 +1,3 @@
-import os, sys
+import sys
 sys.path.append('/var/www_apps/beerlog')
 from beerlog import app as application
