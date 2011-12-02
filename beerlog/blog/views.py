@@ -5,10 +5,11 @@ from datetime import datetime, timedelta
 from flask import render_template, url_for, redirect, request, flash, session
 from sqlobject import AND, SQLObjectNotFound
 
+from beerlog import app
 from beerlog.blog.models import Entry, Tag
 from beerlog.blog.forms import EntryForm
 from beerlog.settings import *
-from beerlog.admin.views mport require_auth
+from beerlog.admin.views import require_auth
 
 @app.route('/')
 @app.route('/entry/<entry_id>/')

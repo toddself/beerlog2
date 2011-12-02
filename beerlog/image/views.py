@@ -14,6 +14,7 @@ from beerlog.image.forms import ImageForm
 from beerlog.image.models import Image
 from beerlog.settings import *
 from beerlog.admin.views import require_auth
+from beerlog import app
 
 @app.route('/image/')
 @require_auth

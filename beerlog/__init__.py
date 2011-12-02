@@ -3,6 +3,8 @@ import os
 from datetime import datetime
 
 from flask import Flask
+from sqlobject import connectionForURI, sqlhub
+from sqlobject.dberrors import OperationalError
 
 from beerlog.blog.models import Tag, Entry
 from beerlog.image.models import Image

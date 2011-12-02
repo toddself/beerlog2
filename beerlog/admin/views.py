@@ -65,7 +65,7 @@ def require_admin(callback):
     return admin
 
 @app.route('/admin/users/edit/<user_id>/password/')
-@require_auth()
+@require_auth
 def change_password(user_id=0):
     pass_form = ChangePasswordForm()
     if pass_form.validate_on_submit():
@@ -74,8 +74,7 @@ def change_password(user_id=0):
             flash("You can only change your own password!")
             return redirect(url_for('list_entries'))        
         try:
-            else:
-                user = Users.get(user_id)
+            user = Users.get(user_id)
         except SQLObjectNotFound:
             flash("You must provide a user ID")
             return redirect(url_for('list_users'))
@@ -95,7 +94,7 @@ def change_password(user_id=0):
                                          'user_id': user.id})
 
 @app.route('/admin/users/')
-@app.require_auth()
+@require_auth
 def list_users(user_id=0):
     if user_id:
         try:
@@ -109,7 +108,7 @@ def list_users(user_id=0):
 
 @app.route('/admin/users/edit/', methods=['POST', 'GET'])
 @app.route('/admin/users/edit/<user_id>/', methods=['POST', 'GET'])
-@require_auth()
+@require_auth
 def edit_user(user_id=-1):
     if user_id > 0:
         user_form = EditUserForm()
@@ -154,7 +153,7 @@ def edit_user(user_id=-1):
                                                        'user': user})
 
 @app.route('/admin/users/edit/<user_id>/delete/')
-@require_admin()
+@require_admin
 def delete_user(user_id):
     try:
         user = User.get(user_id)
