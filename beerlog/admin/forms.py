@@ -26,6 +26,8 @@ class ValidPasswordForUser():
         try:
             user = list(Users.select(AND(Users.q.email==username,
                                          Users.q.password==cyphertext)))[0]
+            if not user.active:
+                raise ValidationError(self.message)
             form.user_id.data = user.id
         except (SQLObjectNotFound, IndexError):
             raise ValidationError(self.message)
