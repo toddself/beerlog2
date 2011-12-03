@@ -59,7 +59,7 @@ def process_bjcp_styles():
                 og_low = og_high = abv_high = fg_low = fg_high = srm_low = 0
                 srm_high = abv_low = ibu_low = ibu_high = 0
 
-                g = sub_category.getElementsByTagName
+                g = sc.getElementsByTagName
                 # loop over the text nodes and set the value of the 
                 # node equal to the xml node name
                 try:
@@ -115,7 +115,7 @@ def process_bjcp_styles():
                         pass
                     try:
                         og_highN = s('og')[0].getElementsByTagName('high')[0]
-                        og_high = float(oh_highN.firstChild.data)
+                        og_high = float(og_highN.firstChild.data)
                     except (IndexError, AttributeError):
                         pass
                     try:
@@ -224,6 +224,8 @@ def process_hops(d):
             stability = float(g('HSI')[0].firstChild.data)
         except AttributeError:
             pass
+        
+        print substitutes
 
         print "adding hop: %s" % name
         thisHop = Hop(name=name,
