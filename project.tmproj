@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>beerlog/brewery/importers.py</string>
+	<string>beerlog/brewery/models.py</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -26,9 +26,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>47</integer>
+				<integer>22</integer>
 				<key>line</key>
-				<integer>6</integer>
+				<integer>58</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -54,14 +54,42 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>40</integer>
+				<integer>19</integer>
 				<key>line</key>
-				<integer>170</integer>
+				<integer>227</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>154</integer>
+			<integer>202</integer>
+		</dict>
+		<key>beerlog/brewery/models.py</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>13</integer>
+				<key>line</key>
+				<integer>10</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>console.sh</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
 		</dict>
 		<key>runserver.py</key>
 		<dict>
@@ -83,6 +111,8 @@
 		<string>beerlog/__init__.py</string>
 		<string>beerlog/brewery/columns.py</string>
 		<string>beerlog/brewery/importers.py</string>
+		<string>beerlog/brewery/models.py</string>
+		<string>console.sh</string>
 		<string>runserver.py</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>

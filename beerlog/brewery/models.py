@@ -24,7 +24,12 @@ class Hop(SQLObject):
     origin = UnicodeCol(default=None)
     name = UnicodeCol(length=64, default=None)
     description = UnicodeCol(default=None)
-    substitutes = RelatedJoin('Hop')
+    substitutes = RelatedJoin('Hop',
+                              joinColumn='master_hop',
+                              otherColumn='substitute_hop',
+                              addRemoveName="Substitute",
+                              intermediateTable="substitute_hops",
+                              createRelatedTable=True)
     versions = Versioning()
     
     def _get_inventory(self):

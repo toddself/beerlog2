@@ -225,19 +225,29 @@ def process_hops(d):
         except AttributeError:
             pass
         
-        print substitutes
+        substitute_hops = []
+        try:
+            for sub_hop in substitutes.split(','):
+                try:
+                    sh = list(Hop.select(Hop.q.name==sub_hop.strip()))[0]
+                except (SQLObjectNotFound, IndexError):
+                    sh = Hop(name=sub_hop.strip())
+                substitute_hops.append(sh)
+        except AttributeError:
+            pass
 
         print "adding hop: %s" % name
         thisHop = Hop(name=name,
             alpha=alpha,
             beta=beta,
             origin=origin,
-            substitutes=substitutes,
             description=description,
             hop_type=hop_type,
             hop_form=hop_form,
             stability=stability
             )
+        if substitute_hops:
+            [thisHop.addSubstitute(x) for x in substitute_hops]
 
 def process_fermentables(d):
     # process all the fermentables
