@@ -5,10 +5,16 @@ from datetime import datetime, timedelta
 from flask import render_template, url_for, redirect, request, flash, session
 from sqlobject import AND, SQLObjectNotFound
 
+from beerlog import app
 from beerlog.blog.models import Entry, Tag
 from beerlog.blog.forms import EntryForm
 from beerlog.settings import *
+from beerlog.admin.views import require_auth
 
+@app.route('/')
+@app.route('/entry/<entry_id>/')
+@app.route('/entry/<year>/<month>/<day>/')
+@app.route('/entry/<year>/<month>/<day>/<slug>/')
 def list_entries(entry_id=None, day=None, month=None, year=None, slug=None):
     if entry_id:
         entries = Entry.select(AND(Entry.q.id == entry_id,
@@ -37,6 +43,9 @@ def list_entries(entry_id=None, day=None, month=None, year=None, slug=None):
 
     return render_template('show_entries.html', entries=entries)
 
+@app.route('/entry/edit/', methods=['POST', 'GET'])
+@app.route('/entry/edit/<entry_id>/', methods=['POST', 'GET'])
+@require_auth
 def edit_entry(entry_id=-1):
     post = EntryForm()
     if post.validate_on_submit():
@@ -89,6 +98,8 @@ def edit_entry(entry_id=-1):
                                      'entry': entry,
                                      'tags': tags})
 
+@app.route('/entry/edit/<entry_id>/delete/')
+@require_auth
 def delete_entry(entry_id=None):
     if not entry_id:
         flash("You have to specify a post to delete")
@@ -98,6 +109,3 @@ def delete_entry(entry_id=None):
         flash("Entry <em>%s</em> has been marked as deleted. (This means it can \
                be recovered!)" % entry.title)
         return redirect(url_for('list_entries'))
-        
-def get_tag(start):
-    pass

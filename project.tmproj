@@ -3,7 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
+<<<<<<< HEAD
 	<string>setup.py</string>
+=======
+	<string>beerlog/brewery/models.py</string>
+>>>>>>> a736de0dab2b643786becb4f4c56ee6ae27cf83b
 	<key>documents</key>
 	<array>
 		<dict>
@@ -21,28 +25,104 @@
 	<integer>150</integer>
 	<key>metaData</key>
 	<dict>
+<<<<<<< HEAD
 		<key>beerlog/blog/views.py</key>
+=======
+		<key>beerlog/__init__.py</key>
+>>>>>>> a736de0dab2b643786becb4f4c56ee6ae27cf83b
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
+<<<<<<< HEAD
 				<integer>41</integer>
 				<key>line</key>
 				<integer>11</integer>
+=======
+				<integer>22</integer>
+				<key>line</key>
+				<integer>58</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>27</integer>
+		</dict>
+		<key>beerlog/brewery/columns.py</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>31</integer>
+				<key>line</key>
+				<integer>1</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>setup.py</key>
+		<key>beerlog/brewery/importers.py</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
+				<integer>19</integer>
+				<key>line</key>
+				<integer>227</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>202</integer>
+		</dict>
+		<key>beerlog/brewery/models.py</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>13</integer>
+				<key>line</key>
+				<integer>10</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>console.sh</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+>>>>>>> a736de0dab2b643786becb4f4c56ee6ae27cf83b
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+<<<<<<< HEAD
+		<key>setup.py</key>
+=======
+		<key>runserver.py</key>
+>>>>>>> a736de0dab2b643786becb4f4c56ee6ae27cf83b
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+<<<<<<< HEAD
 				<integer>72</integer>
 				<key>line</key>
 				<integer>6</integer>
+=======
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+>>>>>>> a736de0dab2b643786becb4f4c56ee6ae27cf83b
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -52,12 +132,25 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
+<<<<<<< HEAD
 		<string>setup.py</string>
 		<string>beerlog/blog/views.py</string>
+=======
+		<string>beerlog/__init__.py</string>
+		<string>beerlog/brewery/columns.py</string>
+		<string>beerlog/brewery/importers.py</string>
+		<string>beerlog/brewery/models.py</string>
+		<string>console.sh</string>
+		<string>runserver.py</string>
+>>>>>>> a736de0dab2b643786becb4f4c56ee6ae27cf83b
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<false/>
 	<key>windowFrame</key>
+<<<<<<< HEAD
 	<string>{{88, 147}, {1514, 971}}</string>
+=======
+	<string>{{24, 64}, {1245, 778}}</string>
+>>>>>>> a736de0dab2b643786becb4f4c56ee6ae27cf83b
 </dict>
 </plist>
