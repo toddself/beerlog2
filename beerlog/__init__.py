@@ -9,6 +9,7 @@ from sqlobject.dberrors import OperationalError
 from beerlog.blog.models import Tag, Entry
 from beerlog.image.models import Image
 from beerlog.admin.models import Users
+from beerlog.comment.models import Comment
 from beerlog.brewery.models import Hop, Grain, Extract, HoppedExtract, Yeast,\
                                    Water, Misc, Mineral, Fining, Flavor,\
                                    Spice, Herb, BJCPStyle, BJCPCategory,\
@@ -49,13 +50,14 @@ def init_db(config):
               Yeast, Water, Misc, Mineral, Fining, Flavor, Spice, Herb,
               BJCPStyle, BJCPCategory,  MashTun, BoilKettle, EquipmentSet,
               MashProfile, MashStep, MashStepOrder, Recipe, RecipeIngredient,
-              Inventory]
+              Inventory, Comment]
     for table in tables:
         try:
             table.createTable()
         except OperationalError:
             pass
-    admin = Users(email=config['ADMIN_USERNAME'])
+    adef = config['ADMIN_USERNAME']
+    admin = Users(email=adef, first_name=adef, last_name=adef, alias=adef)
     admin.set_pass(config['PASSWORD_SALT'], config['ADMIN_PASSWORD'])
     admin.admin = True
     process_bjcp_styles()

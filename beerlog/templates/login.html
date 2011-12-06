@@ -9,8 +9,8 @@
 		{% if error %}<p class="error"><strong>Error:</strong> {{ error }}{% endif %}
 		<dl>
 			{{ data.form.csrf }}
-			{{ render_field(data.form.email) }}
-			{{ render_field(data.form.password) }}
+			{{ render_field(data.form.email, size="40") }}
+			{{ render_field(data.form.password, size="40") }}
 			<dd><input type=submit value=Login >
 		</dl>
 	</form>

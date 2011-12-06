@@ -1,27 +1,28 @@
 {% from "_formhelper.html" import render_field %}
-
-			<form method="post" enctype="multipart/form-data" action="{{ url_for('create_image')}}" class=add-entry>
-				<dl>
-					{{ data.form.csrf }}
-					{{ render_field(data.form.image) }}
-					<dt>Resize <span style="font-weight: normal;">(Max size is 800 pixels on longest side; proportions will be constrained)</span>
-						<dd> {{ data.form.width(size=3) }}x{{ data.form.height(size=3) }}
-					{{ render_field(data.form.caption, size=60) }}
-					{% if data.form.width.errors %}
-					<ul class="errors">
-						{% for error in data.form.width.errors %}<li>{{ error }}{% endfor %}
-					</ul>							
-					{% endif %}
-					{% if data.form.height.errors %}
-					<ul class="errors">
-						{% for error in data.form.height.errors %}<li>{{ error }}{% endfor %}
-					</ul>							
-					{% endif %}
-					
-					{% if data.filename %}
-						<dt>Image filename
-						<dd>{{ data.filename }}
-					{% endif %}
-				</dl>
-				<p><input type=submit value="Upload image">
-			</form>
+{% extends "layout.html" %}
+{% block flash %}{% endblock %}
+{% block nav %}{% endblock %}
+{% block body %}
+<div class="content_body" style="margin-left: 0px !important;">
+	<form method="post" enctype="multipart/form-data" action="{{ url_for('create_image')}}" class=add-entry>
+		<dl>
+			{{ data.form.csrf }}
+			{{ render_field(data.form.image) }}
+			<dt>Resize <span style="font-weight: normal;">(Max size is 800 pixels on longest side; proportions will be constrained)</span>
+				<dd> {{ data.form.side }} {{ data.form.resize_to(size=3) }}
+			{{ render_field(data.form.caption, size=60) }}
+			{% if data.form.resize_to.errors %}
+			<ul class="errors">
+				{% for error in data.form.resize_to.errors %}<li>{{ error }}{% endfor %}
+			</ul>							
+			{% endif %}
+			
+			{% if data.filename %}
+				<dt>Image filename
+				<dd>{{ data.filename }}
+			{% endif %}
+		</dl>
+		<p><input type=submit value="Upload image">
+	</form>
+</div>
+{% endblock %}

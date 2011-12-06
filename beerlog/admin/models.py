@@ -8,10 +8,10 @@ from beerlog.image.models import Image
 from beerlog.settings import PASSWORD_SALT
 
 class Users(SQLObject):
-    first_name = UnicodeCol(length=128, default="")
-    last_name = UnicodeCol(length=128, default="")
+    first_name = UnicodeCol(length=128)
+    last_name = UnicodeCol(length=128)
     email = UnicodeCol(length=255, unique=True)
-    alias = UnicodeCol(length=255, default="")
+    alias = UnicodeCol(length=255)
     password = UnicodeCol(length=255, default="sdlfjskdfjskdfjsadf")
     created_on = DateTimeCol(default=datetime.now())
     last_modified = DateTimeCol(default=datetime.now())

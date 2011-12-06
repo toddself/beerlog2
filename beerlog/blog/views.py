@@ -10,6 +10,12 @@ from beerlog.blog.models import Entry, Tag
 from beerlog.blog.forms import EntryForm
 from beerlog.settings import *
 from beerlog.admin.views import require_auth
+from beerlog.comment.models import Comment
+
+def post_time(value, format="%H:%M %m/%d/%Y"):
+    return value.strftime(format)
+
+app.jinja_env.filters['dateformat'] = post_time
 
 @app.route('/')
 @app.route('/entry/<entry_id>/')

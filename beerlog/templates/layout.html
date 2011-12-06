@@ -13,27 +13,46 @@
 		{% endblock %}
 	</head>
 	<body>
-
-		{% block header %}
-			<div class=metanav>
-			<img src="{{ url_for('static', filename='images/gute_logo.png') }}" >
-			<div class=tools>
-				<a href="/brewery/">Browse Recipes</a> |
-				{% if not session.logged_in %}
-					<a href="{{ url_for('login') }}">Login</a>
-				{% else %}
-					<a href="/brewery/recipe/edit/">Create Recipe</a> |
-					<a href="{{ url_for('edit_entry') }}">Create Post</a> | 
-					<a href="{{ url_for('logout') }}">Log Out</a>
-				{% endif %}
-			</div>
-		</div>
-		{% endblock %}
-		<div class="content_body">
-			{% block body %}{% endblock %}
-		</div>
+		{% block flash %}
 		{% for message in get_flashed_messages() %}
 			<div class="flash">{{ message|safe }}</div>
 		{% endfor %}
+		{% endblock %}
+		{% block nav %}
+		<nav>
+			<span class=logo>
+				Gute Saufen
+			</span>
+			<h1>Recipes</h1>
+			<ul>
+				<li><a href="/brewery/">browse</a>
+				{% if session.logged_in %}
+				<li><a href="/brewery/recipe/edit/">create</a>
+			    {% endif %}
+			</ul>
+			<hr>
+			<h1>Blog</h1>
+			<ul>
+				<li><a href="{{ url_for('list_entries') }}">latest</a>
+				<li><a href="/archives/">older</a>
+				{% if session.logged_in %}
+				<li><a href="{{ url_for('edit_entry') }}">create</a>
+				{% endif %}
+			</ul>
+			<hr>
+			<h1>Admin</h1>
+			<ul>
+				{% if not session.logged_in %}
+				<li><a href="{{ url_for('login') }}">login</a>
+				{% else %}
+				<li><a href="{{ url_for('edit_user', user_id=session.user_id) }}">edit profile</a>
+				<li><a href="{{ url_for('list_users') }}">show all users</a>
+				<li><a href="{{ url_for('edit_user') }}">create user</a>
+				<li><a href="{{ url_for('logout') }}">log out</a><br>
+				{% endif %}
+			</ul>
+		</nav>
+		{% endblock %}
+		{% block body %}{% endblock %}
 	</body>
 </html>

@@ -28,8 +28,8 @@ def create_image():
     image_form = ImageForm(request.form) 
     if image_form.validate_on_submit():
         fn = image_form.image.file.filename
-        width = image_form.width.data
-        height = image_form.height.data
+        side = image_form.side.data
+        resize_to = image_form.resize_to.data
         caption = image_form.caption.data
         if '.' in fn and fn.split('.', 1)[1].lower() in ALLOWED_EXTENSIONS:
             filename = os.path.join(TEMP_UPLOAD_FOLDER,
@@ -41,19 +41,14 @@ def create_image():
                 os.makedirs(TEMP_UPLOAD_FOLDER)
             image_form.image.file.save(filename)
             
-            if width and not height:
-                long_side = int(width)
-            elif height and not width:
-                long_side = int(height)
-            elif width and height:
-                if width >= height:
-                    long_side = int(width)
-                else:
-                    long_side = int(height)
+            if side:
+                side_idx = int(side)
+                length = int(resize_to)
             else:
-                long_side = IMAGE_FULL_SIZE
-            
-            image, thumb_size = store_image(filename, mime, long_side)
+                side_idx = None
+                lenght = 0
+        
+            image, thumb_size = store_image(filename, mime, length, size_idx)
             if image:
                 os.unlink(filename)
                 url = "%s/%s" % (IMAGE_BASEPATH, image)
@@ -88,14 +83,14 @@ def delete_image(image_id):
         flash("%s was deleted from S3 and the database.  It is unrecoverable." % key)
         return redirect(url_for('list_entries'))
 
-def store_image(filename, mime, long_side):
+def store_image(filename, mime, length, side_idx):
     extension = filename.rsplit('.', 1)[1]
     uploadtime = datetime.strftime(datetime.now(), '%Y-%m-%d-%H-%M')
     s3_image_name = "%s%s.%s" % (uploadtime,
                                  hashlib.md5(filename).hexdigest(),
                                  extension)
     bucket = connect_to_s3()
-    image_data, thumb_size = resize_image(filename, long_side)
+    image_data, thumb_size = resize_image(filename, length, side_idx)
     save_data(image_data, bucket, s3_image_name, mime)
     return s3_image_name, thumb_size
 
@@ -112,19 +107,21 @@ def connect_to_s3():
     bucket = conn.get_bucket(AWS_BUCKET_NAME)
     return bucket
 
-def resize_image(filename, t_m_l):
+def resize_image(filename, length, side_idx):
     im = PIL_Image.open(filename)
-    if max(im.size) < t_m_l:
+    if im.size[side_idx] < length:
         image = StringIO()
         return image, im.size
     else:
+        if side_idx == 1:
+            other_idx = 0
+        else: 
+            other_idx = 1
         thumb_size = [0,0]
-        max_l = im.size.index(max(im.size))
-        min_l = im.size.index(min(im.size))
-        thumb_size[max_l] = int(t_m_l)
-        ratio = float(t_m_l) / float(im.size[max_l])
-        raw_min_l = ratio * float(im.size[min_l])
-        thumb_size[min_l] = int(round(raw_min_l))
+        thumb_size[side_idx] = length
+        ratio = float(length) / float(im.size[side_idx])
+        raw_min_l = ratio * float(im.size[other_idx])
+        thumb_size[other_idx] = int(round(raw_min_l))
         im.thumbnail(thumb_size, PIL_Image.ANTIALIAS)
         thumb = StringIO()
         im.save(thumb, 'JPEG')

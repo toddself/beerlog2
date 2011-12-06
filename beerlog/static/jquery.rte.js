@@ -165,11 +165,12 @@
 			this.formatText("enableinlinetableediting",false);*/
 		},
 		_initIframe: function(){
-			if(! this.iframe){
+			if(!this.iframe){
 				this.iframe = document.createElement("iframe");
-				this.iframe.frameBorder = this.iframe.frameMargin = this.iframe.framePadding=0;
+                this.iframe.frameBorder = this.iframe.frameMargin = this.iframe.framePadding=0;
 				this.iframe.id = 'RTE_FRAME_'+this.id;
-				//$(this.iframe).width(this.textarea.width()).height(this.textarea.height());
+                // console.log(this.iframe)
+                $(this.iframe).width(this.textarea.width()).height(this.textarea.height());
 			}else{
 				var css = this.opts.css_url?"<link type='text/css' rel='stylesheet' href='"+this.opts.css_url+"' />":'';
 				this.content = this.opts.content;
@@ -187,7 +188,7 @@
 				else// IE
 					this.editable = this.iframe.contentWindow.document;
 				this.editable.open();
-				this.editable.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><head>'+css+"<style>td{border:solid black 1px !important;}</style></head><body class='frameBody' style='height:100%;width:100%;margin:0;'>"+this.content+"</body></html>");
+				this.editable.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><head>'+css+"<style>td{border:solid black 1px !important;}</style></head><body class='frameBody' style='height:100%;width:100%;margin:0; font-size: 12px; font-family: Helvetica, Arial, sans-serif;'>"+this.content+"</body></html>");
 				this.editable.close();
 				this.editable.contentEditable = 'true';
 				this.editable.designMode = 'on';

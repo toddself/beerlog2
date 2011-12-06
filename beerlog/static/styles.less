@@ -1,5 +1,8 @@
 @base_font_family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 @base_font_size: 12px;
+@top_margin: 40px;
+@new_link_color: #334D66;
+@visited_link_color: #333466;
 
 .fonts(@size: @base_font_size, @fonts: @base_font_family) {
     font-family: @fonts;
@@ -7,28 +10,108 @@
     line-height: @size + 2;
 }
 
-body {
-    .fonts;
+.nohr {
+    border: 0px;
     padding: 0px;
     margin: 0px;
 }
 
-.content {
-    margin: 15px;
+.logo {
+    border: 0px;
 }
 
-.content_body {
+body {
+    .fonts;
+    background: #eee;
+    padding: 0px;
     margin: 0px;
 }
 
+a {
+    text-decoration: none;
+    color: @new_link_color;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:visited {
+    color: @visited_link_color;
+}
+
+
+.content_body {
+    margin: 0px;
+    float: left;
+    margin-left: 50px;
+    margin-top: @top_margin;
+    width: 60%;
+    
+    li {
+        list-style: none;
+        
+        time {
+            font-style: italic;
+        }
+                
+        p {
+            clear: both;
+        }        
+    }
+    
+    iframe {
+        border: 0px;
+        margin: 0px;
+        padding: 0px;
+        width: 100%;
+        height: 250px;
+    }
+    
+    hr {
+        .nohr
+    }
+    
+    h1 {
+        .fonts(14px);
+    }
+}
+
+nav {
+    float: left;
+    text-align: right;
+    border-right: 1px solid black;
+    padding: 5px;
+    margin-top: @top_margin;
+    .fonts(12px);
+    
+    hr {
+        .nohr
+    }
+    
+    ul {
+        padding: 0px;
+        margin: 2px;
+        li {
+            padding-top: 0px;
+            margin-top: 0px;
+            list-style: none;
+        }
+    }
+    
+    h1 {
+        .fonts(13px);
+        padding-bottom: 0px;
+        margin-bottom: 0px;
+    }
+}
+
 form {
-    background: #fff;
-    padding-left: 5px;
-    padding-right:5px;
+    padding-left: 10px;
+    padding-right: 10px;
     padding-top: 2px;
-    padding-bottom: 2px;
-    border: 1px solid #000;
-    margin: 2px;
+    padding-bottom: 0px;
+    margin: 0px;
         
     dt {
         font-weight: bold;
@@ -38,51 +121,12 @@ form {
     
     textarea {
         width: 90%;
-        height: 30%;
+        height: 400px;
+        background: #fff;
     }   
-    
-    &#login {
-        margin: 0px auto 0px auto;
-        width: 75%;
-    }
-    
+        
     h2 {
         .fonts(@base_font_size+8px);
-    }
-}
-
-.metanav {
-    .tools {
-        float: right;
-    }
-    
-    color: #fff;
-    
-    margin: 0px;
-    padding: 5px;
-    border-top: 0px;
-    background-image: linear-gradient(bottom, rgb(255,255,255) 31%, rgb(153,105,70) 66%, rgb(133,77,21) 83%);
-    background-image: -o-linear-gradient(bottom, rgb(255,255,255) 31%, rgb(153,105,70) 66%, rgb(133,77,21) 83%);
-    background-image: -moz-linear-gradient(bottom, rgb(255,255,255) 31%, rgb(153,105,70) 66%, rgb(133,77,21) 83%);
-    background-image: -webkit-linear-gradient(bottom, rgb(255,255,255) 31%, rgb(153,105,70) 66%, rgb(133,77,21) 83%);
-    background-image: -ms-linear-gradient(bottom, rgb(255,255,255) 31%, rgb(153,105,70) 66%, rgb(133,77,21) 83%);
-
-    background-image: -webkit-gradient(
-    	linear,
-    	left bottom,
-    	left top,
-    	color-stop(0.31, rgb(255,255,255)),
-    	color-stop(0.66, rgb(153,105,70)),
-    	color-stop(0.83, rgb(133,77,21))
-    );
-    
-    a {
-        color: #fff;
-        text-decoration: none;
-    }
-    
-    & a:hover{
-        text-decoration: underline;
     }
 }
 

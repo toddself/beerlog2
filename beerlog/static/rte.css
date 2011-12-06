@@ -2,6 +2,7 @@
 	border: solid silver 1px;
 	padding:0;
 	margin-bottom:10px;
+	background: #fff;
 }
 .rte iframe{
 	margin:0.2em;
@@ -28,5 +29,7 @@
 	border-width:0;
 	border-style:none;
 	margin:auto;
-	width:100%;
+	width: 98% !important;
+	padding-top: 2px;
+	padding-bottom: 2px;
 }

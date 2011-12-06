@@ -1,25 +1,27 @@
 {% extends "layout.html" %}
-{% block header %}
-{{ super() }}
-{% endblock %}
 {% block body %}
+<div class="content_body">
 	<ul>
 		{% for entry in entries %}
 			<li>
-				<h2><a href="/entry/{{ entry.id }}/">{{ entry.title }}</a></h2>
-				{{ entry.body|safe }}<br>
-				{{ entry.post_on }}<br>
-				{% if entry.tags %}
-					<ul>
-						{% for tag in entry.tags %}
-							<li>{{ tag.name }}
-						{% endfor %}
-					</ul>
-				{% endif %}				
+				<article>
+					<h2><a href="{{ url_for('list_entries', entry_id=entry.id) }}">{{ entry.title }}</a></h2>
+					<p><time pubdate>{{ entry.post_on|dateformat }}</time> | {{ entry.comment_count }} comments </p>
+					<p>{{ entry.body|safe }}				
+					{% if entry.tags %}
+					<p>File under: {% for tag in entry.tags %}<a href="/tag/{{ tag.name }}/">{{ tag.name }}</a> {% endfor %}
+					{% endif %}
+					<p>posted by {{ entry.author.alias }} {% if session.user_id == entry.author.id %} <a href="{{ url_for('edit_entry', entry_id=entry.id )}}">edit post</a> {% endif %}
+				</article>
+				<div id="{{ entry.id }}comments">
+					
+				</div>
 			</li>
+			<hr>
 		{% else %}
-			<li><em>No entries matched your request</em></li>
+			<li>No entries matched your request</li>
 		{% endfor %}
 	</ul>
+</div>
 {% endblock %}
 {% block iframe %}{% endblock %}	
