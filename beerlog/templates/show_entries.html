@@ -3,9 +3,6 @@
 {{ super() }}
 {% endblock %}
 {% block body %}
-	{% if session.logged_in %}
-		<p><a href="/entry/edit/">Create Post</a>
-	{% endif %}
 	<ul>
 		{% for entry in entries %}
 			<li>

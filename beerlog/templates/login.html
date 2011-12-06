@@ -4,14 +4,14 @@
 {{ super() }}
 {% endblock %}
 {% block body %}
-	<h2>Login</h2>
-	{% if error %}<p class="error"><strong>Error:</strong> {{ error }}{% endif %}
-	<form action="{{ url_for('login') }}" method=POST class=login>
+	<form action="{{ url_for('login') }}" method=POST id=login>
+		<h2>Login</h2>
+		{% if error %}<p class="error"><strong>Error:</strong> {{ error }}{% endif %}
 		<dl>
 			{{ data.form.csrf }}
 			{{ render_field(data.form.email) }}
 			{{ render_field(data.form.password) }}
-			<dd><input type=submit value=Login  >
+			<dd><input type=submit value=Login >
 		</dl>
 	</form>
 {% endblock %}

@@ -8,23 +8,27 @@
 }
 
 body {
-    background: #eee;
     .fonts;
     padding: 0px;
     margin: 0px;
 }
 
-.page {
+.content {
     margin: 15px;
 }
 
-form{
+.content_body {
+    margin: 0px;
+}
+
+form {
     background: #fff;
     padding-left: 5px;
     padding-right:5px;
     padding-top: 2px;
     padding-bottom: 2px;
     border: 1px solid #000;
+    margin: 2px;
         
     dt {
         font-weight: bold;
@@ -35,17 +39,50 @@ form{
     textarea {
         width: 90%;
         height: 30%;
+    }   
+    
+    &#login {
+        margin: 0px auto 0px auto;
+        width: 75%;
     }
     
-    .login {
-        margin: 0px auto 0px auto !important;
-        width: 80% !important;
+    h2 {
+        .fonts(@base_font_size+8px);
     }
 }
 
 .metanav {
     .tools {
         float: right;
+    }
+    
+    color: #fff;
+    
+    margin: 0px;
+    padding: 5px;
+    border-top: 0px;
+    background-image: linear-gradient(bottom, rgb(255,255,255) 31%, rgb(153,105,70) 66%, rgb(133,77,21) 83%);
+    background-image: -o-linear-gradient(bottom, rgb(255,255,255) 31%, rgb(153,105,70) 66%, rgb(133,77,21) 83%);
+    background-image: -moz-linear-gradient(bottom, rgb(255,255,255) 31%, rgb(153,105,70) 66%, rgb(133,77,21) 83%);
+    background-image: -webkit-linear-gradient(bottom, rgb(255,255,255) 31%, rgb(153,105,70) 66%, rgb(133,77,21) 83%);
+    background-image: -ms-linear-gradient(bottom, rgb(255,255,255) 31%, rgb(153,105,70) 66%, rgb(133,77,21) 83%);
+
+    background-image: -webkit-gradient(
+    	linear,
+    	left bottom,
+    	left top,
+    	color-stop(0.31, rgb(255,255,255)),
+    	color-stop(0.66, rgb(153,105,70)),
+    	color-stop(0.83, rgb(133,77,21))
+    );
+    
+    a {
+        color: #fff;
+        text-decoration: none;
+    }
+    
+    & a:hover{
+        text-decoration: underline;
     }
 }
 
