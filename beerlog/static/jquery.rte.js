@@ -478,15 +478,10 @@
 		height:0,
 		/** thoose are the commonly accepted values that work */
 		formatOptions: [
-			['P', 'Paragraph'],
-			['PRE', 'Preformatted'],
-			['ADDRESS','Address'],
-			['H1','Title 1'],
-			['H2','Title 2'],
-			['H3','Title 3 '],
-			['H4','Title 4'],
-			['H5','Title 5'],
-			['H6','Title 6']
+			['h1','Title 1'],
+			['h3','Title 3'],
+			['h6','Title 6'],
+			['pre', "Preformatted"]
 		],
 		/**
 		* classOptions si a list of format tags with specified class like this
@@ -498,8 +493,8 @@
 		* jsfunctionName = function(rte){};
 		*/
 		classOptions: [
-			['span:title','title'],
-      ['div:test','test']
+			['pre','Pre-Formatted'],
+            ['div:test','test']
 		],
 		/**
 		* set what is viewable or not in toolbar and in which order

@@ -1,0 +1,61 @@
+@base_font_family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+@base_font_size: 12px;
+
+.fonts(@size: @base_font_size, @fonts: @base_font_family) {
+    font-family: @fonts;
+    font-size: @size;
+    line-height: @size + 2;
+}
+
+body {
+    background: #eee;
+    .fonts;
+    padding: 0px;
+    margin: 0px;
+}
+
+.page {
+    margin: 15px;
+}
+
+form{
+    background: #fff;
+    padding-left: 5px;
+    padding-right:5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border: 1px solid #000;
+        
+    dt {
+        font-weight: bold;
+        .fonts(@base_font_size+2px);
+        padding-bottom: 2px;
+    }
+    
+    textarea {
+        width: 90%;
+        height: 30%;
+    }
+    
+    .login {
+        margin: 0px auto 0px auto !important;
+        width: 80% !important;
+    }
+}
+
+.metanav {
+    .tools {
+        float: right;
+    }
+}
+
+.flash {
+    background: #aaa;
+    .fonts(@base_font_size+4px);
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+    padding: 5px;
+    margin: 0px;
+    border-bottom: 2px solid #000;
+}

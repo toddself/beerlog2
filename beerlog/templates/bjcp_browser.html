@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block header %}
+{{ super() }}
+{% endblock %}
+{% block body %}
+	<ol>
+		{% for category in styles %}
+			<li>{{ category }}
+				<ol style="list-style-type: lower-alpha">
+					{% for style in styles[category] %}
+						<li>{{ style.name }}
+							<dt>Aroma
+							<dd>{{ style.aroma }}
+							<dt>Appearance
+							<dd>{{ style.appearance }}
+							<dt>Flavor
+							<dd>{{ style.flavor }}
+							<dt>Mouthfeel
+							<dd>{{ style.mouthfeel }}
+							<dt>Impression
+							<dd>{{ style.impression }}
+							<dt>Comments
+							<dd>{{ style.comments }}
+							<dt>Examples
+							<dd>{{ style.examples }}
+							<dt>OG Range
+							<dd>{{ style.og_range }}
+							<dt>FG Range
+							<dd>{{ style.fg_range }}
+							<dt>SRM Range
+							<dd>{{ style.srm_range }}
+							<dt>IBU Range
+							<dd>{{ style.ibu_range }}
+							<dt>ABV Range
+							<dd>{{ style.abv_range }}
+						</li>
+					{% endfor %}
+				</ol>
+			</li>
+		{% else %}
+			<li><em>No entries matched your request</em></li>
+		{% endfor %}
+	</ol>
+{% endblock %}
+{% block iframe %}{% endblock %}

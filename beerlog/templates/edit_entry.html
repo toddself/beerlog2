@@ -1,8 +1,25 @@
 {% from "_formhelper.html" import render_field %}
+
 {% extends "layout.html" %}
-{% block header %}
+
+{% block title %}> > Edit Entry{% endblock %}
+
+{% block stylesheet %}
 {{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='timePicker.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='jquery-ui-1.8.16.custom.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='rte.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='jquery.tagsinput.css') }}">
 {% endblock %}
+
+{% block javascript %}
+{{ super() }}
+<script src="{{ url_for('static', filename='jquery-ui-1.8.16.custom.min.js' )}}"></script>
+<script src="{{ url_for('static', filename='jquery.timePicker.min.js' )}}"></script>
+<script src="{{ url_for('static', filename='jquery.rte.js' )}}"></script>
+<script src="{{ url_for('static', filename='jquery.tagsinput.min.js') }}"></script>
+{% endblock %}
+
 {% block body %}
 	<script>
 		jQuery(function(){
@@ -22,7 +39,9 @@
 			var options = {
 				imgPath: "/static/images/",
 				content: '{{ data.entry.body|safe }}',
-				buttonSet: 'format|class|bold|underline|italic|spacer|orderedList|unorderedList|indent|outdent|spacer|justify|spacer|link|image|table|spacer|toggle'
+				height: '500px',
+				width: '90%',
+				buttonSet: 'bold|underline|italic|spacer|orderedList|unorderedList|indent|outdent|spacer|justify|spacer|link|image|table|spacer|toggle'
 			};
 			$('#editor').rte(options);
 		});
@@ -32,8 +51,7 @@
 		});
 		
 	</script>
-	<form id="postform" action="{{ url_for('edit_entry') }}" 
-		  method="post" class="add-entry">
+	<form id="postform" action="{{ url_for('edit_entry') }}" method="post" class="entry">
 		<dl>
 			{{ data.form.csrf }}
 			{{ render_field(data.form.title, class="title", value=data.entry.title) }}

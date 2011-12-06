@@ -1,0 +1,52 @@
+PAGE RESPONSES
+/brewery/ - lists all recipes in the system for
+/brewery/<user_id>/ - lists all recipes for a given user_id
+/brewery/recipe/<recipe_id>/ - shows individual recipe
+/brewery/recipe/<recipe_id>/batch/ - shows all brewed batches
+/brewery/recipe/<recipe_id>/batch/<user_id>/ - shows all batches of a recipe by a given user_id
+/brewery/recipe/edit/
+/brewery/recipe/<recipe_id>/edit/
+/brewery/recipe/<recipe_id>/delete/
+/brewery/recipe/<recipe_id>/clone/
+/brewery/bjcp/
+/brewery/inventory/<user_id>/
+/brewery/inventory/<user_id>/edit/
+/brewery/inventory/<user_id>/hop/
+/brewery/inventory/<user_id>/grain/
+/brewery/inventory/<user_id>/extract/
+/brewery/inventory/<user_id>/yeast/
+/brewery/inventory/<user_id>/water/
+/brewery/inventory/<user_id>/misc/
+/brewery/inventory/<user_id>/hop/edit/
+/brewery/inventory/<user_id>/grain/edit/
+/brewery/inventory/<user_id>/extract/edit/
+/brewery/inventory/<user_id>/yeast/edit/
+/brewery/inventory/<user_id>/water/edit/
+/brewery/inventory/<user_id>/misc/edit/
+
+JSON RESPONSES
+/brewery/ingredients/hop/
+/brewery/ingredients/grain/
+/brewery/ingredients/extract/
+/brewery/ingredients/yeast/
+/brewery/ingredients/water/
+/brewery/ingredients/misc/
+/brewery/ingredients/hop/edit/
+/brewery/ingredients/grain/edit/
+/brewery/ingredients/extract/edit/
+/brewery/ingredients/yeast/edit/
+/brewery/ingredients/water/edit/
+/brewery/ingredients/misc/edit/
+/brewery/ingredients/hop/<hop_id>/
+/brewery/ingredients/grain/<grain_id>/
+/brewery/ingredients/extract/<extract_id>/
+/brewery/ingredients/yeast/<yeast_id>/
+/brewery/ingredients/water/<water_id>/
+/brewery/ingredients/misc/<misc_id>/
+/brewery/ingredients/hop/<hop_id>/edit/
+/brewery/ingredients/grain/<grain_id>/edit/
+/brewery/ingredients/extract/<extract_id>/edit/
+/brewery/ingredients/yeast/<yeast_id>/edit/
+/brewery/ingredients/water/<water_id>/edit/
+/brewery/ingredients/misc/<misc_id>/edit/
+

@@ -23,6 +23,7 @@ app.config.from_object('beerlog.settings')
 from beerlog.admin.views import *
 from beerlog.blog.views import *
 from beerlog.image.views import *
+from beerlog.brewery.bjcp.views import *
 
 @app.before_request
 def before_request():

@@ -1,12 +1,5 @@
 {% from "_formhelper.html" import render_field %}
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>B(eer)Log</title>
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
-	</head>
-	<body style="background: #fff !important;">
-		<div style="width: 35em; background: white;">
+
 			<form method="post" enctype="multipart/form-data" action="{{ url_for('create_image')}}" class=add-entry>
 				<dl>
 					{{ data.form.csrf }}
@@ -32,6 +25,3 @@
 				</dl>
 				<p><input type=submit value="Upload image">
 			</form>
-		</div>
-	</body>
-</html>
