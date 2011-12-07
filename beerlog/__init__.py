@@ -25,6 +25,7 @@ from beerlog.admin.views import *
 from beerlog.blog.views import *
 from beerlog.image.views import *
 from beerlog.brewery.bjcp.views import *
+from beerlog.comment.views import *
 
 @app.before_request
 def before_request():
