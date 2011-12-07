@@ -21,6 +21,12 @@ from beerlog.brewery.importers import process_bjcp_styles, process_bt_database
 app = Flask(__name__)
 app.config.from_object('beerlog.settings')
 
+def format_time(value, format="%H:%M %m/%d/%Y"):
+    return value.strftime(format)
+
+app.jinja_env.filters['dateformat'] = format_time
+
+
 from beerlog.admin.views import *
 from beerlog.blog.views import *
 from beerlog.image.views import *

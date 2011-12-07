@@ -10,9 +10,26 @@
 		{% block javascript %}
 		<script src="{{ url_for('static', filename='less-1.1.5.min.js') }}"></script>
 		<script src="{{ url_for('static', filename='jquery-1.7.min.js') }}"></script>
+		<script>
+		function gen_a(dest, text, cls){
+			a = $('<a>');
+			a.attr('href', dest)
+			a.attr('class', cls)
+			a.html(text)
+			return a
+		}
+		
+		$.getJSON('/json/entry/archives/', function(data) {
+			$.each(data, function(key, val) {
+				li = $('<li>');
+				li.html(gen_a('/entry/'+val+'/', val, 'archive_item'))
+				$('#archive_list').append(li);
+			});
+		});
+		</script>
 		{% endblock %}
 	</head>
-	<body>
+	<body {% block bodystyle %}{% endblock %}>
 		{% block flash %}
 		{% for message in get_flashed_messages() %}
 			<div class="flash">{{ message|safe }}<div style="float: right; margin-right: 20px;"><a href="#" onclick="$('.flash').hide('fast')">x</a></div></div>
@@ -20,7 +37,8 @@
 		{% endblock %}
 		{% block nav %}
 		<nav>
-			<a href="/"><img src="/static/images/logo.png" class="logo" alt="Gute Saufen"></a>
+			<a href="/"><img src="/static/images/logo_top2.png" class="logo" alt="Gute Saufen"></a><hr>
+			<a href="/"><img src="/static/images/logo_bottom.png" class="logo" alt="Gute Saufen"></a><br>
 			<h1>Recipes</h1>
 			<ul>
 				<li><a href="/brewery/">browse</a>
@@ -32,19 +50,20 @@
 			<h1>Blog</h1>
 			<ul>
 				<li><a href="{{ url_for('list_entries') }}">latest</a>
-				<li><a href="/archives/">older</a>
+				<li>older
+					<ul id=archive_list></ul>
 				{% if session.logged_in %}
 				<li><a href="{{ url_for('edit_entry') }}">create</a>
 				{% endif %}
 			</ul>
-			<hr>
+			<hr><br>
 			<h1>Admin</h1>
 			<ul>
 				{% if not session.logged_in %}
 				<li><a href="{{ url_for('login') }}">login</a>
 				{% else %}
 				<li><a href="{{ url_for('edit_user', user_id=session.user_id) }}">edit profile</a>
-				<li><a href="{{ url_for('list_users') }}">show all users</a>
+				<li><a href="{{ url_for('list_users') }}">list users</a>
 				<li><a href="{{ url_for('edit_user') }}">create user</a>
 				<li><a href="{{ url_for('logout') }}">log out</a><br>
 				{% endif %}

@@ -1,45 +1,69 @@
 {% extends "layout.html" %}
-{% block header %}
+{% block title %}&#187; BJCP Styleguide{% endblock %}
+{% block javascript %}
 {{ super() }}
+<script>
+$().ready(function(){
+	$('.subcat').hide()
+});
+
+function display_style(category_id){
+	$.getJSON('/json/brewery/bjcp/style/'+category_id+'/', function(data) {
+		$.each(data, function(key, val){
+			$('#'+key).html(val)
+		});
+	});
+	$('#bjcp_data').show();
+}
+
+</script>
 {% endblock %}
 {% block body %}
-	<ol>
+<div class="content_body" style="width: 25%;">
+	<h2>BJCP Styles</h2>
+	<ul>
 		{% for category in styles %}
-			<li>{{ category }}
-				<ol style="list-style-type: lower-alpha">
-					{% for style in styles[category] %}
-						<li>{{ style.name }}
-							<dt>Aroma
-							<dd>{{ style.aroma }}
-							<dt>Appearance
-							<dd>{{ style.appearance }}
-							<dt>Flavor
-							<dd>{{ style.flavor }}
-							<dt>Mouthfeel
-							<dd>{{ style.mouthfeel }}
-							<dt>Impression
-							<dd>{{ style.impression }}
-							<dt>Comments
-							<dd>{{ style.comments }}
-							<dt>Examples
-							<dd>{{ style.examples }}
-							<dt>OG Range
-							<dd>{{ style.og_range }}
-							<dt>FG Range
-							<dd>{{ style.fg_range }}
-							<dt>SRM Range
-							<dd>{{ style.srm_range }}
-							<dt>IBU Range
-							<dd>{{ style.ibu_range }}
-							<dt>ABV Range
-							<dd>{{ style.abv_range }}
-						</li>
+			<li><a href="#" onclick="$('#{{category}}list').toggle()">{{ category }}. {{ styles[category].name }}</a><br>
+				<ul id="{{category}}list" class="subcat" style="margin-left: 15px">
+					{% for subcat in styles[category].styles %}
+					<li><a href="#" onclick="display_style('{{ subcat.id }}')">{{ subcat.subcategory }}. {{ subcat.name }}</a>
 					{% endfor %}
-				</ol>
-			</li>
-		{% else %}
-			<li><em>No entries matched your request</em></li>
+				</ul>
+						
 		{% endfor %}
-	</ol>
+	</ul>
+</div>
+<div class="content_body" style="width: 50%;">
+	<dl class="subcat" id="bjcp_data">
+		<dt>Category</dt>
+		<dd id="category"></dd>
+		<dt>Name</dt>
+		<dd id="name"></dd>
+		<dt>Aroma</dt>
+		<dd id="aroma"></dd>
+		<dt>Appearance</dt>
+		<dd id="appearance"></dd>
+		<dt>Flavor</dt>
+		<dd id="flavor"></dd>
+		<dt>Mouthfeel</dt>
+		<dd id="mouthfeel"></dd>
+		<dt>Impression</dt>
+		<dd id="impression"></dd>
+		<dt>Comments</dt>
+		<dd id="comments"></dd>
+		<dt>Examples</dt>
+		<dd id="examples"></dd>
+		<dt>OG Range</dt>
+		<dd id="og_range"></dd>
+		<dt>FG Range</dt>
+		<dd id="fg_range"></dd>
+		<dt>IBU Range</dt>
+		<dd id="ibu_range"></dd>
+		<dt>SRM Range</dt>
+		<dd id="srm_range"></dd>
+		<dt>ABV Range</dt>
+		<dd id="abv_range"></dd>
+	</dl>
+</div>
 {% endblock %}
 {% block iframe %}{% endblock %}

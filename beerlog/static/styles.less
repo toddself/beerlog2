@@ -1,8 +1,14 @@
 @base_font_family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 @base_font_size: 12px;
 @top_margin: 40px;
-@new_link_color: #334D66;
-@visited_link_color: #333466;
+@new_link_color: #3A2A1D;
+@visited_link_color: #3A2A1D;
+@page_color: #F1E8D7;
+@max_width: 480px;
+
+.background_override {
+    background: @page_color none !important;
+}
 
 .fonts(@size: @base_font_size, @fonts: @base_font_family) {
     font-family: @fonts;
@@ -24,7 +30,7 @@
 
 body {
     .fonts;
-    background: #eee url(/static/images/barley.png) repeat-x bottom;
+    background: @page_color;// url(/static/images/barley2.png) repeat-x top;
     padding: 0px;
     margin: 0px;
 }
@@ -42,16 +48,20 @@ a:visited {
     color: @visited_link_color;
 }
 
-
 .content_body {
-    margin: 0px;
     float: left;
-    margin-left: 15px;
     margin-top: @top_margin;
-    width: 60%;
+    width: 75%;
+    margin-left: 20px;
+    
+    ul {
+        margin-left: 0px;
+        padding-left: 0px;
+    }
     
     li {
         list-style: none;
+        clear: both;
         
         time {
             font-style: italic;
@@ -59,9 +69,38 @@ a:visited {
         
         p {
             clear: both;
-        }        
+        }
     }
     
+    .column {
+        float: left;
+        width: 22%;
+        overflow: scroll;
+        padding-left: 2px;
+    }
+    
+    li.row {
+        padding-top: 2px;
+        padding-bottom: 2px;
+        border-bottom: 1px solid black;
+    }
+    
+    li.row:nth-child(2){
+        background: #aaa;
+    }
+    
+    li.row:hover{
+        background: #bb2;
+    }
+        
+    .header {
+        font-weight: bold;
+    }
+    
+    .header:hover{
+        background: none !important;
+    }
+
     iframe {
         border: 0px;
         margin: 0px;
@@ -79,13 +118,21 @@ a:visited {
     }
 }
 
-nav {
+.archive_item {
+    .fonts(9px);
+}
+
+.nav_display {
     float: left;
     text-align: right;
-    border-right: 1px solid black;
+    border-right: 1px solid #3A2A1D;
     padding: 5px;
     margin-top: @top_margin;
     .fonts(12px);
+    
+    br {
+        display: none;
+    }
     
     hr {
         .nohr
@@ -105,6 +152,37 @@ nav {
         .fonts(13px);
         padding-bottom: 0px;
         margin-bottom: 0px;
+        color: #DD8A56;
+    }
+}
+
+nav{
+    .nav_display;
+}
+
+@media screen and (max-width: 480){
+    nav{
+        .nav_display;
+        width: 100%;
+        margin-top: 2px !important;
+        text-align: left !important;
+        h1, ul, li {
+            display: inline;
+        }
+    
+        hr {
+            display: none;
+        }
+    
+        br {
+            display: block;
+        }
+    }
+    
+    .content_body{
+        margin-top: 0px !important;
+        margin-left: 7px !important;
+        width: 95% !important;
     }
 }
 

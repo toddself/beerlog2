@@ -1,5 +1,6 @@
 import hashlib
 import os
+import json
 from datetime import datetime, timedelta
 
 from flask import render_template, url_for, redirect, request, flash, session
@@ -12,42 +13,61 @@ from beerlog.settings import *
 from beerlog.admin.views import require_auth
 from beerlog.comment.models import Comment
 
-def post_time(value, format="%H:%M %m/%d/%Y"):
-    return value.strftime(format)
-
-app.jinja_env.filters['dateformat'] = post_time
-
 @app.route('/')
 @app.route('/entry/<entry_id>/')
+@app.route('/entry/<year>/')
+@app.route('/entry/<year>/<month>/')
 @app.route('/entry/<year>/<month>/<day>/')
 @app.route('/entry/<year>/<month>/<day>/<slug>/')
 def list_entries(entry_id=None, day=None, month=None, year=None, slug=None):
+    entries = None
+    start_date = None
+    end_date = None
     if entry_id:
         entries = Entry.select(AND(Entry.q.id == entry_id,
                                    Entry.q.deleted == False,
                                    Entry.q.draft == False))
+    elif year and not month and not day:
+        start_date = datetime.strptime(year, '%Y')
+        end_date = start_date + timedelta(days=365)
+    elif year and month and not day:
+        start_date = datetime.strptime('%s-%s' % (year, month), '%Y-%m')
+        end_date = start_date + timedelta(days=31)
     elif day and month and year:
         time_string = "%s-%s-%s" % (year, month, day)
         start_date = datetime.strptime(time_string, DATE_FORMAT)
         end_date = start_date + timedelta(days=1)
+    
+    if not entries:
         if slug:
             entries = Entry.select(AND(Entry.q.draft == False,
                                         Entry.q.slug == slug,
                                         Entry.q.deleted == False,
                                         AND(Entry.q.post_on > start_date,
                                             Entry.q.post_on < end_date)))
-        else:
+        elif start_date:
             entries = Entry.select(AND(Entry.q.draft == False,
                                        Entry.q.deleted == False,
                                        AND(Entry.q.post_on > start_date,
                                            Entry.q.post_on < end_date))
                                    ).orderBy("-post_on")
-    else:
-        entries = Entry.select(AND(Entry.q.draft == False,
-                                   Entry.q.deleted == False)
-                               ).orderBy("-post_on")
+        else:
+            entries = Entry.select(AND(Entry.q.draft == False,
+                                       Entry.q.deleted == False)
+                                   ).orderBy("-post_on")
 
-    return render_template('show_entries.html', entries=entries)
+    return render_template('list_entries.html', entries=entries)
+
+@app.route('/json/entry/archives/')
+def list_archives():
+    year_list = {}
+    for entry in list(Entry.select()):
+        year = entry.post_on.strftime('%Y')
+        year_list[year] = year
+    if year_list:
+        return json.dumps(year_list)
+    else: 
+        return json.dumps([])
 
 @app.route('/entry/edit/', methods=['POST', 'GET'])
 @app.route('/entry/edit/<entry_id>/', methods=['POST', 'GET'])
