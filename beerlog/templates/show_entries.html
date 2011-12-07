@@ -1,4 +1,13 @@
+{% from "_formhelper.html" import render_field %}
 {% extends "layout.html" %}
+{% block javascript %}
+{{ super() }}
+<script>
+	jQuery().ready(function(){
+		$('.comments').hide()
+	});
+</script>
+{% endblock %}
 {% block body %}
 <div class="content_body">
 	<ul>
@@ -6,15 +15,25 @@
 			<li>
 				<article>
 					<h2><a href="{{ url_for('list_entries', entry_id=entry.id) }}">{{ entry.title }}</a></h2>
-					<p><time pubdate>{{ entry.post_on|dateformat }}</time> | {{ entry.comment_count }} comments </p>
+					<p><time pubdate>{{ entry.post_on|dateformat }}</time> | <a href="#" onclick="$('#{{ entry.id }}comments').toggle()">{{ entry.comment_count }} comments</a> </p>
 					<p>{{ entry.body|safe }}				
 					{% if entry.tags %}
-					<p>File under: {% for tag in entry.tags %}<a href="/tag/{{ tag.name }}/">{{ tag.name }}</a> {% endfor %}
+					{% set lister = joiner(", ") %}
+					<p>File under: {% for tag in entry.tags %}{{ lister() }}<a href="/tag/{{ tag.name }}/">{{ tag.name }}</a>{% endfor %}
 					{% endif %}
-					<p>posted by {{ entry.author.alias }} {% if session.user_id == entry.author.id %} <a href="{{ url_for('edit_entry', entry_id=entry.id )}}">edit post</a> {% endif %}
+					<p>posted by {{ entry.author.alias }} {% if session.user_id == entry.author.id %} | <a href="{{ url_for('edit_entry', entry_id=entry.id )}}">edit post</a> {% endif %}
 				</article>
-				<div id="{{ entry.id }}comments">
-					
+				<div class="comments" id="{{ entry.id }}comments">
+					<h2>Comments</h2>
+					<ul>
+					{% for comment in entry.comments %}
+						<li>comment.body
+					{% else %}
+						<li>No comments yet
+					{% endfor %}
+					</ul>
+					<form method="{{ url_for('add_comment', entry_id=entry.id) }}" method="post">
+					</form>
 				</div>
 			</li>
 			<hr>

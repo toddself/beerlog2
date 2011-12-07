@@ -46,9 +46,9 @@ def create_image():
                 length = int(resize_to)
             else:
                 side_idx = None
-                lenght = 0
+                length = 0
         
-            image, thumb_size = store_image(filename, mime, length, size_idx)
+            image, thumb_size = store_image(filename, mime, length, side_idx)
             if image:
                 os.unlink(filename)
                 url = "%s/%s" % (IMAGE_BASEPATH, image)
@@ -56,9 +56,6 @@ def create_image():
                             width=thumb_size[0], 
                             height=thumb_size[1],
                             caption=caption)
-                flash("Image uploaded!")
-            else:
-                flash("Couldn't store the image in S3. Please try again.")
             return render_template('upload_file.html',
                                     data={'filename': url,
                                           'form': image_form})
@@ -90,7 +87,7 @@ def store_image(filename, mime, length, side_idx):
                                  hashlib.md5(filename).hexdigest(),
                                  extension)
     bucket = connect_to_s3()
-    image_data, thumb_size = resize_image(filename, length, side_idx)
+    image_data, thumb_size = resize_image(filename, length, side_idx, mime)
     save_data(image_data, bucket, s3_image_name, mime)
     return s3_image_name, thumb_size
 
@@ -107,22 +104,27 @@ def connect_to_s3():
     bucket = conn.get_bucket(AWS_BUCKET_NAME)
     return bucket
 
-def resize_image(filename, length, side_idx):
+def resize_image(filename, length, side_idx, mime):
+    im_type = mime.split('/')[1]
     im = PIL_Image.open(filename)
-    if im.size[side_idx] < length:
+    try:
+        if length and im.size[side_idx] > length:
+            if side_idx == 1:
+                other_idx = 0
+            else: 
+                other_idx = 1
+            thumb_size = [0,0]
+            thumb_size[side_idx] = length
+            ratio = float(length) / float(im.size[side_idx])
+            raw_min_l = ratio * float(im.size[other_idx])
+            thumb_size[other_idx] = int(round(raw_min_l))
+            im.thumbnail(thumb_size, PIL_Image.ANTIALIAS)
+            thumb = StringIO()
+            im.save(thumb, im_type)
+            return thumb, thumb_size
+    except TypeError:
+        pass
+    finally:
         image = StringIO()
+        im.save(image, im_type)
         return image, im.size
-    else:
-        if side_idx == 1:
-            other_idx = 0
-        else: 
-            other_idx = 1
-        thumb_size = [0,0]
-        thumb_size[side_idx] = length
-        ratio = float(length) / float(im.size[side_idx])
-        raw_min_l = ratio * float(im.size[other_idx])
-        thumb_size[other_idx] = int(round(raw_min_l))
-        im.thumbnail(thumb_size, PIL_Image.ANTIALIAS)
-        thumb = StringIO()
-        im.save(thumb, 'JPEG')
-        return thumb, thumb_size

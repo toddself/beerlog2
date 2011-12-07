@@ -3,9 +3,13 @@
 {% block flash %}{% endblock %}
 {% block nav %}{% endblock %}
 {% block body %}
-<div class="content_body" style="margin-left: 0px !important;">
+<div class="content_body" style="margin-left: 0px !important; margin-top: 0px !important;">
 	<form method="post" enctype="multipart/form-data" action="{{ url_for('create_image')}}" class=add-entry>
 		<dl>
+			{% if data.filename %}
+				<dt>Image filename
+				<dd><a href="{{ data.filename }}">{{ data.filename }}</a>
+			{% endif %}
 			{{ data.form.csrf }}
 			{{ render_field(data.form.image) }}
 			<dt>Resize <span style="font-weight: normal;">(Max size is 800 pixels on longest side; proportions will be constrained)</span>
@@ -15,11 +19,6 @@
 			<ul class="errors">
 				{% for error in data.form.resize_to.errors %}<li>{{ error }}{% endfor %}
 			</ul>							
-			{% endif %}
-			
-			{% if data.filename %}
-				<dt>Image filename
-				<dd>{{ data.filename }}
 			{% endif %}
 		</dl>
 		<p><input type=submit value="Upload image">
