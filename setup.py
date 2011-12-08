@@ -12,7 +12,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     data_files=[('/var/www_apps/', ['beerlog.wsgi',
-                                    'database.xml',
+                                    'beer_data.xml',
                                     'styleguide2008.xml'])],
     install_requires=['Flask',
                       'PIL',
