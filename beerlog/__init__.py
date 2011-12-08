@@ -26,7 +26,6 @@ def format_time(value, format="%H:%M %m/%d/%Y"):
 
 app.jinja_env.filters['dateformat'] = format_time
 
-
 from beerlog.admin.views import *
 from beerlog.blog.views import *
 from beerlog.image.views import *

@@ -1,5 +1,6 @@
 from sqlobject import DecimalCol
 from sqlobject.col import pushKey
+from flask.wtf.html5 import DecimalField, IntegerField
 
 class SGCol(DecimalCol):
     """ Stores Specific Gravity in a decimal column

@@ -5,6 +5,8 @@ from sqlobject.versioning import Versioning
 
 from beerlog.brewery.measures import Measure
 from beerlog.brewery.columns import *
+from beerlog.brewery.beerutils import *
+from beerlog.admin.models import Users
 
 class Hop(SQLObject):
     BITTERING = 0 
@@ -383,6 +385,7 @@ class EquipmentSet(SQLObject):
     mash_tun = ForeignKey('MashTun')
     boil_kettle = ForeignKey('BoilKettle')
     hop_utilization_factor = PercentCol(default=100)
+    brewer = ForeignKey('Users')
     versions = Versioning()
     
 class MashProfile(SQLObject):
@@ -443,7 +446,7 @@ class Recipe(SQLObject, Measure):
     
     name = UnicodeCol(length=64, default=None)
     style = ForeignKey('BJCPStyle', default=None)
-    brewer = UnicodeCol(length=255, default=None)
+    brewer = ForeignKey('Users')
     recipe_type = IntCol(default=EXTRACT)
     boil_volume = DecimalCol(size=5, precision=2, default=5.5)
     boil_volume_units = IntCol(default=Measure.GAL)
@@ -699,6 +702,7 @@ class Inventory(SQLObject):
     price = CurrencyCol(default=0)
     notes = UnicodeCol(default=None)
     inventory_type = UnicodeCol(default=None)
+    brewer = ForeignKey('Users')
     versions = Versioning()
 
     def _get_name(self):

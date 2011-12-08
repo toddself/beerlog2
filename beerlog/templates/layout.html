@@ -30,6 +30,7 @@
 		{% endblock %}
 	</head>
 	<body {% block bodystyle %}{% endblock %}>
+		<a name="pagetop"></a>
 		{% block flash %}
 		{% for message in get_flashed_messages() %}
 			<div class="flash">{{ message|safe }}<div style="float: right; margin-right: 20px;"><a href="#" onclick="$('.flash').hide('fast')">x</a></div></div>

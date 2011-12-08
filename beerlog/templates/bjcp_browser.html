@@ -23,10 +23,10 @@ function display_style(category_id){
 	<h2>BJCP Styles</h2>
 	<ul>
 		{% for category in styles %}
-			<li><a href="#" onclick="$('#{{category}}list').toggle()">{{ category }}. {{ styles[category].name }}</a><br>
+			<li><a name="{{category}}node"></a><a href="#{{category}}node" onclick="$('#{{category}}list').toggle()">{{ category }}. {{ styles[category].name }}</a><br>
 				<ul id="{{category}}list" class="subcat" style="margin-left: 15px">
 					{% for subcat in styles[category].styles %}
-					<li><a href="#" onclick="display_style('{{ subcat.id }}')">{{ subcat.subcategory }}. {{ subcat.name }}</a>
+					<li><a href="#description" onclick="display_style('{{ subcat.id }}')">{{ subcat.subcategory }}. {{ subcat.name }}</a>
 					{% endfor %}
 				</ul>
 						
@@ -34,6 +34,7 @@ function display_style(category_id){
 	</ul>
 </div>
 <div class="content_body" style="width: 50%;">
+	<a name="description"></a>
 	<dl class="subcat" id="bjcp_data">
 		<dt>Category</dt>
 		<dd id="category"></dd>
@@ -63,6 +64,7 @@ function display_style(category_id){
 		<dd id="srm_range"></dd>
 		<dt>ABV Range</dt>
 		<dd id="abv_range"></dd>
+		<p><a class="smallscreen" href="#pagetop">back to top</a>
 	</dl>
 </div>
 {% endblock %}
