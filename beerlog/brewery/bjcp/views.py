@@ -1,4 +1,5 @@
 import json
+from decimal import Decimal
 
 from flask import render_template
 from sqlobject import SQLObjectNotFound
@@ -23,10 +24,9 @@ def get_style_json(style_id=-1):
     try:
         s = BJCPStyle.get(style_id)
         style = {
-            'name': s.name,
+            'name': "%s. %s" % (s.subcategory, s.name),
             'beer_type': s.beer_type,
             'category': "%s. %s" % (s.category.id, s.category.name),
-            'subcategory': s.subcategory,
             'aroma': s.aroma,
             'appearance': s.appearance,
             'flavor': s.flavor,
