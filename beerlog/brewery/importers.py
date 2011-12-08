@@ -172,13 +172,13 @@ def process_bjcp_styles():
                     
 def process_bt_database():
     d = minidom.parse('/var/www_apps/beer_data.xml')
-    print "adding hops"
+    #print "adding hops"
     process_hops(d)
-    print "adding fermentables"
+    #print "adding fermentables"
     process_fermentables(d)
-    print "adding yeasts"
+    #print "adding yeasts"
     process_yeasts(d)
-    print "adding miscellaneous"
+    #print "adding miscellaneous"
     process_misc(d)
     
 def process_hops(d):
@@ -236,7 +236,7 @@ def process_hops(d):
         except AttributeError:
             pass
 
-        print "adding hop: %s" % name
+        #print "adding hop: %s" % name
         thisHop = Hop(name=name,
             alpha=alpha,
             beta=beta,
@@ -322,7 +322,7 @@ def process_fermentables(d):
                 notes = unicode(g('NOTES')[0].firstChild.data)
             except AttributeError:
                 pass                
-            print 'adding grain: %s' % name
+            #print 'adding grain: %s' % name
             thisGrain = Grain(name=name,
                 origin=origin,
                 maltster=maltster,
@@ -375,7 +375,7 @@ def process_fermentables(d):
                     add_after_boil = True
             except AttributeError:
                  pass
-            print "adding extract: %s" % name
+            #print "adding extract: %s" % name
             thisExtract = Extract(name=name,
                 origin=origin,
                 supplier=supplier,
@@ -462,7 +462,7 @@ def process_yeasts(d):
             use_starter = True
         else:
             use_starter = False
-        print "adding yeast: %s" % name
+        #print "adding yeast: %s" % name
         thisYeast = Yeast(name=name,
             yeast_type=yeast_type,
             yeast_form=yeast_form,
@@ -500,7 +500,7 @@ def process_misc(d):
         elif misc_type == 'Water Agent':
             misc_obj = Mineral
         else:
-            print "No matched type, boss %s" % misc_type
+            #print "No matched type, boss %s" % misc_type
             pass
         name = use_for = notes = None
         rec_amount = rec_units = batch_size = batch_size_units = \
@@ -523,7 +523,7 @@ def process_misc(d):
             misc_obj = Spice     
         if name == u'Paradise Seed':
             name = u'Grains of Paradise'
-        print "adding misc: %s" % name
+        #print "adding misc: %s" % name
         thisMisc = misc_obj(name=name,
             use_for=use_for,
             rec_amount=rec_amount,
