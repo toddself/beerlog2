@@ -10,10 +10,14 @@ $().ready(function(){
 function display_style(category_id){
 	$.getJSON('/json/brewery/bjcp/style/'+category_id+'/', function(data) {
 		$.each(data, function(key, val){
-			$('#'+key).html(val)
+			if(key == 'category'){
+				$('#'+key).html(val.category_id+". "+val.name)
+			} else {
+				$('#'+key).html(val)
+			}
 		});
+		$('#bjcp_data').show();
 	});
-	$('#bjcp_data').show();
 }
 
 </script>

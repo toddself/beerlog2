@@ -1,4 +1,4 @@
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 
 from flask import session
 from flaskext.wtf import Form, TextField, SelectField, 
@@ -17,22 +17,45 @@ BOIL_VOL_REQ = "You must provide a volume for the recipe's boil"
 BOIL_VOL_TYPE_REQ = "You must tell me what units your boil will measure in"
 EQUIPMENT_REQ = "You must choose an equipment set for me to accurately handle the boil"
 
-class SGValidation():
-    def __init__(self, message=None):
+class DecimalValidation():
+    def __init__(self, size, places, message=None):
         if not message:
-            self.message = "This must be a standard gravity value"
+            self.message = "This value must be less than %s^-%s" % (size, places)
         else:
-            self.message = message            
-            
+            self.message = message
+
     def __call__(self, form, field):
         if not isinstance(field.data, Decimal):
+            try:
+                dec_data = Decimal(field.data)
+                field.data = dec_data
+            except InvalidOperation:
+                raise ValidationError(self.message)
+        if field.data.as_tuple.exponent > self.places:
             raise ValidationError(self.message)
-        else:
-            if field.data.as_tuple.exponent != 3:
-                raise ValidationError(self.message)
-            elif field.data.as_tuple.digits[0] > 1:
-                raise ValidationError(self.message)
+        elif field.data.as_tuple.digits[0] > size:
+            raise ValidationError(self.message)
 
+class SRMValidation(DecimalValidation):
+    def __init__(self, message=None):
+        super(DecimalValidation, self).__init__(3, 1, message)
+
+class SGValidation(DecimalValidation):
+    def __init__(self, message=None):
+        super(DecimalValidation, self).__init__(1, 3, message)
+
+class IBUValidation(DecimalValidation):
+    def __init__(self, message=None):
+        super(DecimalValidation, self).__init__(3, 1, message)
+
+class PercentValidation(DecimalValidation):
+    def __init__(self, message=None):
+        super(DecimalValidation, self).__init__(3, 2, message)
+
+class TemperatureValidation(DecimalValidation):
+    def __init__(self, message=None):
+        super(DecimalValidation, self).__init__(3, 1, message)
+    
 def get_style_choices():
     styles = BJCPStyle.select().orderBy('category_id', 'subcategory')
     return [(s.id, s.name) for s in styles]
@@ -47,6 +70,9 @@ def boil_volume_choices():
 def equipment_set_choices():
     equipment = EquipmentSet.select(EquipmentSet.brewer==session.user_id)
     return [(e.id, e.name) for e in equipment]
+
+def fermentation_type_choices():
+    return [(Recipe.fermentation_types.index(x), x) for x in Recipe.fermentation_types]
             
 class RecipeForm(Form):
     name = TextField("Name", 
@@ -83,11 +109,28 @@ class RecipeForm(Form):
                          places=1,
                          validators[Required(SRM_REQ), SRMValidation()])
 
-    
-    color = SRMCol(default=0)
-    ibu = IBUCol(default=0)
-    ingredient = MultipleJoin('RecipeIngredient')
-    fermentation_type = IntCol(default=SINGLE)
+    ibu = DecimalField("IBU",
+                       places=1,
+                       validators[Required(IBU_REQ), IBUValidation()])
+    # ingredients are stored in hidden textfields which contain json-formatted
+    # strings containing the list of ingredients for that type, as well as
+    # all the other relevant ingredient data
+    hops = TextField(widget=HiddenInput())
+    grains = TextField(widget=HiddenInput())
+    extracts = TextField(widget=HiddenInput())
+    hopped_extracts = TextField(widget=HiddenInput())
+    mineral = TextField(widget=HiddenInput())
+    fining = TextField(widget=HiddenInput())
+    flavor = TextField(widget=HiddenInput())
+    spice = TextField(widget=HiddenInput())
+    herb = TextField(widget=HiddenInput())
+    fermentation_type = SelectField("Fermentation",
+                                    coerce=int,
+                                    choices=fermentation_type_choices(),
+                                    validators=[Required(FERM_TYPE_REQ)])
+    fermentation_stage_1_temp = DecimalField
+
+
     fermentation_stage_1_temp = DecimalCol(size=5, precision=2, default=0)
     fermentation_stage_1_temp_units = IntCol(default=Measure.F)
     fermentation_stage_2_temp = DecimalCol(size=5, precision=2, default=0)

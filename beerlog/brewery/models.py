@@ -343,13 +343,12 @@ class BJCPStyle(SQLObject):
         else:
             return "%i - %i" % (low, high)
 
-
 class BJCPCategory(SQLObject):
     name = UnicodeCol(length=48, default=None)
     category_id = IntCol(default=None)  
     notes = UnicodeCol()
     versions = Versioning()
-
+    
 class MashTun(SQLObject, Measure):
     volume = DecimalCol(size=5, precision=2, default=0.0)
     volume_unit = IntCol(default=Measure.GAL)
