@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>beerlog/static/styles.less</string>
+	<string>beerlog/brewery/recipe/forms.py</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -21,79 +21,7 @@
 	<integer>200</integer>
 	<key>metaData</key>
 	<dict>
-		<key>beerlog/__init__.py</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>35</integer>
-				<key>line</key>
-				<integer>27</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>4</integer>
-		</dict>
-		<key>beerlog/blog/views.py</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>77</integer>
-				<key>line</key>
-				<integer>4</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>4</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>77</integer>
-				<key>line</key>
-				<integer>4</integer>
-			</dict>
-		</dict>
-		<key>beerlog/comment/forms.py</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>11</integer>
-				<key>line</key>
-				<integer>5</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>beerlog/comment/views.py</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>29</integer>
-				<key>line</key>
-				<integer>5</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>beerlog/static/styles.less</key>
+		<key>beerlog/brewery/models.py</key>
 		<dict>
 			<key>caret</key>
 			<dict>
@@ -101,6 +29,20 @@
 				<integer>0</integer>
 				<key>line</key>
 				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>418</integer>
+		</dict>
+		<key>beerlog/brewery/recipe/forms.py</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>61</integer>
+				<key>line</key>
+				<integer>56</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -110,15 +52,12 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>beerlog/__init__.py</string>
-		<string>beerlog/comment/forms.py</string>
-		<string>beerlog/comment/views.py</string>
-		<string>beerlog/static/styles.less</string>
-		<string>beerlog/blog/views.py</string>
+		<string>beerlog/brewery/recipe/forms.py</string>
+		<string>beerlog/brewery/models.py</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<false/>
 	<key>windowFrame</key>
-	<string>{{7, 49}, {1343, 819}}</string>
+	<string>{{16, 48}, {1343, 819}}</string>
 </dict>
 </plist>
