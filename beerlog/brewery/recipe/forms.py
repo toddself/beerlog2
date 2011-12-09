@@ -1,8 +1,8 @@
 from decimal import Decimal
 
 from flask import session
-from flask.wtf import Form, TextField, SelectField, 
-from flask.wtf.html5 import IntegerField, DecimalField
+from flaskext.wtf import Form, TextField, SelectField, 
+from flaskext.wtf.html5 import IntegerField, DecimalField
 from wtforms.validators import Required, Optional, Length, ValidatonError
 from wtforms.widgets import HiddenInput
 
