@@ -24,6 +24,22 @@ from beerlog.brewery.importers import process_bjcp_styles, process_bt_database
 
 app = Flask(__name__)
 app.config.from_object('beerlog.settings')
+
+if app.config['DEBUG']:
+    prefix = 'DEBUG'
+else:
+    prefix = 'LIVE'
+    
+try:
+    app.static_url_path = app.config['%s_STATIC_URL_PATH' % prefix]
+except KeyError:
+    pass
+
+try:
+    app.static_folder = app.config['%s_STATIC_FOLDER' % prefix]
+except KeyError:
+    pass
+
 app.jinja_env.filters['dateformat'] = format_time
 
 def url(url_rule, import_name, **options):
