@@ -397,6 +397,7 @@ class MashProfile(SQLObject):
     sparge_type = IntCol(default=BATCH)
     num_sparges = IntCol(default=1)
     notes = UnicodeCol(default=None)
+    RelatedJoin('MashStep')
     versions = Versioning()
     
 class MashStep(SQLObject, Measure):
@@ -417,7 +418,7 @@ class MashStep(SQLObject, Measure):
     step_time = DecimalCol(size=3, precision=1, default=0.0)
     rise_time = DecimalCol(size=3, precision=1, default=0.0)
     mash_steps = ForeignKey('MashStepOrder')
-    mash = ForeignKey('MashProfile')
+    mash = RelatedJoin('MashProfile')
     versions = Versioning()
 
 class MashStepOrder(SQLObject):

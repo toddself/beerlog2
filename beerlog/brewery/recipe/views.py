@@ -1,6 +1,5 @@
 from flask import render_template
 
-from beerlog import app
 from beerlog.brewery.models import *
 from beerlog.brewery.recipe.forms import RecipeForm
 

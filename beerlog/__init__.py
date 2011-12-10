@@ -8,10 +8,11 @@ from flask import Flask
 from sqlobject import connectionForURI, sqlhub
 from sqlobject.dberrors import OperationalError
 
-from beerlog.helpers import format_time, sqlobject_to_dict
+from beerlog.helpers import format_time, sqlobject_to_dict, LazyView
 from beerlog.blog.models import Tag, Entry
 from beerlog.image.models import Image
 from beerlog.admin.models import Users
+from beerlog.admin.views import require_auth
 from beerlog.comment.models import Comment
 from beerlog.brewery.models import Hop, Grain, Extract, HoppedExtract, Yeast,\
                                    Water, Misc, Mineral, Fining, Flavor,\
@@ -23,13 +24,51 @@ from beerlog.brewery.importers import process_bjcp_styles, process_bt_database
 
 app = Flask(__name__)
 app.config.from_object('beerlog.settings')
-
 app.jinja_env.filters['dateformat'] = format_time
-from beerlog.admin.views import *
-from beerlog.blog.views import *
-from beerlog.image.views import *
-from beerlog.brewery.bjcp.views import *
-from beerlog.comment.views import *
+
+def url(url_rule, import_name, **options):
+    view = LazyView('beerlog.'+import_name)
+    app.add_url_rule(url_rule, view_func=view, **options)
+
+# ADMIN VIEWS
+url('/login', 'admin.views.login', methods=['GET', 'POST'])
+url('/logout', 'admin.views.logout')
+url('/admin/users/edit/<user_id>/password/', 'admin.views.change_password')
+url('/admin/users/', 'admin.views.list_users')
+url('/admin/users/edit/', 'admin.views.edit_user', methods=['POST', 'GET'])
+url('/admin/users/edit/<user_id>', 'admin.views.edit_user', methods=['POST', 'GET'])
+url('/admin/users/edit/<user_id>/delete/', 'admin.views.delete_user')
+
+# BLOG VIEWS
+url('/', 'blog.views.list_entries')
+url('/entry/<entry_id>/', 'blog.views.list_entries')
+url('/entry/<year>/', 'blog.views.list_entries')
+url('/entry/<year>/<month>/', 'blog.views.list_entries')
+url('/entry/<year>/<month>/<day>/', 'blog.views.list_entries')
+url('/entry/<year>/<month>/<day>/<slug>/', 'blog.views.list_entries')
+url('/json/entry/archives/', 'blog.views.list_archives')
+url('/entry/edit/', 'blog.views.edit_entry', methods=['POST', 'GET'])
+url('/entry/edit/<entry_id>/', 'blog.views.edit_entry', methods=['POST', 'GET'])
+url('/entry/edit/<entry_id>/delete/', 'blog.views.delete_entry')
+
+# COMMENT VIEWS
+url('/entry/<entry_id>/comment/add/', 'comment.views.add_comment')
+
+# IMAGE VIEWS
+url('/image/', 'image.views.list_images')
+url('/image/add/', 'image.views.create_image', methods=['GET','POST'])
+url('/image/<image_id>/delete/', 'image.views.delete_image')
+
+# BREWERY VIEWS
+## BJCP
+url('/brewery/bjcp/', 'brewery.bjcp.views.list_styles')
+url('/json/brewery/bjcp/style/<style_id>/', 'brewery.bjcp.views.get_style_json')
+## RECIPE
+url('/brewery/', 'brewery.recipe.views.list_recipes')
+url('/brewery/recipe/', 'brewery.recipe.views.list_recipes')
+url('/brewery/recipe/<recipe_id>/batch/', 'brewery.recipe.views.list_recipes')
+url('/brewery/recipe/<recipe_id>/', 'brewery.recipe.views.edit_recipe', methods=['POST', 'GET'])
+url('/brewery/recipe/batch/<recipe_id>/', 'brewery.recipe.views.edit_recipe', methods=['POST', 'GET'])
 
 @app.before_request
 def before_request():

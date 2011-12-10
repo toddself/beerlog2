@@ -14,15 +14,12 @@ from beerlog.image.forms import ImageForm
 from beerlog.image.models import Image
 from beerlog.settings import *
 from beerlog.admin.views import require_auth
-from beerlog import app
 
-@app.route('/image/')
 @require_auth
 def list_images():
     images = list(Image.select())
     return render_template('show_images.html', data={'images': images})
 
-@app.route('/image/add/', methods=['GET','POST'])
 @require_auth
 def create_image():
     image_form = ImageForm(request.form) 
@@ -67,7 +64,6 @@ def create_image():
         return render_template('upload_file.html',
                                data={'form': image_form})
 
-@app.route('/image/<image_id>/delete/')
 @require_auth
 def delete_image(image_id):
     img = Image.get(image_id)

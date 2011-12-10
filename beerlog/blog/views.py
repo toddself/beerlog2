@@ -6,19 +6,12 @@ from datetime import datetime, timedelta
 from flask import render_template, url_for, redirect, request, flash, session
 from sqlobject import AND, SQLObjectNotFound
 
-from beerlog import app
 from beerlog.blog.models import Entry, Tag
 from beerlog.blog.forms import EntryForm
 from beerlog.settings import *
 from beerlog.admin.views import require_auth
 from beerlog.comment.models import Comment
 
-@app.route('/')
-@app.route('/entry/<entry_id>/')
-@app.route('/entry/<year>/')
-@app.route('/entry/<year>/<month>/')
-@app.route('/entry/<year>/<month>/<day>/')
-@app.route('/entry/<year>/<month>/<day>/<slug>/')
 def list_entries(entry_id=None, day=None, month=None, year=None, slug=None):
     entries = None
     start_date = None
@@ -58,7 +51,6 @@ def list_entries(entry_id=None, day=None, month=None, year=None, slug=None):
 
     return render_template('list_entries.html', entries=entries)
 
-@app.route('/json/entry/archives/')
 def list_archives():
     year_list = {}
     for entry in list(Entry.select()):
@@ -69,8 +61,6 @@ def list_archives():
     else: 
         return json.dumps([])
 
-@app.route('/entry/edit/', methods=['POST', 'GET'])
-@app.route('/entry/edit/<entry_id>/', methods=['POST', 'GET'])
 @require_auth
 def edit_entry(entry_id=-1):
     post = EntryForm()
@@ -124,7 +114,6 @@ def edit_entry(entry_id=-1):
                                      'entry': entry,
                                      'tags': tags})
 
-@app.route('/entry/edit/<entry_id>/delete/')
 @require_auth
 def delete_entry(entry_id=None):
     if not entry_id:

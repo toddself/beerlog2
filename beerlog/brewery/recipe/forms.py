@@ -1,9 +1,9 @@
 from decimal import Decimal, InvalidOperation
 
 from flask import session
-from flaskext.wtf import Form, TextField, SelectField, 
+from flaskext.wtf import Form, TextField, SelectField, ValidationError
 from flaskext.wtf.html5 import IntegerField, DecimalField
-from wtforms.validators import Required, Optional, Length, ValidatonError
+from wtforms.validators import Required, Optional, Length
 from wtforms.widgets import HiddenInput
 
 from beerlog.brewery.models import BJCPStyle
@@ -64,8 +64,8 @@ def recipe_type_choices():
     return [(Recipe.recipe_types.index(x), x) for x in Recipe.recipe_types]
     
 def boil_volume_choices():
-    return [(Measure.GAL, Measure.measures.index(Measure.GAL),
-            (Measure.LITER, Measure.measures.index(Measure.LITER)]
+    return [(Measure.GAL, Measure.measures.index(Measure.GAL)),
+            (Measure.LITER, Measure.measures.index(Measure.LITER))]
 
 def equipment_set_choices():
     equipment = EquipmentSet.select(EquipmentSet.brewer==session.user_id)
@@ -82,12 +82,13 @@ def time_unit_choices():
     return [(Measure.DAYS, Measure.timing_parts.index(Measure.DAYS)),
             (Measure.WEEKS, Measure.timing_parts.index(Measure.WEEKS))]  
 
-def mash_choices():          
+def mash_choices():
+    return [(m.id, m.name) for m in MashProfiles.select()]
 
 class RecipeForm(Form):
     name = TextField("Name", 
-                     [Required(message=NAME_REQ,
-                      Length(min=1, max=64, message=NAME_LEN_ERROR)])
+                     [Required(message=NAME_REQ),
+                      Length(min=1, max=64, message=NAME_LEN)])
     style = SelectField("Style", 
                         coerce=int,
                         choices=style_choices(), 
@@ -96,10 +97,10 @@ class RecipeForm(Form):
     recipe_type = SelectField("Recipe Type",
                               coerce=int,
                               choices=recipe_type_choices(),
-                              validators=[Required(RECIPE_TYPE_REQ])
+                              validators=[Required(RECIPE_TYPE_REQ)])
     boil_volume = DecimalField('Boil Volume', 
                                places=2,
-                               validators=[Required(BOIL_VOL_REQ])
+                               validators=[Required(BOIL_VOL_REQ)])
     boil_volume_units = SelectField(choices=boil_volume_choices(),
                                     coerce=int,
                                     validators=[Required(BOIL_VOL_TYPE_REQ)])
@@ -111,17 +112,17 @@ class RecipeForm(Form):
     efficiency = IntegerField("Efficiency", [Optional()])
     og = DecimalField("OG",
                       places=3,
-                      validators[Required(OG_REQ), SGValidation()])
+                      validators=[Required(OG_REQ), SGValidation()])
     fg = DecimalField("FG",
                       places=3,
-                      validators[Required(FG_REQ), SGValidation()])
+                      validators=[Required(FG_REQ), SGValidation()])
     color = DecimalField("SRM",
                          places=1,
-                         validators[Required(SRM_REQ), SRMValidation()])
+                         validators=[Required(SRM_REQ), SRMValidation()])
 
     ibu = DecimalField("IBU",
                        places=1,
-                       validators[Required(IBU_REQ), IBUValidation()])
+                       validators=[Required(IBU_REQ), IBUValidation()])
     # ingredients are stored in hidden textfields which contain json-formatted
     # strings containing the list of ingredients for that type, as well as
     # all the other relevant ingredient data
@@ -146,7 +147,7 @@ class RecipeForm(Form):
     stage_1_time = IntegerColumn("Time", [Required()])
     stage_1_time_units = SelectField(coerce=int,
                                      choices=time_unit_choices(),
-                                     validators[Required()])
+                                     validators=[Required()])
     stage_2_temp = DecimalField("Temperature", [TemperatureValidation(), 
                                                 Optional()])
     stage_2_temp_units = SelectField(coerce=int,
@@ -155,7 +156,7 @@ class RecipeForm(Form):
     stage_2_time = IntegerColumn("Time", [Optional()])
     stage_2_time_units = SelectField(coerce=int,
                                      choices=time_unit_choices(),
-                                     validators[Optional()])
+                                     validators=[Optional()])
     stage_3_temp = DecimalField("Temperature", [TemperatureValidation(), 
                                                 Optional()])
     stage_3_temp_units = SelectField(coerce=int,
@@ -164,22 +165,21 @@ class RecipeForm(Form):
     stage_3_time = IntegerColumn("Time", [Optional()])
     stage_3_time_units = SelectField(coerce=int,
                                      choices=time_unit_choices(),
-                                     validators[Optional()])
-    mash = SelectColumn(coerce=int,
+                                     validators=[Optional()])
+    mash = SelectColumn("Mash Profile",
+                        coerce=int,
                         choices=mash_choices(),
                         validators=[Optional()])
-
-
-
-
-
-    mash = ForeignKey('MashProfile', default=None)
-    carbonation_type = IntCol(default=FORCED_CO2)
-    carbonation_volume = DecimalCol(size=3, precision=1, default=0)
-    carbonation_amount = DecimalCol(size=4, precision=2, default=0)
-    carbonation_amount_units = IntCol(default=Measure.OZ)
-    brewed_on = DateCol(default=datetime.now())
-    is_batch = BoolCol(default=False)
-    master_recipe = IntCol(default=0)
-    grain_total_weight = DecimalCol(size=5, precision=2, default=0)
-    hop_total_weight = DecimalCol(size=5, precision=2, default=0)
+    carbonation_type = SelectColumn("Carbonation Type",
+                                    coerce=int,
+                                    choices=carbonation_choices(),
+                                    validatators=[Optional()])
+    carbonation_volume = DecimalField('Volume wanted', 
+                                      places=1,
+                                      validators=[Optional()])
+    carbonation_sugar_amount = DecimalField("Amount",
+                                            places=2,
+                                            validators=[Optional()])
+    carbonation_sugar_units = SelectField(coerce=int,
+                                          choices=small_weight_choices(),
+                                          validators=[Optional()])

@@ -1,6 +1,7 @@
 import json
 from decimal import Decimal
 
+from werkzeug import import_string, cached_property 
 from sqlobject import SQLObject
 
 def format_time(value, format="%H:%M %m/%d/%Y"):
@@ -22,3 +23,16 @@ def sqlobject_to_dict(obj):
                 json_dict[attr] = getattr(obj, attr)
 
     return json_dict
+
+class LazyView(object):
+    
+    def __init__(self, import_name):
+        self.__module__, self.__name__ = import_name.rsplit('.', 1)
+        self.import_name = import_name
+        
+    @cached_property
+    def view(self):
+        return import_string(self.import_name)
+    
+    def __call__(self, *args, **kwargs):
+        return self.view(*args, **kwargs)

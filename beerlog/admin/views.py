@@ -5,13 +5,11 @@ from datetime import datetime
 from flask import request, flash, redirect, render_template, url_for, session
 from sqlobject import AND, SQLObjectNotFound
 
-from beerlog import app
 from beerlog.admin.models import Users, generate_password
 from beerlog.admin.forms import LoginForm, EditUserForm, CreateUserForm, ChangePasswordForm
 from beerlog.image.models import Image
 from beerlog.settings import PASSWORD_SALT
 
-@app.route('/login', methods=['POST', 'GET'])
 def login():
     error = None
     login_form = LoginForm()
@@ -25,7 +23,6 @@ def login():
     return render_template('login.html', data={"form": login_form,
                                                "error": error})
 
-@app.route('/logout')
 def logout():
     session.pop('logged_in', None)
     session.pop('user_id', None)
@@ -64,7 +61,6 @@ def require_admin(callback):
             return redirect(url_for('list_entries'))
     return admin
 
-@app.route('/admin/users/edit/<user_id>/password/')
 @require_auth
 def change_password(user_id=0):
     pass_form = ChangePasswordForm()
@@ -93,7 +89,6 @@ def change_password(user_id=0):
                                    data={'form': pass_form,
                                          'user_id': user.id})
 
-@app.route('/admin/users/')
 @require_auth
 def list_users(user_id=0):
     if user_id:
@@ -106,8 +101,6 @@ def list_users(user_id=0):
         users = list(Users.select())
     return render_template('list_users.html', data={'users': users})
 
-@app.route('/admin/users/edit/', methods=['POST', 'GET'])
-@app.route('/admin/users/edit/<user_id>/', methods=['POST', 'GET'])
 @require_auth
 def edit_user(user_id=-1):
     if user_id > 0:
@@ -152,7 +145,6 @@ def edit_user(user_id=-1):
         return render_template('edit_user.html', data={'form': user_form,
                                                        'user': user})
 
-@app.route('/admin/users/edit/<user_id>/delete/')
 @require_admin
 def delete_user(user_id):
     try:
