@@ -56,11 +56,11 @@ class TemperatureValidation(DecimalValidation):
     def __init__(self, message=None):
         super(DecimalValidation, self).__init__(3, 1, message)
     
-def get_style_choices():
+def style_choices():
     styles = BJCPStyle.select().orderBy('category_id', 'subcategory')
     return [(s.id, s.name) for s in styles]
 
-def get_recipe_type_choices():
+def recipe_type_choices():
     return [(Recipe.recipe_types.index(x), x) for x in Recipe.recipe_types]
     
 def boil_volume_choices():
@@ -73,19 +73,29 @@ def equipment_set_choices():
 
 def fermentation_type_choices():
     return [(Recipe.fermentation_types.index(x), x) for x in Recipe.fermentation_types]
-            
+    
+def temp_unit_choices():
+    return [(Measure.F, Measure.temperatures.index(Measure.F)),
+             Measure.C, Measure.temperatures.index(Measure.C)]
+
+def time_unit_choices():
+    return [(Measure.DAYS, Measure.timing_parts.index(Measure.DAYS)),
+            (Measure.WEEKS, Measure.timing_parts.index(Measure.WEEKS))]  
+
+def mash_choices():          
+
 class RecipeForm(Form):
     name = TextField("Name", 
                      [Required(message=NAME_REQ,
                       Length(min=1, max=64, message=NAME_LEN_ERROR)])
     style = SelectField("Style", 
                         coerce=int,
-                        choices=get_style_choices(), 
+                        choices=style_choices(), 
                         validators=[Required(STYLE_REQ)])
     brewer = IntegerField(widget=HiddenInput())
     recipe_type = SelectField("Recipe Type",
                               coerce=int,
-                              choices=get_recipe_type_choices(),
+                              choices=recipe_type_choices(),
                               validators=[Required(RECIPE_TYPE_REQ])
     boil_volume = DecimalField('Boil Volume', 
                                places=2,
@@ -128,21 +138,41 @@ class RecipeForm(Form):
                                     coerce=int,
                                     choices=fermentation_type_choices(),
                                     validators=[Required(FERM_TYPE_REQ)])
-    fermentation_stage_1_temp = DecimalField
+    stage_1_temp = DecimalField("Temperature", [TemperatureValidation(), 
+                                                Required()])
+    stage_1_temp_units = SelectField(coerce=int,
+                                     choices=temp_unit_choices(),
+                                     validators=[Required()])
+    stage_1_time = IntegerColumn("Time", [Required()])
+    stage_1_time_units = SelectField(coerce=int,
+                                     choices=time_unit_choices(),
+                                     validators[Required()])
+    stage_2_temp = DecimalField("Temperature", [TemperatureValidation(), 
+                                                Optional()])
+    stage_2_temp_units = SelectField(coerce=int,
+                                     choices=temp_unit_choices(),
+                                     validators=[Optional()])
+    stage_2_time = IntegerColumn("Time", [Optional()])
+    stage_2_time_units = SelectField(coerce=int,
+                                     choices=time_unit_choices(),
+                                     validators[Optional()])
+    stage_3_temp = DecimalField("Temperature", [TemperatureValidation(), 
+                                                Optional()])
+    stage_3_temp_units = SelectField(coerce=int,
+                                     choices=temp_unit_choices(),
+                                     validators=[Optional()])
+    stage_3_time = IntegerColumn("Time", [Optional()])
+    stage_3_time_units = SelectField(coerce=int,
+                                     choices=time_unit_choices(),
+                                     validators[Optional()])
+    mash = SelectColumn(coerce=int,
+                        choices=mash_choices(),
+                        validators=[Optional()])
 
 
-    fermentation_stage_1_temp = DecimalCol(size=5, precision=2, default=0)
-    fermentation_stage_1_temp_units = IntCol(default=Measure.F)
-    fermentation_stage_2_temp = DecimalCol(size=5, precision=2, default=0)
-    fermentation_stage_2_temp_units = IntCol(default=Measure.F)
-    fermentation_stage_3_temp = DecimalCol(size=5, precision=2, default=0)
-    fermentation_stage_3_temp_units = IntCol(default=Measure.F)
-    fermentation_stage_1_length = IntCol(default=0)
-    fermentation_stage_2_length = IntCol(default=0)
-    fermentation_stage_3_length = IntCol(default=0)
-    fermentation_stage_1_length_units = IntCol(default=0)
-    fermentation_stage_2_length_units = IntCol(default=0)
-    fermentation_stage_3_length_units = IntCol(default=0)
+
+
+
     mash = ForeignKey('MashProfile', default=None)
     carbonation_type = IntCol(default=FORCED_CO2)
     carbonation_volume = DecimalCol(size=3, precision=1, default=0)
