@@ -2,7 +2,7 @@
 {% extends "layout.html" %}
 {% block body %}
 <div class="content_body">
-	<form id="postform" action="{{ url_for('edit_user') }}{% if data.user.id is defined %}{{ data.user.id }}/{% endif %}" 
+	<form id="postform" action="{{ url_for('edit_user', user_id=data.user.id) }}" 
 		  method="post" class="entry">
 		<h2>{% if data.user.id is defined %}Edit{% else %}Create{% endif %} User</h2>
 		<dl>

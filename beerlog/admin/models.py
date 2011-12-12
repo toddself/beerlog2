@@ -18,7 +18,9 @@ class Users(SQLObject):
     last_login = DateTimeCol(default=datetime.now())
     avatar = ForeignKey("Image", notNone=False, default=None)
     active = BoolCol(default=True)
+    role = RelatedJoin('Role')
     admin = BoolCol(default=False)
+    permissions = RelatedJoin('Permission')
     
     def set_pass(self, salt, password_value):
         password = hashlib.sha256("%s%s" % (salt, password_value)).hexdigest()
@@ -27,3 +29,30 @@ class Users(SQLObject):
 def generate_password(cleartext):
     cyphertext = hashlib.sha256("%s%s" % (PASSWORD_SALT, cleartext))
     return cyphertext.hexdigest()        
+    
+
+class Role(SQLObject):
+    name = UnicodeCol(length=128)
+    user = RelatedJoin('Users')
+
+class Permission(SQLObject):
+    EDIT_DELETE_READ = 7
+    EDIT_READ = 6
+    READ_DELETE = 5
+    READ = 4
+    EDIT_DELETE = 3
+    EDIT = 2
+    DELETE = 1
+    NONE = 0
+    permissions = ['none', 'delete', 'edit', 'edit & delete', 'read', 
+                   'read & delete', 'edit & read', 'edit, delete & read']
+    
+    role = RelatedJoin('Role')
+    user = RelatedJoin('Users')
+    object_type = UnicodeCol(length=128)
+    object_id = IntCol()
+    permission = IntCol(default=EDIT_DELETE_READ)
+    
+    def _set_object_id(self, value):
+        self.object_type = value.__class__.__name__
+        self._SO_set_object_id = value.id

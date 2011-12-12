@@ -11,7 +11,7 @@
 	</li>
 	{% for user in data.users %}
 		<li class="row">&nbsp;
-			<div class="column"><a href="{{ url_for('edit_user') }}{{ user.id }}/">{{ user.first_name }} {{ user.last_name }}</a></div>
+			<div class="column"><a href="{{ url_for('edit_user', user_id=user.id) }}">{{ user.first_name }} {{ user.last_name }}</a></div>
 			<div class="column">{{ user.email }}</div>
 			<div class="column">{{ user.alias }}</div>
 			<div class="column">{{ user.last_login|dateformat }}</div>

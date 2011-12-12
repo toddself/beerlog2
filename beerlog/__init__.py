@@ -11,7 +11,7 @@ from sqlobject.dberrors import OperationalError
 from beerlog.helpers import format_time, sqlobject_to_dict, LazyView
 from beerlog.blog.models import Tag, Entry
 from beerlog.image.models import Image
-from beerlog.admin.models import Users
+from beerlog.admin.models import Users, Role, Permission
 from beerlog.admin.views import require_auth
 from beerlog.comment.models import Comment
 from beerlog.brewery.models import Hop, Grain, Extract, HoppedExtract, Yeast,\
@@ -51,9 +51,10 @@ url('/login', 'admin.views.login', methods=['GET', 'POST'])
 url('/logout', 'admin.views.logout')
 url('/admin/users/edit/<user_id>/password/', 'admin.views.change_password')
 url('/admin/users/', 'admin.views.list_users')
-url('/admin/users/edit/', 'admin.views.edit_user', methods=['POST', 'GET'])
-url('/admin/users/edit/<user_id>', 'admin.views.edit_user', methods=['POST', 'GET'])
+url('/admin/users/edit/<user_id>/', 'admin.views.edit_user', methods=['POST', 'GET'])
+url('/admin/users/create/', 'admin.views.create_user', methods=['POST', 'GET'])
 url('/admin/users/edit/<user_id>/delete/', 'admin.views.delete_user')
+
 
 # BLOG VIEWS
 url('/', 'blog.views.list_entries')
@@ -110,16 +111,24 @@ def init_db(config):
               Yeast, Water, Misc, Mineral, Fining, Flavor, Spice, Herb,
               BJCPStyle, BJCPCategory,  MashTun, BoilKettle, EquipmentSet,
               MashProfile, MashStep, MashStepOrder, Recipe, RecipeIngredient,
-              Inventory, Comment]
+              Inventory, Comment, Role, Permission]
     for table in tables:
         try:
             table.createTable()
         except OperationalError:
             pass
+    
+
     adef = config['ADMIN_USERNAME']
     admin = Users(email=adef, first_name=adef, last_name=adef, alias=adef)
     admin.set_pass(config['PASSWORD_SALT'], config['ADMIN_PASSWORD'])
     admin.admin = True
+    # uncomment when you're sorted out your little permissions thingy
+    # for role in config['SYSTEM_ROLES']:
+    #     r = Role(name=role)
+    # admin.addRole(config['SYSTEM_ROLES'].index(config['ADMIN']))
+
+
     process_bjcp_styles()
     process_bt_database()
 

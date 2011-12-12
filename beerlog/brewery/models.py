@@ -652,22 +652,22 @@ class RecipeIngredient(SQLObject):
     
     def _get_gravity_units(self):
         if self.ingredient_type in self.sugar_types:
-            return gu_from_sg(eval(self.ingredient_type).get(self.ingredient_id).potential)            
+            return gu_from_sg(globals()[self.ingredient_type].get(self.ingredient_id).potential)            
         else:
             return 0
     
     def _get_srm(self):
         if self.ingredient_type in self.sugar_types:
-            return eval(self.ingredient_type).get(self.ingredient_id).color
+            return globals()[self.ingredient_type].get(self.ingredient_id).color
         else:
             return 0
     
     def _get_name(self):
-        return eval(self.ingredient_type).get(self.ingredient_id).name
+        return globals()[self.ingredient_type].get(self.ingredient_id).name
     
     def _set_ingredient_id(self, value):
         try:
-            self.ingredient_type = value.sqlmeta.table.title()
+            self.ingredient_type = value.__class__.__name__
             self._SO_set_ingredient_id(value.id)
         except AttributeError:
             self.ingredient_type = 'Grain'
@@ -706,10 +706,10 @@ class Inventory(SQLObject):
     versions = Versioning()
 
     def _get_name(self):
-        return eval(self.inventory_type).get(self.inventory_item_id).name
+        return globals()[self.inventory_type].get(self.inventory_item_id).name
     
     def _set_inventory_item_id(self, value):
-        self.inventory_type = value.sqlmeta.table.title()
+        self.inventory_type = value.__class__.__name__
         self._SO_set_inventory_item_id(value.id)
 
 def cloneRecipe(clone, master):

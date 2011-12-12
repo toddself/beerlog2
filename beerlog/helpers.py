@@ -27,7 +27,7 @@ def sqlobject_to_dict(obj):
 class LazyView(object):
     
     def __init__(self, import_name):
-        self.__module__, self.__name__ = import_name.rsplit('.', 1)
+        self.__module__, self.__name__ = import_name.rsplit('.',  1)
         self.import_name = import_name
         
     @cached_property
