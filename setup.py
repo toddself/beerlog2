@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='beerlog',
-    version='0.57',
+    version='0.56',
     long_description=__doc__,
     packages=['beerlog',
              'beerlog.blog',
@@ -10,6 +10,7 @@ setup(
              'beerlog.image',
              'beerlog.brewery',
              'beerlog.brewery.bjcp',
+             'beerlog.brewery.recipe',
              'beerlog.comment'],
     include_package_data=True,
     zip_safe=False,
