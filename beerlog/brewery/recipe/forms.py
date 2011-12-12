@@ -128,17 +128,17 @@ class RecipeForm(Form):
                             validators=[Required(EQUIPMENT_REQ)])
     base_boil_equipment = BooleanField("Base boil on equipment", [Optional()])
     efficiency = IntegerField("Efficiency", [Optional()])
-    og = DecimalField("OG",
+    og = DecimalField("O.G.",
                       places=3,
                       validators=[Required(OG_REQ), SGValidation()])
-    fg = DecimalField("FG",
+    fg = DecimalField("F.G.",
                       places=3,
                       validators=[Required(FG_REQ), SGValidation()])
-    color = DecimalField("SRM",
+    color = DecimalField("Color",
                          places=1,
                          validators=[Required(SRM_REQ), SRMValidation()])
 
-    ibu = DecimalField("IBU",
+    ibu = DecimalField("IBUs",
                        places=1,
                        validators=[Required(IBU_REQ), IBUValidation()])
     # ingredients are stored in hidden textfields which contain json-formatted
@@ -161,7 +161,7 @@ class RecipeForm(Form):
                                     coerce=int,
                                     choices=fermentation_type_choices(),
                                     validators=[Required(FERM_TYPE_REQ)])
-    stage_1_temp = DecimalField("Temperature", [TemperatureValidation(), 
+    stage_1_temp = DecimalField("First stage", [TemperatureValidation(), 
                                                 Required()])
     stage_1_temp_units = SelectField(coerce=int,
                                      choices=temp_unit_choices(),
@@ -170,7 +170,7 @@ class RecipeForm(Form):
     stage_1_time_units = SelectField(coerce=int,
                                      choices=time_unit_choices(),
                                      validators=[Required()])
-    stage_2_temp = DecimalField("Temperature", [TemperatureValidation(), 
+    stage_2_temp = DecimalField("Second Stage", [TemperatureValidation(), 
                                                 Optional()])
     stage_2_temp_units = SelectField(coerce=int,
                                      choices=temp_unit_choices(),
@@ -179,7 +179,7 @@ class RecipeForm(Form):
     stage_2_time_units = SelectField(coerce=int,
                                      choices=time_unit_choices(),
                                      validators=[Optional()])
-    stage_3_temp = DecimalField("Temperature", [TemperatureValidation(), 
+    stage_3_temp = DecimalField("Third Stage", [TemperatureValidation(), 
                                                 Optional()])
     stage_3_temp_units = SelectField(coerce=int,
                                      choices=temp_unit_choices(),

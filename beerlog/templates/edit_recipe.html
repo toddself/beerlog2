@@ -3,17 +3,18 @@
 {% block title %}&#187; Edit Recipe{% endblock %}
 {% block stylesheet %}
 {{ super() }}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='timePicker.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='jquery-ui-1.8.16.custom.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='rte.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='jquery.tagsinput.css') }}">
+<link rel=stylesheet type="text/css" href="{{ url_for('static', filename='demo_page.css') }}">
+<link rel=stylesheet type="text/css" href="{{ url_for('static', filename='demo_table.css') }}">
+<link rel=stylesheet type="text/css" href="{{ url_for('static', filename='demo_table_jui.css') }}">
 {% endblock %}
 {% block javascript %}
 {{ super() }}
-<script src="{{ url_for('static', filename='jquery-ui-1.8.16.custom.min.js' )}}"></script>
-<script src="{{ url_for('static', filename='jquery.timePicker.min.js' )}}"></script>
-<script src="{{ url_for('static', filename='jquery.rte.js' )}}"></script>
-<script src="{{ url_for('static', filename='jquery.tagsinput.min.js') }}"></script>
+<script src="{{ url_for('static', filename='jquery.dataTables.min.js') }}"></script>
+<script>
+	$(document).ready(function(){
+		$('#example').dataTable();
+	});
+</script>
 {% endblock %}
 {% block body %}
 <div class="content_body">	
@@ -22,6 +23,7 @@
 {{ data.form.csrf }}{{ data.form.brewer(value=session.get('user_id')) }}{{ data.form.hops }}
 {{ data.form.grains }}{{ data.form.extracts }}{{ data.form.hopped_extracts }}{{ data.form.mineral }}
 {{ data.form.fining }}{{ data.form.flavor }}{{ data.form.spice }}{{ data.form.herb }}
+<span class=section_title>General</span>
 <div class=recipe_section>
 	<div>{{ data.form.name.label }}{{ data.form.name(style="width: 100px;") }}</div>
 	<div>{{ data.form.style.label }}{{ data.form.style }}</div>
@@ -34,31 +36,77 @@
 	<div>{{ data.form.base_boil_equipment }}{{ data.form.base_boil_equipment.label }}</div>
 	<br>
 </div>
-			
-
-
-			{{ render_field(data.form.og, step="0.001", min="1.000") }}
-			{{ render_field(data.form.fg, step="0.001", min="1.000") }}
-			{{ render_field(data.form.color, step="0.1") }}
-			{{ render_field(data.form.ibu, step="0.1") }}
-			{{ render_field(data.form.fermentation_type) }}
-			{{ render_field(data.form.stage_1_temp) }}
-			{{ render_field(data.form.stage_1_temp_units) }}
-			{{ render_field(data.form.stage_1_time) }}
-			{{ render_field(data.form.stage_1_time_units) }}
-			{{ render_field(data.form.stage_2_temp) }}
-			{{ render_field(data.form.stage_2_temp_units) }}
-			{{ render_field(data.form.stage_2_time) }}
-			{{ render_field(data.form.stage_2_time_units) }}
-			{{ render_field(data.form.stage_3_temp) }}
-			{{ render_field(data.form.stage_3_temp_units) }}
-			{{ render_field(data.form.stage_3_time) }}
-			{{ render_field(data.form.stage_3_time_units) }}
-			{{ render_field(data.form.mash) }}
-			{{ render_field(data.form.carbonation_type) }}
-			{{ render_field(data.form.carbonation_sugar_amount) }}
-			{{ render_field(data.form.carbonation_sugar_units) }}			
-			{{ render_field(data.form.carbonation_volume) }}
+<span class=section_title>Ingredients</span>
+<div class=recipe_section>
+	
+	<div>
+		<table id=example style="width: 100% !important;">
+			<thead>
+				<tr>
+					<th>Ingredient</th>
+					<th>Type</th>
+					<th>Use</th>
+					<th>%</th>
+					<th>Time</th>
+					<th>Amount</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div><br>
+	<input type="button" onclick="addIngredient" id="add_ingredient" value="Add Ingredient">
+	<input type="button" onclick="removeIngrient" id="remove_ingredient" value="Delete Ingredient">
+</div>
+<div class=recipe_section style="float: left;">
+	<div style="float: left; width: 40%">
+		<span class=section_title>Recipe Stats</span>
+		<div  style="width: 100%;">
+			<div style="width: 20%">{{ data.form.og.label }}</div><div>{{ data.form.og(disabled="disabled", style="width: 75px;") }}</div><br>
+			<div style="width: 20%">{{ data.form.fg.label }}</div><div>{{ data.form.fg(disabled="disabled", style="width: 75px;") }}</div><br>
+			<div style="width: 20%">{{ data.form.color.label }}</div><div>{{ data.form.color(disabled="disabled", style="width: 75px;") }}</div><br>
+			<div style="width: 20%">{{ data.form.ibu.label }}</div><div>{{ data.form.ibu(disabled="disabled", style="width: 75px;") }}</div><br>
+			<div style="width: 20%"><label for="abv">A.B.V.</label></div><div><input type="number" style="width: 75px;" disabled></div><br>
+			<div style="width: 20%"><label for="bitt_ratio">IBU/GU</label></div><div><input style="width: 75px;" type="number" disabled></div><br>			
+		</div>
+	</div>
+	<div style="float: left; width: 40%">
+		<span class=section_title>Style Stats</span>
+		<div style="width: 100%;">
+			<div style="width: 20%">{{ data.form.og.label }}</div><div>{{ data.form.og(disabled="disabled", style="width: 75px;") }}</div><br>
+			<div style="width: 20%">{{ data.form.fg.label }}</div><div>{{ data.form.fg(disabled="disabled", style="width: 75px;") }}</div><br>
+			<div style="width: 20%">{{ data.form.color.label }}</div><div>{{ data.form.color(disabled="disabled", style="width: 75px;") }}</div><br>
+			<div style="width: 20%">{{ data.form.ibu.label }}</div><div>{{ data.form.ibu(disabled="disabled", style="width: 75px;") }}</div><br>
+			<div style="width: 20%"><label for="abv">A.B.V.</label></div><div><input type="number" style="width: 75px;" disabled></div><br>
+			<div style="width: 20%">&nbsp;</div><div>&nbsp;</div><br>
+		</div>
+	</div><br>
+</div>
+<div class=recipe_section style="float: left; margin-left: 15px">
+	<div>
+		<div style="width: 23%">{{ data.form.fermentation_type.label }}</div><div>{{ data.form.fermentation_type }}</div><br>
+		<div style="width: 23%">{{ data.form.stage_1_temp.label }}</div><div>{{ data.form.stage_1_temp(style="width: 50px;")}}{{ data.form.stage_1_temp_units}}</div><div>{{ data.form.stage_1_time(style="width: 50px;")}}{{ data.form.stage_1_time_units }}</div><br>
+		<div style="width: 23%">{{ data.form.stage_2_temp.label }}</div><div>{{ data.form.stage_2_temp(style="width: 50px;")}}{{ data.form.stage_2_temp_units}}</div><div>{{ data.form.stage_2_time(style="width: 50px;")}}{{ data.form.stage_2_time_units }}</div><br>
+		<div style="width: 23%">{{ data.form.stage_3_temp.label }}</div><div>{{ data.form.stage_3_temp(style="width: 50px;")}}{{ data.form.stage_3_temp_units}}</div><div>{{ data.form.stage_3_time(style="width: 50px;")}}{{ data.form.stage_3_time_units }}</div><br>
+	</div><br>
+</div>
+<br style="clear: both;">
+<span class=section_title>Mash Profile</span>
+<div class=recipe_section>
+	<div>
+		<div>{{ data.form.mash.label }}{{ data.form.mash }}</div><br>
+	</div><br>
+</div>
+<span class=section_title>Carbonation</span>
+<div class=recipe_section>
+	<div>
+		<div>
+			<div>{{ data.form.carbonation_type.label }}</div><div>{{ data.form.carbonation_type }}</div><br>
+			<div>{{ data.form.carbonation_sugar_amount.label }}</div><div>{{ data.form.carbonation_sugar_amount }}{{ data.form.carbonation_sugar_units }}</div><br>
+			<div>{{ data.form.carbonation_volume.label }}</div><div>{{ data.form.carbonation_volume }}</div><br>
+		</div>
+	</div><br>
+</div>
 		<p><input type=submit value="{% if data.recipe.id %}Edit{% else %}Create{% endif %} Recipe">
 	</form>
 </div>

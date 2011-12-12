@@ -222,15 +222,29 @@ form {
         .fonts(@base_font_size+8px);
     }
     
+
+    span.section_title {
+        position: relative;
+        top: 4px;
+        left: 5px;
+        font-weight: bold;
+        background: @page_color;
+        padding: 4px;
+    }
+
     div.recipe_section {
+        border: 1px solid black;
+        margin-bottom: (@base_font_size+4px);
+
         label {
             font-weight: bold
         }
+
         div {
             float: left;
             padding: 5px;
-            
         }
+        
         br {
             clear: both;
         }
