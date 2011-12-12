@@ -18,30 +18,29 @@
 {% block body %}
 <div class="content_body">	
 	<form id=postform action="{{ url_for('edit_recipe', recipe_id=data.recipe.id) }}" method="post" class="entry">
-		<dl>
-			{{ data.form.csrf }}
-			{{ data.form.brewer(value=session.get('user_id')) }}
-			{{ data.form.hops }}
-			{{ data.form.grains }}
-			{{ data.form.extracts }}
-			{{ data.form.hopped_extracts }}
-			{{ data.form.mineral }}
-			{{ data.form.fining }}
-			{{ data.form.flavor }}
-			{{ data.form.spice }}
-			{{ data.form.herb }}
-			{{ render_field(data.form.name) }}
-			{{ render_field(data.form.style) }}
-			{{ render_field(data.form.recipe_type) }}
-			{{ render_field(data.form.boil_volume) }}
-			{{ render_field(data.form.boil_volume_units) }}
-			{{ render_field(data.form.equipment) }}
-			{{ render_field(data.form.base_boil_equipment) }}
-			{{ render_field(data.form.efficiency) }}
-			{{ render_field(data.form.og) }}
-			{{ render_field(data.form.fg) }}
-			{{ render_field(data.form.color) }}
-			{{ render_field(data.form.ibu) }}
+<!-- hidden fields for internal accounting -->
+{{ data.form.csrf }}{{ data.form.brewer(value=session.get('user_id')) }}{{ data.form.hops }}
+{{ data.form.grains }}{{ data.form.extracts }}{{ data.form.hopped_extracts }}{{ data.form.mineral }}
+{{ data.form.fining }}{{ data.form.flavor }}{{ data.form.spice }}{{ data.form.herb }}
+<div class=recipe_section>
+	<div>{{ data.form.name.label }}{{ data.form.name(style="width: 100px;") }}</div>
+	<div>{{ data.form.style.label }}{{ data.form.style }}</div>
+	<div>{{ data.form.recipe_type.label }}{{ data.form.recipe_type }}</div>
+	<div>{{ data.form.efficiency.label }}{{ data.form.efficiency(style="width: 50px", step="0.1") }}%</div>
+	<br>
+	<div>{{ data.form.boil_volume.label }}{{ data.form.boil_volume(style="width: 50px;", step="0.1") }}{{ data.form.boil_volume_units }}</div>
+	<div>{{ data.form.batch_volume.label }}{{ data.form.batch_volume(style="width: 50px;", step="0.1") }}{{ data.form.batch_volume_units }}</div>
+	<div>{{ data.form.equipment.label }}{{ data.form.equipment }}</div>
+	<div>{{ data.form.base_boil_equipment }}{{ data.form.base_boil_equipment.label }}</div>
+	<br>
+</div>
+			
+
+
+			{{ render_field(data.form.og, step="0.001", min="1.000") }}
+			{{ render_field(data.form.fg, step="0.001", min="1.000") }}
+			{{ render_field(data.form.color, step="0.1") }}
+			{{ render_field(data.form.ibu, step="0.1") }}
 			{{ render_field(data.form.fermentation_type) }}
 			{{ render_field(data.form.stage_1_temp) }}
 			{{ render_field(data.form.stage_1_temp_units) }}
@@ -60,7 +59,6 @@
 			{{ render_field(data.form.carbonation_sugar_amount) }}
 			{{ render_field(data.form.carbonation_sugar_units) }}			
 			{{ render_field(data.form.carbonation_volume) }}
-		</dl>
 		<p><input type=submit value="{% if data.recipe.id %}Edit{% else %}Create{% endif %} Recipe">
 	</form>
 </div>

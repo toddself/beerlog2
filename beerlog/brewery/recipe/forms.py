@@ -116,6 +116,12 @@ class RecipeForm(Form):
     boil_volume_units = SelectField(choices=boil_volume_choices(),
                                     coerce=int,
                                     validators=[Required(BOIL_VOL_TYPE_REQ)])
+    batch_volume = DecimalField('Batch Volume', 
+                               places=2,
+                               validators=[Required(BOIL_VOL_REQ)])
+    batch_volume_units = SelectField(choices=boil_volume_choices(),
+                                    coerce=int,
+                                    validators=[Required(BOIL_VOL_TYPE_REQ)])
     equipment = SelectField("Equipment",
                             coerce=int,
                             choices=equipment_set_choices(),

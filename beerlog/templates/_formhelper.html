@@ -1,10 +1,25 @@
 {% macro render_field(field) %}
-	<dt>{{ field.label }}
-	<dd>{{ field(**kwargs)|safe }}
+		<dt>{{ field.label }}
+		<dd>{{ field(**kwargs)|safe }}
+		{% if field.errors %}
+		<ul class="errors">
+			{% for error in field.errors %}<li>{{ error }}{% endfor %}
+	    </ul>
+		{% endif %}
+		</dd>	
+{% endmacro %}
+
+{% macro render_div_field(field) %}
+<div>
+	{% if label_first %}
+		{% if no_label %}{{ field.label }}{% endif %}{{ field(**kwargs)|safe }}
+	{% else %}
+		{{ field(**kwargs)|safe }}{% if no_label %}{{ field.label }}{% endif %}
+	{% endif %}
 	{% if field.errors %}
 	<ul class="errors">
 		{% for error in field.errors %}<li>{{ error }}{% endfor %}
-    </ul>
+	</ul>
 	{% endif %}
-	</dd>	
+</div>
 {% endmacro %}
