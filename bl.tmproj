@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>beerlog/brewery/models.py</string>
+	<string>beerlog/templates/edit_recipe.html</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -21,59 +21,43 @@
 	<integer>200</integer>
 	<key>metaData</key>
 	<dict>
-		<key>beerlog/admin/models.py</key>
+		<key>beerlog/brewery/recipe/forms.py</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>31</integer>
+				<integer>46</integer>
 				<key>line</key>
-				<integer>37</integer>
+				<integer>191</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>9</integer>
+			<integer>159</integer>
 		</dict>
-		<key>beerlog/brewery/models.py</key>
+		<key>beerlog/templates/edit_recipe.html</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>50</integer>
 				<key>line</key>
-				<integer>28</integer>
+				<integer>22</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>54</integer>
-				<key>line</key>
-				<integer>33</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>28</integer>
-			</dict>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>beerlog/admin/models.py</string>
-		<string>beerlog/brewery/models.py</string>
+		<string>beerlog/templates/edit_recipe.html</string>
+		<string>beerlog/brewery/recipe/forms.py</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<false/>
 	<key>windowFrame</key>
-	<string>{{29, 48}, {1721, 1093}}</string>
+	<string>{{0, 0}, {1404, 878}}</string>
 </dict>
 </plist>

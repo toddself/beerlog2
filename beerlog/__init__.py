@@ -11,7 +11,7 @@ from sqlobject.dberrors import OperationalError
 from beerlog.helpers import format_time, sqlobject_to_dict, LazyView
 from beerlog.blog.models import Tag, Entry
 from beerlog.image.models import Image
-from beerlog.admin.models import Users, Role, Permission
+from beerlog.admin.models import Users, Role#, Permission
 from beerlog.admin.views import require_auth
 from beerlog.comment.models import Comment
 from beerlog.brewery.models import Hop, Grain, Extract, HoppedExtract, Yeast,\
@@ -84,6 +84,7 @@ url('/json/brewery/bjcp/style/<style_id>/', 'brewery.bjcp.views.get_style_json')
 url('/brewery/', 'brewery.recipe.views.list_recipes')
 url('/brewery/recipe/', 'brewery.recipe.views.list_recipes')
 url('/brewery/recipe/<recipe_id>/batch/', 'brewery.recipe.views.list_recipes')
+url('/brewery/recipe/edit/', 'brewery.recipe.views.edit_recipe', methods=['POST', 'GET'])
 url('/brewery/recipe/<recipe_id>/', 'brewery.recipe.views.edit_recipe', methods=['POST', 'GET'])
 url('/brewery/recipe/batch/<recipe_id>/', 'brewery.recipe.views.edit_recipe', methods=['POST', 'GET'])
 
@@ -111,7 +112,7 @@ def init_db(config):
               Yeast, Water, Misc, Mineral, Fining, Flavor, Spice, Herb,
               BJCPStyle, BJCPCategory,  MashTun, BoilKettle, EquipmentSet,
               MashProfile, MashStep, MashStepOrder, Recipe, RecipeIngredient,
-              Inventory, Comment, Role, Permission]
+              Inventory, Comment, Role]#, Permission]
     for table in tables:
         try:
             table.createTable()

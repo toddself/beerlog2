@@ -1,12 +1,12 @@
 from decimal import Decimal, InvalidOperation
 
 from flask import session
-from flaskext.wtf import Form, TextField, SelectField, ValidationError
+from flaskext.wtf import Form, TextField, SelectField, ValidationError, BooleanField
 from flaskext.wtf.html5 import IntegerField, DecimalField
 from wtforms.validators import Required, Optional, Length
 from wtforms.widgets import HiddenInput
 
-from beerlog.brewery.models import BJCPStyle
+from beerlog.brewery.models import *
 from beerlog.brewery.measures import Measure
 
 NAME_REQ = "You must provide a name for your recipe"
@@ -16,8 +16,13 @@ RECIPE_TYPE_REQ = "You must select a type for your recipe"
 BOIL_VOL_REQ = "You must provide a volume for the recipe's boil"
 BOIL_VOL_TYPE_REQ = "You must tell me what units your boil will measure in"
 EQUIPMENT_REQ = "You must choose an equipment set for me to accurately handle the boil"
+OG_REQ = ''
+FG_REQ = ''
+SRM_REQ = ''
+IBU_REQ = ''
+FERM_TYPE_REQ = ''
 
-class DecimalValidation():
+class DecimalValidation(object):
     def __init__(self, size, places, message=None):
         if not message:
             self.message = "This value must be less than %s^-%s" % (size, places)
@@ -38,53 +43,60 @@ class DecimalValidation():
 
 class SRMValidation(DecimalValidation):
     def __init__(self, message=None):
-        super(DecimalValidation, self).__init__(3, 1, message)
+        super(SRMValidation, self).__init__(3, 1, message)
 
 class SGValidation(DecimalValidation):
     def __init__(self, message=None):
-        super(DecimalValidation, self).__init__(1, 3, message)
+        super(SGValidation, self).__init__(1, 3, message)
 
 class IBUValidation(DecimalValidation):
     def __init__(self, message=None):
-        super(DecimalValidation, self).__init__(3, 1, message)
+        super(IBUValidation, self).__init__(3, 1, message)
 
 class PercentValidation(DecimalValidation):
     def __init__(self, message=None):
-        super(DecimalValidation, self).__init__(3, 2, message)
+        super(PercentValidation, self).__init__(3, 2, message)
 
 class TemperatureValidation(DecimalValidation):
     def __init__(self, message=None):
-        super(DecimalValidation, self).__init__(3, 1, message)
+        super(TemperatureValidation, self).__init__(3, 1, message)
     
 def style_choices():
-    styles = BJCPStyle.select().orderBy('category_id', 'subcategory')
+    styles = BJCPStyle.select().orderBy('category_id').orderBy('subcategory')
     return [(s.id, s.name) for s in styles]
 
 def recipe_type_choices():
     return [(Recipe.recipe_types.index(x), x) for x in Recipe.recipe_types]
     
 def boil_volume_choices():
-    return [(Measure.GAL, Measure.measures.index(Measure.GAL)),
-            (Measure.LITER, Measure.measures.index(Measure.LITER))]
+    return [(Measure.GAL, Measure.measures[Measure.GAL]),
+            (Measure.LITER, Measure.measures[Measure.LITER])]
 
 def equipment_set_choices():
-    equipment = EquipmentSet.select(EquipmentSet.brewer==session.user_id)
+    equipment = EquipmentSet.select(EquipmentSet.q.brewer==session.get('user_id'))
     return [(e.id, e.name) for e in equipment]
 
 def fermentation_type_choices():
     return [(Recipe.fermentation_types.index(x), x) for x in Recipe.fermentation_types]
     
 def temp_unit_choices():
-    return [(Measure.F, Measure.temperatures.index(Measure.F)),
-             Measure.C, Measure.temperatures.index(Measure.C)]
+    return [(Measure.F, Measure.temperatures[Measure.F]),
+             (Measure.C, Measure.temperatures[Measure.C])]
 
 def time_unit_choices():
-    return [(Measure.DAYS, Measure.timing_parts.index(Measure.DAYS)),
-            (Measure.WEEKS, Measure.timing_parts.index(Measure.WEEKS))]  
+    return [(Measure.DAYS, Measure.timing_parts[Measure.DAYS]),
+            (Measure.WEEKS, Measure.timing_parts[Measure.WEEKS])]
 
 def mash_choices():
-    return [(m.id, m.name) for m in MashProfiles.select()]
-
+    return [(m.id, m.name) for m in MashProfile.select()]
+    
+def carbonation_choices():
+    return [(Recipe.carbonation_types.index(x), x) for x in Recipe.carbonation_types]
+    
+def small_weight_choices():
+    return [(Measure.GM, Measure.measures[Measure.GM]),
+            (Measure.OZ, Measure.measures[Measure.OZ])]
+    
 class RecipeForm(Form):
     name = TextField("Name", 
                      [Required(message=NAME_REQ),
@@ -126,6 +138,10 @@ class RecipeForm(Form):
     # ingredients are stored in hidden textfields which contain json-formatted
     # strings containing the list of ingredients for that type, as well as
     # all the other relevant ingredient data
+    # example: [{"id": ingredient.id
+    #            "amount": ingredient amount & unit}
+    #            "use": where ingredient is used
+    #            "time": amount of time from end of boil thing should be used}]
     hops = TextField(widget=HiddenInput())
     grains = TextField(widget=HiddenInput())
     extracts = TextField(widget=HiddenInput())
@@ -144,7 +160,7 @@ class RecipeForm(Form):
     stage_1_temp_units = SelectField(coerce=int,
                                      choices=temp_unit_choices(),
                                      validators=[Required()])
-    stage_1_time = IntegerColumn("Time", [Required()])
+    stage_1_time = IntegerField("Time", [Required()])
     stage_1_time_units = SelectField(coerce=int,
                                      choices=time_unit_choices(),
                                      validators=[Required()])
@@ -153,7 +169,7 @@ class RecipeForm(Form):
     stage_2_temp_units = SelectField(coerce=int,
                                      choices=temp_unit_choices(),
                                      validators=[Optional()])
-    stage_2_time = IntegerColumn("Time", [Optional()])
+    stage_2_time = IntegerField("Time", [Optional()])
     stage_2_time_units = SelectField(coerce=int,
                                      choices=time_unit_choices(),
                                      validators=[Optional()])
@@ -162,18 +178,18 @@ class RecipeForm(Form):
     stage_3_temp_units = SelectField(coerce=int,
                                      choices=temp_unit_choices(),
                                      validators=[Optional()])
-    stage_3_time = IntegerColumn("Time", [Optional()])
+    stage_3_time = IntegerField("Time", [Optional()])
     stage_3_time_units = SelectField(coerce=int,
                                      choices=time_unit_choices(),
                                      validators=[Optional()])
-    mash = SelectColumn("Mash Profile",
+    mash = SelectField("Mash Profile",
                         coerce=int,
                         choices=mash_choices(),
                         validators=[Optional()])
-    carbonation_type = SelectColumn("Carbonation Type",
+    carbonation_type = SelectField("Carbonation Type",
                                     coerce=int,
                                     choices=carbonation_choices(),
-                                    validatators=[Optional()])
+                                    validators=[Optional()])
     carbonation_volume = DecimalField('Volume wanted', 
                                       places=1,
                                       validators=[Optional()])

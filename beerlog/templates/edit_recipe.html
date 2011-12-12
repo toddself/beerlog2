@@ -1,0 +1,67 @@
+{% from "_formhelper.html" import render_field %}
+{% extends "layout.html" %}
+{% block title %}&#187; Edit Recipe{% endblock %}
+{% block stylesheet %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='timePicker.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='jquery-ui-1.8.16.custom.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='rte.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='jquery.tagsinput.css') }}">
+{% endblock %}
+{% block javascript %}
+{{ super() }}
+<script src="{{ url_for('static', filename='jquery-ui-1.8.16.custom.min.js' )}}"></script>
+<script src="{{ url_for('static', filename='jquery.timePicker.min.js' )}}"></script>
+<script src="{{ url_for('static', filename='jquery.rte.js' )}}"></script>
+<script src="{{ url_for('static', filename='jquery.tagsinput.min.js') }}"></script>
+{% endblock %}
+{% block body %}
+<div class="content_body">	
+	<form id=postform action="{{ url_for('edit_recipe', recipe_id=data.recipe.id) }}" method="post" class="entry">
+		<dl>
+			{{ data.form.csrf }}
+			{{ data.form.brewer(value=session.get('user_id')) }}
+			{{ data.form.hops }}
+			{{ data.form.grains }}
+			{{ data.form.extracts }}
+			{{ data.form.hopped_extracts }}
+			{{ data.form.mineral }}
+			{{ data.form.fining }}
+			{{ data.form.flavor }}
+			{{ data.form.spice }}
+			{{ data.form.herb }}
+			{{ render_field(data.form.name) }}
+			{{ render_field(data.form.style) }}
+			{{ render_field(data.form.recipe_type) }}
+			{{ render_field(data.form.boil_volume) }}
+			{{ render_field(data.form.boil_volume_units) }}
+			{{ render_field(data.form.equipment) }}
+			{{ render_field(data.form.base_boil_equipment) }}
+			{{ render_field(data.form.efficiency) }}
+			{{ render_field(data.form.og) }}
+			{{ render_field(data.form.fg) }}
+			{{ render_field(data.form.color) }}
+			{{ render_field(data.form.ibu) }}
+			{{ render_field(data.form.fermentation_type) }}
+			{{ render_field(data.form.stage_1_temp) }}
+			{{ render_field(data.form.stage_1_temp_units) }}
+			{{ render_field(data.form.stage_1_time) }}
+			{{ render_field(data.form.stage_1_time_units) }}
+			{{ render_field(data.form.stage_2_temp) }}
+			{{ render_field(data.form.stage_2_temp_units) }}
+			{{ render_field(data.form.stage_2_time) }}
+			{{ render_field(data.form.stage_2_time_units) }}
+			{{ render_field(data.form.stage_3_temp) }}
+			{{ render_field(data.form.stage_3_temp_units) }}
+			{{ render_field(data.form.stage_3_time) }}
+			{{ render_field(data.form.stage_3_time_units) }}
+			{{ render_field(data.form.mash) }}
+			{{ render_field(data.form.carbonation_type) }}
+			{{ render_field(data.form.carbonation_sugar_amount) }}
+			{{ render_field(data.form.carbonation_sugar_units) }}			
+			{{ render_field(data.form.carbonation_volume) }}
+		</dl>
+		<p><input type=submit value="{% if data.recipe.id %}Edit{% else %}Create{% endif %} Recipe">
+	</form>
+</div>
+{% endblock %}
