@@ -3,7 +3,8 @@
 @top_margin: 40px;
 @new_link_color: #3A2A1D;
 @visited_link_color: #3A2A1D;
-@page_color: #F1E8D7;
+//@page_color: #F1E8D7;
+@page_color: #D6C37E;
 @max_width: 480px;
 
 .background_override {
@@ -225,16 +226,18 @@ form {
 
     span.section_title {
         position: relative;
-        top: 4px;
+        top: 0px;
         left: 5px;
         font-weight: bold;
-        background: @page_color;
         padding: 4px;
+        color: #AA3612;
+        .fonts((@base_font_size+2px));
     }
 
     div.recipe_section {
-        border: 1px solid black;
+        border: 1px solid #3A2A1D;
         margin-bottom: (@base_font_size+4px);
+        background-color: #F1E8D7;
 
         label {
             font-weight: bold
