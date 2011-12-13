@@ -3,18 +3,9 @@
 {% block title %}&#187; Edit Recipe{% endblock %}
 {% block stylesheet %}
 {{ super() }}
-<link rel=stylesheet type="text/css" href="{{ url_for('static', filename='demo_page.css') }}">
-<link rel=stylesheet type="text/css" href="{{ url_for('static', filename='demo_table.css') }}">
-<link rel=stylesheet type="text/css" href="{{ url_for('static', filename='demo_table_jui.css') }}">
 {% endblock %}
 {% block javascript %}
 {{ super() }}
-<script src="{{ url_for('static', filename='jquery.dataTables.min.js') }}"></script>
-<script>
-	$(document).ready(function(){
-		$('#example').dataTable();
-	});
-</script>
 {% endblock %}
 {% block body %}
 <div class="content_body">	
@@ -38,9 +29,8 @@
 </div>
 <span class=section_title>Ingredients</span>
 <div class=recipe_section>
-	
-	<div>
-		<table id=example style="width: 100% !important;">
+	<div style="width: 100%">
+		<table id=ingredients>
 			<thead>
 				<tr>
 					<th>Ingredient</th>
@@ -51,7 +41,23 @@
 					<th>Amount</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody>				
+				<tr>
+					<td>test</td>
+					<td>test</td>
+					<td>test</td>
+					<td>test</td>
+					<td>test</td>
+					<td>test</td>
+				</tr>
+				<tr>
+					<td>test</td>
+					<td>test</td>
+					<td>test</td>
+					<td>test</td>
+					<td>test</td>
+					<td>test</td>
+				</tr>				
 			</tbody>
 		</table>
 	</div><br>
@@ -82,7 +88,7 @@
 		</div>
 	</div><br>
 </div>
-<div class=recipe_section style="float: left; margin-left: 15px">
+<div class=recipe_section style="float: left; margin-left: 10px; @media screen and (max-width: 480px){ margin-left: 0px !important; }">
 	<div>
 		<div style="width: 23%">{{ data.form.fermentation_type.label }}</div><div>{{ data.form.fermentation_type }}</div><br>
 		<div style="width: 23%">{{ data.form.stage_1_temp.label }}</div><div>{{ data.form.stage_1_temp(style="width: 50px;")}}{{ data.form.stage_1_temp_units}}</div><div>{{ data.form.stage_1_time(style="width: 50px;")}}{{ data.form.stage_1_time_units }}</div><br>
@@ -99,11 +105,11 @@
 </div>
 <span class=section_title>Carbonation</span>
 <div class=recipe_section>
-	<div>
-		<div>
-			<div>{{ data.form.carbonation_type.label }}</div><div>{{ data.form.carbonation_type }}</div><br>
-			<div>{{ data.form.carbonation_sugar_amount.label }}</div><div>{{ data.form.carbonation_sugar_amount }}{{ data.form.carbonation_sugar_units }}</div><br>
-			<div>{{ data.form.carbonation_volume.label }}</div><div>{{ data.form.carbonation_volume }}</div><br>
+	<div style="width: 100%">
+		<div style="width: 100%">
+			<div style="width: 15%">{{ data.form.carbonation_type.label }}</div><div>{{ data.form.carbonation_type }}</div><br>
+			<div style="width: 15%">{{ data.form.carbonation_sugar_amount.label }}</div><div>{{ data.form.carbonation_sugar_amount }}{{ data.form.carbonation_sugar_units }}</div><br>
+			<div style="width: 15%">{{ data.form.carbonation_volume.label }}</div><div>{{ data.form.carbonation_volume }}</div><br>
 		</div>
 	</div><br>
 </div>

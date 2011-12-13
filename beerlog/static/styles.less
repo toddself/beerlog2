@@ -237,7 +237,7 @@ form {
     div.recipe_section {
         border: 1px solid #3A2A1D;
         margin-bottom: (@base_font_size+4px);
-        background-color: #F1E8D7;
+        background-color: #fff;
 
         label {
             font-weight: bold
@@ -246,6 +246,38 @@ form {
         div {
             float: left;
             padding: 5px;
+            
+            table {
+                width: 90%;
+                border: 1px solid black;
+                border-collapse: collapse;
+                border-spacing: 0px;
+                
+                th {
+                    text-align: left;
+                    background: #000;
+                    border-bottom: 1px;
+                    color: #fff;
+                    padding: 3px;
+                }
+                
+                tbody {
+                    tr {
+                        padding: 3px;
+                        margin: 0px;
+                    }
+                
+                    tr:nth-child(2){
+                        background: #eee;
+                    }
+                
+                    td {
+                        border: 0px;
+                        margin: 0px;
+                        padding: 3px;
+                    }
+                }
+            }
         }
         
         br {
