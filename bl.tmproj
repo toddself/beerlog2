@@ -21,43 +21,43 @@
 	<integer>200</integer>
 	<key>metaData</key>
 	<dict>
-		<key>beerlog/brewery/recipe/forms.py</key>
+		<key>beerlog/static/styles.less</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>46</integer>
+				<integer>22</integer>
 				<key>line</key>
-				<integer>191</integer>
+				<integer>232</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>159</integer>
+			<integer>207</integer>
 		</dict>
 		<key>beerlog/templates/edit_recipe.html</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>50</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>22</integer>
+				<integer>0</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>70</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
+		<string>beerlog/static/styles.less</string>
 		<string>beerlog/templates/edit_recipe.html</string>
-		<string>beerlog/brewery/recipe/forms.py</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<false/>
 	<key>windowFrame</key>
-	<string>{{0, 0}, {1404, 878}}</string>
+	<string>{{22, 62}, {1313, 804}}</string>
 </dict>
 </plist>
