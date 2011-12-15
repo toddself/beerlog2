@@ -141,19 +141,10 @@ class RecipeForm(Form):
                             validators=[Required(EQUIPMENT_REQ)])
     base_boil_equipment = BooleanField("Base boil on equipment", [Optional()])
     efficiency = IntegerField("Efficiency", [Optional()])
-    og = DecimalField("O.G.",
-                      places=3,
-                      validators=[Required(OG_REQ), SGValidation()])
-    fg = DecimalField("F.G.",
-                      places=3,
-                      validators=[Required(FG_REQ), SGValidation()])
-    color = DecimalField("Color",
-                         places=1,
-                         validators=[Required(SRM_REQ), SRMValidation()])
-
-    ibu = DecimalField("IBUs",
-                       places=1,
-                       validators=[Required(IBU_REQ), IBUValidation()])
+    og = TextField("O.G.", validators=[Required(OG_REQ), SGValidation()])
+    fg = TextField("F.G.", validators=[Required(FG_REQ), SGValidation()])
+    color = TextField("Color", validators=[Required(SRM_REQ), SRMValidation()])
+    ibu = TextField("IBUs", validators=[Required(IBU_REQ), IBUValidation()])
     # ingredients are stored in hidden textfields which contain json-formatted
     # strings containing the list of ingredients for that type, as well as
     # all the other relevant ingredient data

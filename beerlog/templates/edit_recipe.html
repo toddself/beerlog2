@@ -7,6 +7,13 @@
 {% block javascript %}
 {{ super() }}
 <script>
+	
+	function toggle_select(list){
+		$.each($('table#'+list+' tbody tr'), function(index, value){
+			$('input', $(value)).prop('checked') ? $('input', $(value)).prop('checked', false) : $('input', $(value)).prop('checked', true)
+		})
+	}
+
 	function reverse_arrow(th_id){
 		if($('#'+th_id.id+'_arrow').attr("src").match(/up/)){
 			$('#'+th_id.id+'_arrow').attr("src", "/static/images/arrow_down.png")
@@ -105,12 +112,31 @@
 	<div>{{ data.form.base_boil_equipment }}{{ data.form.base_boil_equipment.label }}</div>
 	<br>
 </div>
+
+<span class=section_title>Recipe Stats</span>
+<div class=recipe_section>
+	<div style="float: left">{{ data.form.og.label }}</div><div style="float: left;">{{ data.form.og(disabled="disabled", style="width: 90px;") }}</div>
+	<div style="float: left">{{ data.form.fg.label }}</div><div style="float: left;">{{ data.form.fg(disabled="disabled", style="width: 90px;") }}</div>
+	<div style="float: left">{{ data.form.color.label }}</div><div style="float: left;">{{ data.form.color(disabled="disabled", style="width: 90px;") }}</div>
+	<div style="float: left">{{ data.form.ibu.label }}</div><div style="float: left;">{{ data.form.ibu(disabled="disabled", style="width: 90px;") }}</div>
+	<div style="float: left"><label for="abv">A.B.V.</label></div><div style="float: left;"><input type="text" style="width: 90px;" disabled></div>
+	<div style="float: left"><label for="bitt_ratio">IBU/GU</label></div><div style="float: left;"><input style="width: 90px;" type="text" disabled></div><br style="clear; both;">
+</div>
+<span class=section_title>Style Stats</span>
+<div class=recipe_section>
+		<div style="float: left;"><label for="style_og">O.G.</label></div><div style="float: left;"><input type=text id=style_og disabled style="width: 90px;"></div>
+		<div style="float: left;"><label for="style_fg">F.G.</label></div><div style="float: left;"><input type=text id=style_fg disabled style="width: 90px;"></div>
+		<div style="float: left;"><label for="style_srm">Color</label></div><div style="float: left;"><input type=text id=style_srm disabled style="width: 90px;"></div>
+		<div style="float: left;"><label for="style_ibu">IBUs</label></div><div style="float: left;"><input type=text id=style_ibu disabled style="width: 90px;"></div>
+		<div style="float: left;"><label for="style_abv">A.B.V.</label></div><div style="float: left;"><input type=text id=style_abv style="width: 90px;" disabled></div><br style="clear: both;">
+</div>
 <span class=section_title>Ingredients</span>
 <div class=recipe_section>
 	<div style="width: 100%">
 		<table id=ingredients>
 			<thead>
 				<tr>
+					<th class=select_all><input type=checkbox onclick=toggle_select('ingredients')></th>
 					<th onclick="reverse_arrow(this)" id=ingredient>Ingredient <img src="/static/images/arrow_up.png" id=ingredient_arrow></th>
 					<th onclick="reverse_arrow(this)" id=type>Type <img src="/static/images/arrow_up.png" id=type_arrow></th>
 					<th onclick="reverse_arrow(this)" id=use>Use <img src="/static/images/arrow_up.png" id=use_arrow></th>
@@ -121,6 +147,7 @@
 			</thead>
 			<tbody>				
 				<tr>
+					<td><input type=checkbox></td>
 					<td>test</td>
 					<td>test</td>
 					<td>test</td>
@@ -129,6 +156,7 @@
 					<td>test</td>
 				</tr>
 				<tr>
+					<td><input type=checkbox></td>					
 					<td>test</td>
 					<td>test</td>
 					<td>test</td>
@@ -139,34 +167,25 @@
 			</tbody>
 		</table>
 	</div><br>
-	<input type="button" onclick="addIngredient" id="add_ingredient" value="Add Ingredient">
-	<input type="button" onclick="removeIngrient" id="remove_ingredient" value="Delete Ingredient">
+	<input type="button" onclick="add_hops()" id="add_hops" value="Add Hops">
+	<input type="button" onclick="add_fermentables()" id="add_fermentables" value="Add Fermentables">
+	<input type="button" onclick="add_misc()" id="add_misc" value="Add Misc">
+	<input type="button" onclick="add_yeast()" id="add_yeast" value="Add Yeast">
+	<input type="button" onclick="remove_ingredient" id="remove_ingredient" value="Delete Ingredient">
 </div>
-<div class=recipe_section style="float: left; width: 50%;">
-	<div style="float: left; width: 40%">
-		<span class=section_title>Recipe Stats</span>
-		<div  style="width: 100%;">
-			<div style="width: 20%">{{ data.form.og.label }}</div><div>{{ data.form.og(disabled="disabled", style="width: 75px;") }}</div><br>
-			<div style="width: 20%">{{ data.form.fg.label }}</div><div>{{ data.form.fg(disabled="disabled", style="width: 75px;") }}</div><br>
-			<div style="width: 20%">{{ data.form.color.label }}</div><div>{{ data.form.color(disabled="disabled", style="width: 75px;") }}</div><br>
-			<div style="width: 20%">{{ data.form.ibu.label }}</div><div>{{ data.form.ibu(disabled="disabled", style="width: 75px;") }}</div><br>
-			<div style="width: 20%"><label for="abv">A.B.V.</label></div><div><input type="number" style="width: 75px;" disabled></div><br>
-			<div style="width: 20%"><label for="bitt_ratio">IBU/GU</label></div><div><input style="width: 75px;" type="number" disabled></div><br>			
+<div class=recipe_section style="float: left; width: 30%;">
+	<div>
+		<span class=section_title>Carbonation</span>
+		<div style="width: 100%">
+			<div style="width: 100%">
+				<div style="width: 30%">{{ data.form.carbonation_type.label }}</div><div>{{ data.form.carbonation_type }}</div><br>
+				<div style="width: 30%">{{ data.form.carbonation_sugar_amount.label }}</div><div>{{ data.form.carbonation_sugar_amount }}{{ data.form.carbonation_sugar_units }}</div><br>
+				<div style="width: 30%">{{ data.form.carbonation_volume.label }}</div><div>{{ data.form.carbonation_volume }}</div><br>
+			</div>
 		</div>
 	</div>
-	<div style="float: left; width: 40%">
-		<span class=section_title>Style Stats</span>
-		<div style="width: 100%;">
-			<div style="width: 20%"><label for="style_og">O.G.</label></div><div><input type=text id=style_og disabled style="width: 90px;"></div><br>
-			<div style="width: 20%"><label for="style_fg">F.G.</label></div><div><input type=text id=style_fg disabled style="width: 90px;"></div><br>
-			<div style="width: 20%"><label for="style_srm">Color</label></div><div><input type=text id=style_srm disabled style="width: 90px;"></div><br>
-			<div style="width: 20%"><label for="style_ibu">IBUs</label></div><div><input type=text id=style_ibu disabled style="width: 90px;"></div><br>
-			<div style="width: 20%"><label for="style_abv">A.B.V.</label></div><div><input type=text id=style_abv style="width: 90px;" disabled></div><br>
-			<div style="width: 20%">&nbsp;</div><div>&nbsp;</div><br>
-		</div>
-	</div><br>
 </div>
-<div class=recipe_section style="float: left; margin-left: 5px; @media screen and (max-width: 480px){ margin-left: 0px !important; }">
+<div class=recipe_section style="float: left; margin-left: 5px; width: 30%;">
 	<div style="width: 100%;">
 		<span class=section_title>Fermentation &amp; Aging</span><br>
 		<div style="width: 100%;">
@@ -177,8 +196,7 @@
 		</div><br>
 	</div>
 </div>
-<br style="clear: both;">
-<div class=recipe_section id=mash_section style="float: left; width: 50%">
+<div class=recipe_section id=mash_section style="float: left; margin-left: 5px; width: 38%;">
 	<div>
 		<span class=section_title>Mash</span><br>
 		<div>
@@ -188,6 +206,7 @@
 			<table id=mashes>
 				<thead>
 					<tr>
+						<th class=select_all><input type=checkbox onclick=toggle_select('mashes')></th>
 						<th onclick="reverse_arrow(this)" id=step>Step <img src="/static/images/arrow_up.png" id=step_arrow></th>
 						<th onclick="reverse_arrow(this)" id=temp>Temperature <img src="/static/images/arrow_up.png" id=temp_arrow></th>
 						<th onclick="reverse_arrow(this)" id=duration>Duration <img src="/static/images/arrow_up.png" id=duration_arrow></th>
@@ -195,11 +214,13 @@
 				</thead>
 				<tbody>				
 					<tr>
+						<td><input type=checkbox></td>						
 						<td>test</td>
 						<td>test</td>
 						<td>test</td>
 					</tr>
 					<tr>
+						<td><input type=checkbox></td>
 						<td>test</td>
 						<td>test</td>
 						<td>test</td>
@@ -213,18 +234,7 @@
 		<input type="button" value="move down">
 	</div>
 </div>
-<div class=recipe_section style="float: left; margin-left: 5px; width: 40%;">
-	<div>
-		<span class=section_title>Carbonation</span>
-		<div style="width: 100%">
-			<div style="width: 100%">
-				<div style="width: 30%">{{ data.form.carbonation_type.label }}</div><div>{{ data.form.carbonation_type }}</div><br>
-				<div style="width: 30%">{{ data.form.carbonation_sugar_amount.label }}</div><div>{{ data.form.carbonation_sugar_amount }}{{ data.form.carbonation_sugar_units }}</div><br>
-				<div style="width: 30%">{{ data.form.carbonation_volume.label }}</div><div>{{ data.form.carbonation_volume }}</div><br>
-			</div>
-		</div>
-	</div>
-</div><br style="clear: both;">
+<br style="clear: both;">
 		<p><input type=submit value="{% if data.recipe.id %}Edit{% else %}Create{% endif %} Recipe">
 	</form>
 </div>
