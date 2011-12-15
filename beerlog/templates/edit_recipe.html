@@ -6,6 +6,76 @@
 {% endblock %}
 {% block javascript %}
 {{ super() }}
+<script>
+	function set_style(style){
+		$.getJSON('/json/brewery/bjcp/style/'+style+'/', function(data) {
+			$('#style_og').val(data.og_range);
+			$('#style_fg').val(data.fg_range);			
+			$('#style_srm').val(data.srm_range);
+			$('#style_ibu').val(data.ibu_range);
+			$('#style_abv').val(data.abv_range);
+		})
+	}
+	
+	function set_recipe(recipe_type){
+		EXTRACT = 0
+	    PARTIAL_MASH = 1
+	    ALL_GRAIN = 2
+		if(recipe_type == EXTRACT){
+			$('#mash_title').hide();
+			$('#mash_section').hide();
+		} else {
+			$('#mash_title').show();
+			$('#mash_section').show();
+		}
+	}
+	
+	function set_fermentation(ferm_type){
+		if(ferm_type == 0){
+			$('#stage_1_label').show();
+			$('#stage_1_data').show();
+			$('#stage_1_time').show();
+			$('#stage_2_label').hide();
+			$('#stage_2_data').hide();
+			$('#stage_2_time').hide();
+			$('#stage_3_label').hide();
+			$('#stage_3_data').hide();
+			$('#stage_3_time').hide();			
+		} else if(ferm_type == 1){
+			$('#stage_1_label').show();
+			$('#stage_1_data').show();
+			$('#stage_1_time').show();			
+			$('#stage_2_label').show();
+			$('#stage_2_data').show();
+			$('#stage_2_time').show();
+			$('#stage_3_label').hide();
+			$('#stage_3_data').hide();	
+			$('#stage_3_time').hide();				
+		} else {
+			$('#stage_1_label').show();
+			$('#stage_1_data').show();
+			$('#stage_1_time').show();			
+			$('#stage_2_label').show();
+			$('#stage_2_data').show();
+			$('#stage_2_time').show();			
+			$('#stage_3_label').show();
+			$('#stage_3_data').show();
+			$('#stage_3_time').show();
+		}
+	}
+	
+	$().ready(function(){
+		$('#stage_1_label').show();
+		$('#stage_1_data').show();
+		$('#stage_1_time').show();
+		$('#stage_2_label').hide();
+		$('#stage_2_data').hide();
+		$('#stage_2_time').hide();
+		$('#stage_3_label').hide();
+		$('#stage_3_data').hide();
+		$('#stage_3_time').hide();
+	})
+</script>
 {% endblock %}
 {% block body %}
 <div class="content_body">	
@@ -13,12 +83,12 @@
 <!-- hidden fields for internal accounting -->
 {{ data.form.csrf }}{{ data.form.brewer(value=session.get('user_id')) }}{{ data.form.hops }}
 {{ data.form.grains }}{{ data.form.extracts }}{{ data.form.hopped_extracts }}{{ data.form.mineral }}
-{{ data.form.fining }}{{ data.form.flavor }}{{ data.form.spice }}{{ data.form.herb }}
+{{ data.form.fining }}{{ data.form.flavor }}{{ data.form.spice }}{{ data.form.herb }}{{ data.form.mash_data }}
 <span class=section_title>General</span>
 <div class=recipe_section>
 	<div>{{ data.form.name.label }}{{ data.form.name(style="width: 100px;") }}</div>
-	<div>{{ data.form.style.label }}{{ data.form.style }}</div>
-	<div>{{ data.form.recipe_type.label }}{{ data.form.recipe_type }}</div>
+	<div>{{ data.form.style.label }}{{ data.form.style(onchange="set_style(this.value)") }}</div>
+	<div>{{ data.form.recipe_type.label }}{{ data.form.recipe_type(onchange="set_recipe(this.value)") }}</div>
 	<div>{{ data.form.efficiency.label }}{{ data.form.efficiency(style="width: 50px", step="0.1") }}%</div>
 	<br>
 	<div>{{ data.form.boil_volume.label }}{{ data.form.boil_volume(style="width: 50px;", step="0.1") }}{{ data.form.boil_volume_units }}</div>
@@ -64,7 +134,7 @@
 	<input type="button" onclick="addIngredient" id="add_ingredient" value="Add Ingredient">
 	<input type="button" onclick="removeIngrient" id="remove_ingredient" value="Delete Ingredient">
 </div>
-<div class=recipe_section style="float: left;">
+<div class=recipe_section style="float: left; width: 50%;">
 	<div style="float: left; width: 40%">
 		<span class=section_title>Recipe Stats</span>
 		<div  style="width: 100%;">
@@ -79,40 +149,74 @@
 	<div style="float: left; width: 40%">
 		<span class=section_title>Style Stats</span>
 		<div style="width: 100%;">
-			<div style="width: 20%">{{ data.form.og.label }}</div><div>{{ data.form.og(disabled="disabled", style="width: 75px;") }}</div><br>
-			<div style="width: 20%">{{ data.form.fg.label }}</div><div>{{ data.form.fg(disabled="disabled", style="width: 75px;") }}</div><br>
-			<div style="width: 20%">{{ data.form.color.label }}</div><div>{{ data.form.color(disabled="disabled", style="width: 75px;") }}</div><br>
-			<div style="width: 20%">{{ data.form.ibu.label }}</div><div>{{ data.form.ibu(disabled="disabled", style="width: 75px;") }}</div><br>
-			<div style="width: 20%"><label for="abv">A.B.V.</label></div><div><input type="number" style="width: 75px;" disabled></div><br>
+			<div style="width: 20%"><label for="style_og">O.G.</label></div><div><input type=text id=style_og disabled style="width: 90px;"></div><br>
+			<div style="width: 20%"><label for="style_fg">F.G.</label></div><div><input type=text id=style_fg disabled style="width: 90px;"></div><br>
+			<div style="width: 20%"><label for="style_srm">Color</label></div><div><input type=text id=style_srm disabled style="width: 90px;"></div><br>
+			<div style="width: 20%"><label for="style_ibu">IBUs</label></div><div><input type=text id=style_ibu disabled style="width: 90px;"></div><br>
+			<div style="width: 20%"><label for="style_abv">A.B.V.</label></div><div><input type=text id=style_abv style="width: 90px;" disabled></div><br>
 			<div style="width: 20%">&nbsp;</div><div>&nbsp;</div><br>
 		</div>
 	</div><br>
 </div>
-<div class=recipe_section style="float: left; margin-left: 10px; @media screen and (max-width: 480px){ margin-left: 0px !important; }">
-	<div>
-		<div style="width: 23%">{{ data.form.fermentation_type.label }}</div><div>{{ data.form.fermentation_type }}</div><br>
-		<div style="width: 23%">{{ data.form.stage_1_temp.label }}</div><div>{{ data.form.stage_1_temp(style="width: 50px;")}}{{ data.form.stage_1_temp_units}}</div><div>{{ data.form.stage_1_time(style="width: 50px;")}}{{ data.form.stage_1_time_units }}</div><br>
-		<div style="width: 23%">{{ data.form.stage_2_temp.label }}</div><div>{{ data.form.stage_2_temp(style="width: 50px;")}}{{ data.form.stage_2_temp_units}}</div><div>{{ data.form.stage_2_time(style="width: 50px;")}}{{ data.form.stage_2_time_units }}</div><br>
-		<div style="width: 23%">{{ data.form.stage_3_temp.label }}</div><div>{{ data.form.stage_3_temp(style="width: 50px;")}}{{ data.form.stage_3_temp_units}}</div><div>{{ data.form.stage_3_time(style="width: 50px;")}}{{ data.form.stage_3_time_units }}</div><br>
-	</div><br>
+<div class=recipe_section style="float: left; margin-left: 5px; @media screen and (max-width: 480px){ margin-left: 0px !important; }">
+	<div style="width: 100%;">
+		<span class=section_title>Fermentation &amp; Aging</span><br>
+		<div style="width: 100%;">
+			<div style="width: 23%">{{ data.form.fermentation_type.label }}</div><div>{{ data.form.fermentation_type(onchange="set_fermentation(this.value)") }}</div><br>
+			<div style="width: 20%" id=stage_1_label>{{ data.form.stage_1_temp.label }}</div><div id=stage_1_data>{{ data.form.stage_1_temp(style="width: 50px;")}}{{ data.form.stage_1_temp_units}}</div><div id=stage_1_time>{{ data.form.stage_1_time(style="width: 50px;")}}{{ data.form.stage_1_time_units }}</div><br>
+			<div style="width: 20%" id=stage_2_label>{{ data.form.stage_2_temp.label }}</div><div id=stage_2_data>{{ data.form.stage_2_temp(style="width: 50px;")}}{{ data.form.stage_2_temp_units}}</div><div id=stage_2_time>{{ data.form.stage_2_time(style="width: 50px;")}}{{ data.form.stage_2_time_units }}</div><br>
+			<div style="width: 20%" id=stage_3_label>{{ data.form.stage_3_temp.label }}</div><div id=stage_3_data>{{ data.form.stage_3_temp(style="width: 50px;")}}{{ data.form.stage_3_temp_units}}</div><div id=stage_3_time>{{ data.form.stage_3_time(style="width: 50px;")}}{{ data.form.stage_3_time_units }}</div><br>
+		</div><br>
+	</div>
 </div>
 <br style="clear: both;">
-<span class=section_title>Mash Profile</span>
-<div class=recipe_section>
+<div class=recipe_section id=mash_section style="float: left; width: 50%">
 	<div>
-		<div>{{ data.form.mash.label }}{{ data.form.mash }}</div><br>
-	</div><br>
+		<span class=section_title>Mash</span>
+		<div>
+			<div>{{ data.form.mash.label }}{{ data.form.mash }}</div><div>{{ data.form.adjust_mash_temp_equipment }}{{ data.form.adjust_mash_temp_equipment.label }}</div><br>
+		</div><br>
+		<div style="width: 100%;">
+			<table id=mashes>
+				<thead>
+					<tr>
+						<th>Step</th>
+						<th>Temperature</th>
+						<th>Duration</th>
+					</tr>
+				</thead>
+				<tbody>				
+					<tr>
+						<td>test</td>
+						<td>test</td>
+						<td>test</td>
+					</tr>
+					<tr>
+						<td>test</td>
+						<td>test</td>
+						<td>test</td>
+					</tr>				
+				</tbody>
+			</table>		
+		</div><br>
+		<input type="button" value="add step">
+		<input type="button" value="remove step">
+		<input type="button" value="move up">	
+		<input type="button" value="move down">
+	</div>
 </div>
-<span class=section_title>Carbonation</span>
-<div class=recipe_section>
-	<div style="width: 100%">
+<div class=recipe_section style="float: left; margin-left: 5px; width: 40%;">
+	<div>
+		<span class=section_title>Carbonation</span>
 		<div style="width: 100%">
-			<div style="width: 15%">{{ data.form.carbonation_type.label }}</div><div>{{ data.form.carbonation_type }}</div><br>
-			<div style="width: 15%">{{ data.form.carbonation_sugar_amount.label }}</div><div>{{ data.form.carbonation_sugar_amount }}{{ data.form.carbonation_sugar_units }}</div><br>
-			<div style="width: 15%">{{ data.form.carbonation_volume.label }}</div><div>{{ data.form.carbonation_volume }}</div><br>
+			<div style="width: 100%">
+				<div style="width: 30%">{{ data.form.carbonation_type.label }}</div><div>{{ data.form.carbonation_type }}</div><br>
+				<div style="width: 30%">{{ data.form.carbonation_sugar_amount.label }}</div><div>{{ data.form.carbonation_sugar_amount }}{{ data.form.carbonation_sugar_units }}</div><br>
+				<div style="width: 30%">{{ data.form.carbonation_volume.label }}</div><div>{{ data.form.carbonation_volume }}</div><br>
+			</div>
 		</div>
-	</div><br>
-</div>
+	</div>
+</div><br style="clear: both;">
 		<p><input type=submit value="{% if data.recipe.id %}Edit{% else %}Create{% endif %} Recipe">
 	</form>
 </div>

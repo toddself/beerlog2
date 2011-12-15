@@ -483,6 +483,7 @@ class Recipe(SQLObject, Measure):
     master_recipe = IntCol(default=0)
     grain_total_weight = DecimalCol(size=5, precision=2, default=0)
     hop_total_weight = DecimalCol(size=5, precision=2, default=0)
+    adjust_mash_temp_for_equipment = BoolCol(default=False)
     versions = Versioning()
 
     def _set_carbonation_used(self, value):

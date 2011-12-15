@@ -62,11 +62,20 @@ class TemperatureValidation(DecimalValidation):
         super(TemperatureValidation, self).__init__(3, 1, message)
     
 def style_choices():
-    styles = BJCPStyle.select().orderBy('category_id').orderBy('subcategory')
-    return [(s.id, s.name) for s in styles]
-
+    style_list = []
+    for cat in BJCPCategory.select():
+        cat_name = "%s. %s" % (cat.category_id, cat.name)
+        style_list.append((0, cat_name))
+        for style in BJCPStyle.select(BJCPStyle.q.category==cat):
+            style_name = "-%s%s. %s" % (cat.category_id, style.subcategory, style.name)
+            style_list.append((style.id, style_name))
+    style_list.insert(0, (0, 'Select a style...'))
+    return style_list
+    
 def recipe_type_choices():
-    return [(Recipe.recipe_types.index(x), x) for x in Recipe.recipe_types]
+    recipe_types = [(Recipe.recipe_types.index(x), x) for x in Recipe.recipe_types]
+    recipe_types.insert(0, (0, 'Select a recipe type...'))
+    return recipe_types
     
 def boil_volume_choices():
     return [(Measure.GAL, Measure.measures[Measure.GAL]),
@@ -74,7 +83,9 @@ def boil_volume_choices():
 
 def equipment_set_choices():
     equipment = EquipmentSet.select(EquipmentSet.q.brewer==session.get('user_id'))
-    return [(e.id, e.name) for e in equipment]
+    e_choices = [(e.id, e.name) for e in equipment]
+    e_choices.append((0, 'New equipment set...'))
+    return e_choices
 
 def fermentation_type_choices():
     return [(Recipe.fermentation_types.index(x), x) for x in Recipe.fermentation_types]
@@ -88,7 +99,9 @@ def time_unit_choices():
             (Measure.WEEKS, Measure.timing_parts[Measure.WEEKS])]
 
 def mash_choices():
-    return [(m.id, m.name) for m in MashProfile.select()]
+    mashes = [(m.id, m.name) for m in MashProfile.select()]
+    mashes.append((0, 'New mash profile...'))
+    return mashes
     
 def carbonation_choices():
     return [(Recipe.carbonation_types.index(x), x) for x in Recipe.carbonation_types]
@@ -157,6 +170,7 @@ class RecipeForm(Form):
     flavor = TextField(widget=HiddenInput())
     spice = TextField(widget=HiddenInput())
     herb = TextField(widget=HiddenInput())
+    mash_data = TextField(widget=HiddenInput())
     fermentation_type = SelectField("Fermentation",
                                     coerce=int,
                                     choices=fermentation_type_choices(),
@@ -192,6 +206,8 @@ class RecipeForm(Form):
                         coerce=int,
                         choices=mash_choices(),
                         validators=[Optional()])
+    adjust_mash_temp_equipment = BooleanField("Adjust Mash Temp for Equipment",
+                                              [Optional()])
     carbonation_type = SelectField("Carbonation Type",
                                     coerce=int,
                                     choices=carbonation_choices(),
