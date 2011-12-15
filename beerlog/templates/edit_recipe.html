@@ -7,6 +7,14 @@
 {% block javascript %}
 {{ super() }}
 <script>
+	function reverse_arrow(th_id){
+		if($('#'+th_id.id+'_arrow').attr("src").match(/up/)){
+			$('#'+th_id.id+'_arrow').attr("src", "/static/images/arrow_down.png")
+		} else {
+			$('#'+th_id.id+'_arrow').attr("src", "/static/images/arrow_up.png")
+		}
+	}
+
 	function set_style(style){
 		$.getJSON('/json/brewery/bjcp/style/'+style+'/', function(data) {
 			$('#style_og').val(data.og_range);
@@ -103,12 +111,12 @@
 		<table id=ingredients>
 			<thead>
 				<tr>
-					<th>Ingredient</th>
-					<th>Type</th>
-					<th>Use</th>
-					<th>%</th>
-					<th>Time</th>
-					<th>Amount</th>
+					<th onclick="reverse_arrow(this)" id=ingredient>Ingredient <img src="/static/images/arrow_up.png" id=ingredient_arrow></th>
+					<th onclick="reverse_arrow(this)" id=type>Type <img src="/static/images/arrow_up.png" id=type_arrow></th>
+					<th onclick="reverse_arrow(this)" id=use>Use <img src="/static/images/arrow_up.png" id=use_arrow></th>
+					<th onclick="reverse_arrow(this)" id=percent>% <img src="/static/images/arrow_up.png" id=percent_arrow></th>
+					<th onclick="reverse_arrow(this)" id=time>Time <img src="/static/images/arrow_up.png" id=time_arrow></th>
+					<th onclick="reverse_arrow(this)" id=amount>Amount <img src="/static/images/arrow_up.png" id=amount_arrow></th>
 				</tr>
 			</thead>
 			<tbody>				
@@ -172,7 +180,7 @@
 <br style="clear: both;">
 <div class=recipe_section id=mash_section style="float: left; width: 50%">
 	<div>
-		<span class=section_title>Mash</span>
+		<span class=section_title>Mash</span><br>
 		<div>
 			<div>{{ data.form.mash.label }}{{ data.form.mash }}</div><div>{{ data.form.adjust_mash_temp_equipment }}{{ data.form.adjust_mash_temp_equipment.label }}</div><br>
 		</div><br>
@@ -180,9 +188,9 @@
 			<table id=mashes>
 				<thead>
 					<tr>
-						<th>Step</th>
-						<th>Temperature</th>
-						<th>Duration</th>
+						<th onclick="reverse_arrow(this)" id=step>Step <img src="/static/images/arrow_up.png" id=step_arrow></th>
+						<th onclick="reverse_arrow(this)" id=temp>Temperature <img src="/static/images/arrow_up.png" id=temp_arrow></th>
+						<th onclick="reverse_arrow(this)" id=duration>Duration <img src="/static/images/arrow_up.png" id=duration_arrow></th>
 					</tr>
 				</thead>
 				<tbody>				
