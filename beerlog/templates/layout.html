@@ -11,21 +11,23 @@
 		<script src="{{ url_for('static', filename='less-1.1.5.min.js') }}"></script>
 		<script src="{{ url_for('static', filename='jquery-1.7.min.js') }}"></script>
 		<script>
-		function gen_a(dest, text, cls){
-			a = $('<a>');
-			a.attr('href', dest)
-			a.attr('class', cls)
-			a.html(text)
-			return a
-		}
-		
-		$.getJSON('/json/entry/archives/', function(data) {
-			$.each(data, function(key, val) {
-				li = $('<li>');
-				li.html(gen_a('/entry/'+val+'/', val, 'archive_item'))
-				$('#archive_list').append(li);
-			});
-		});
+		$().ready(function(){
+			function gen_a(dest, text, cls){
+				a = $('<a>');
+				a.attr('href', dest)
+				a.attr('class', cls)
+				a.html(text)
+				return a
+			}
+
+			$.getJSON('/json/entry/archives/', function(data) {
+				$.each(data, function(key, val) {
+					li = $('<li>');
+					li.html(gen_a('/entry/'+val+'/', val, 'archive_item'))
+					$('#archive_list').append(li);
+				});
+			});			
+		})
 		</script>
 		{% endblock %}
 	</head>

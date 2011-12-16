@@ -12,10 +12,12 @@
 		b = new Brewery();
 		b.init();
 	});
+	
+	ing = {'ingredient': 'Cascade', 'ingredient_id': 1, 'type': 'Hop', 'use': 'Boil', 'use_id': 1, 'percent': '65%', 'time': '60 min', 'amount': '4oz'};
 </script>
 {% endblock %}
 {% block body %}
-<div class="content_body">	
+<div class="content_body">
 	<form id=postform action="{{ url_for('edit_recipe', recipe_id=data.recipe.id) }}" method="post" class="entry">
 <!-- hidden fields for internal accounting -->
 {{ data.form.csrf }}{{ data.form.brewer(value=session.get('user_id')) }}{{ data.form.hops }}
@@ -67,33 +69,18 @@
 					<th onclick="b.reverse_arrow(this)" id=amount>Amount <img src="/static/images/arrow_up.png" id=amount_arrow></th>
 				</tr>
 			</thead>
-			<tbody>				
-				<tr>
-					<td><input type=checkbox></td>
-					<td>test</td>
-					<td>test</td>
-					<td>test</td>
-					<td>test</td>
-					<td>test</td>
-					<td>test</td>
+			<tbody>
+				<tr id="ingredients_blank_list">
+					<td colspan="7">This list is empty</td>
 				</tr>
-				<tr>
-					<td><input type=checkbox></td>					
-					<td>test</td>
-					<td>test</td>
-					<td>test</td>
-					<td>test</td>
-					<td>test</td>
-					<td>test</td>
-				</tr>				
 			</tbody>
 		</table>
 	</div><br>
-	<input type="button" onclick="add_hops()" id="add_hops" value="Add Hops">
+	<input type="button" onclick="b.append_row('ingredients', ing)" id="add_hops" value="Add Hops">
 	<input type="button" onclick="add_fermentables()" id="add_fermentables" value="Add Fermentables">
 	<input type="button" onclick="add_misc()" id="add_misc" value="Add Misc">
 	<input type="button" onclick="add_yeast()" id="add_yeast" value="Add Yeast">
-	<input type="button" onclick="remove_ingredient" id="remove_ingredient" value="Delete Ingredient">
+	<input type="button" onclick="b.remove_row('ingredients', 0)" id="remove_ingredient" value="Delete Ingredient">
 </div>
 <div class=recipe_section style="float: left; width: 30%;">
 	<div>
@@ -134,25 +121,17 @@
 						<th onclick="b.reverse_arrow(this)" id=duration>Duration <img src="/static/images/arrow_up.png" id=duration_arrow></th>
 					</tr>
 				</thead>
-				<tbody>				
-					<tr>
-						<td><input type=checkbox></td>						
-						<td>test</td>
-						<td>test</td>
-						<td>test</td>
+				<tbody>
+					<tr id="ingredients_blank_list">
+						<td colspan="4">This list is empty</td>
 					</tr>
-					<tr>
-						<td><input type=checkbox></td>
-						<td>test</td>
-						<td>test</td>
-						<td>test</td>
-					</tr>				
+					
 				</tbody>
-			</table>		
+			</table>
 		</div><br>
 		<input type="button" value="add step">
 		<input type="button" value="remove step">
-		<input type="button" value="move up">	
+		<input type="button" value="move up">
 		<input type="button" value="move down">
 	</div>
 </div>
