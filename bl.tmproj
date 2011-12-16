@@ -21,49 +21,47 @@
 	<integer>200</integer>
 	<key>metaData</key>
 	<dict>
-		<key>beerlog/brewery/models.py</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>429</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>425</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>17</integer>
-				<key>line</key>
-				<integer>431</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>429</integer>
-			</dict>
-		</dict>
 		<key>beerlog/brewery/recipe/forms.py</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>23</integer>
+				<integer>47</integer>
 				<key>line</key>
-				<integer>77</integer>
+				<integer>165</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>43</integer>
+			<integer>125</integer>
+		</dict>
+		<key>beerlog/static/brewery.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>beerlog/static/styles.less</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>8</integer>
+				<key>line</key>
+				<integer>302</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>271</integer>
 		</dict>
 		<key>beerlog/templates/bjcp_browser.html</key>
 		<dict>
@@ -79,31 +77,47 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>beerlog/templates/edit_entry.html</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>21</integer>
+				<key>line</key>
+				<integer>25</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>19</integer>
+		</dict>
 		<key>beerlog/templates/edit_recipe.html</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>24</integer>
+				<integer>58</integer>
 				<key>line</key>
-				<integer>167</integer>
+				<integer>60</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>137</integer>
+			<integer>111</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
 		<string>beerlog/templates/edit_recipe.html</string>
-		<string>beerlog/templates/bjcp_browser.html</string>
+		<string>beerlog/static/brewery.js</string>
+		<string>beerlog/templates/edit_entry.html</string>
+		<string>beerlog/static/styles.less</string>
 		<string>beerlog/brewery/recipe/forms.py</string>
-		<string>beerlog/brewery/models.py</string>
+		<string>beerlog/templates/bjcp_browser.html</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<false/>
 	<key>windowFrame</key>
-	<string>{{22, 58}, {1313, 804}}</string>
+	<string>{{85, 70}, {1688, 949}}</string>
 </dict>
 </plist>

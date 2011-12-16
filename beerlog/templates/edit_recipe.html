@@ -6,90 +6,12 @@
 {% endblock %}
 {% block javascript %}
 {{ super() }}
+<script src="{{ url_for('static', filename='brewery.js') }}"></script>
 <script>
-	
-	function toggle_select(list){
-		$.each($('table#'+list+' tbody tr'), function(index, value){
-			$('input', $(value)).prop('checked') ? $('input', $(value)).prop('checked', false) : $('input', $(value)).prop('checked', true)
-		})
-	}
-
-	function reverse_arrow(th_id){
-		if($('#'+th_id.id+'_arrow').attr("src").match(/up/)){
-			$('#'+th_id.id+'_arrow').attr("src", "/static/images/arrow_down.png")
-		} else {
-			$('#'+th_id.id+'_arrow').attr("src", "/static/images/arrow_up.png")
-		}
-	}
-
-	function set_style(style){
-		$.getJSON('/json/brewery/bjcp/style/'+style+'/', function(data) {
-			$('#style_og').val(data.og_range);
-			$('#style_fg').val(data.fg_range);			
-			$('#style_srm').val(data.srm_range);
-			$('#style_ibu').val(data.ibu_range);
-			$('#style_abv').val(data.abv_range);
-		})
-	}
-	
-	function set_recipe(recipe_type){
-		EXTRACT = 0
-	    PARTIAL_MASH = 1
-	    ALL_GRAIN = 2
-		if(recipe_type == EXTRACT){
-			$('#mash_title').hide();
-			$('#mash_section').hide();
-		} else {
-			$('#mash_title').show();
-			$('#mash_section').show();
-		}
-	}
-	
-	function set_fermentation(ferm_type){
-		if(ferm_type == 0){
-			$('#stage_1_label').show();
-			$('#stage_1_data').show();
-			$('#stage_1_time').show();
-			$('#stage_2_label').hide();
-			$('#stage_2_data').hide();
-			$('#stage_2_time').hide();
-			$('#stage_3_label').hide();
-			$('#stage_3_data').hide();
-			$('#stage_3_time').hide();			
-		} else if(ferm_type == 1){
-			$('#stage_1_label').show();
-			$('#stage_1_data').show();
-			$('#stage_1_time').show();			
-			$('#stage_2_label').show();
-			$('#stage_2_data').show();
-			$('#stage_2_time').show();
-			$('#stage_3_label').hide();
-			$('#stage_3_data').hide();	
-			$('#stage_3_time').hide();				
-		} else {
-			$('#stage_1_label').show();
-			$('#stage_1_data').show();
-			$('#stage_1_time').show();			
-			$('#stage_2_label').show();
-			$('#stage_2_data').show();
-			$('#stage_2_time').show();			
-			$('#stage_3_label').show();
-			$('#stage_3_data').show();
-			$('#stage_3_time').show();
-		}
-	}
-	
 	$().ready(function(){
-		$('#stage_1_label').show();
-		$('#stage_1_data').show();
-		$('#stage_1_time').show();
-		$('#stage_2_label').hide();
-		$('#stage_2_data').hide();
-		$('#stage_2_time').hide();
-		$('#stage_3_label').hide();
-		$('#stage_3_data').hide();
-		$('#stage_3_time').hide();
-	})
+		b = new Brewery();
+		b.init();
+	});
 </script>
 {% endblock %}
 {% block body %}
@@ -102,8 +24,8 @@
 <span class=section_title>General</span>
 <div class=recipe_section>
 	<div>{{ data.form.name.label }}{{ data.form.name(style="width: 100px;") }}</div>
-	<div>{{ data.form.style.label }}{{ data.form.style(onchange="set_style(this.value)") }}</div>
-	<div>{{ data.form.recipe_type.label }}{{ data.form.recipe_type(onchange="set_recipe(this.value)") }}</div>
+	<div>{{ data.form.style.label }}{{ data.form.style(onchange="b.set_style(this.value)") }}</div>
+	<div>{{ data.form.recipe_type.label }}{{ data.form.recipe_type(onchange="b.set_recipe(this.value)") }}</div>
 	<div>{{ data.form.efficiency.label }}{{ data.form.efficiency(style="width: 50px", step="0.1") }}%</div>
 	<br>
 	<div>{{ data.form.boil_volume.label }}{{ data.form.boil_volume(style="width: 50px;", step="0.1") }}{{ data.form.boil_volume_units }}</div>
@@ -136,13 +58,13 @@
 		<table id=ingredients>
 			<thead>
 				<tr>
-					<th class=select_all><input type=checkbox onclick=toggle_select('ingredients')></th>
-					<th onclick="reverse_arrow(this)" id=ingredient>Ingredient <img src="/static/images/arrow_up.png" id=ingredient_arrow></th>
-					<th onclick="reverse_arrow(this)" id=type>Type <img src="/static/images/arrow_up.png" id=type_arrow></th>
-					<th onclick="reverse_arrow(this)" id=use>Use <img src="/static/images/arrow_up.png" id=use_arrow></th>
-					<th onclick="reverse_arrow(this)" id=percent>% <img src="/static/images/arrow_up.png" id=percent_arrow></th>
-					<th onclick="reverse_arrow(this)" id=time>Time <img src="/static/images/arrow_up.png" id=time_arrow></th>
-					<th onclick="reverse_arrow(this)" id=amount>Amount <img src="/static/images/arrow_up.png" id=amount_arrow></th>
+					<th class=select_all><input type=checkbox onclick="b.toggle_select('ingredients')"></th>
+					<th onclick="b.reverse_arrow(this)" id=ingredient>Ingredient <img src="/static/images/arrow_up.png" id=ingredient_arrow></th>
+					<th onclick="b.reverse_arrow(this)" id=type>Type <img src="/static/images/arrow_up.png" id=type_arrow></th>
+					<th onclick="b.reverse_arrow(this)" id=use>Use <img src="/static/images/arrow_up.png" id=use_arrow></th>
+					<th onclick="b.reverse_arrow(this)" id=percent>% <img src="/static/images/arrow_up.png" id=percent_arrow></th>
+					<th onclick="b.reverse_arrow(this)" id=time>Time <img src="/static/images/arrow_up.png" id=time_arrow></th>
+					<th onclick="b.reverse_arrow(this)" id=amount>Amount <img src="/static/images/arrow_up.png" id=amount_arrow></th>
 				</tr>
 			</thead>
 			<tbody>				
@@ -206,10 +128,10 @@
 			<table id=mashes>
 				<thead>
 					<tr>
-						<th class=select_all><input type=checkbox onclick=toggle_select('mashes')></th>
-						<th onclick="reverse_arrow(this)" id=step>Step <img src="/static/images/arrow_up.png" id=step_arrow></th>
-						<th onclick="reverse_arrow(this)" id=temp>Temperature <img src="/static/images/arrow_up.png" id=temp_arrow></th>
-						<th onclick="reverse_arrow(this)" id=duration>Duration <img src="/static/images/arrow_up.png" id=duration_arrow></th>
+						<th class=select_all><input type=checkbox onclick="b.toggle_select('mashes')"></th>
+						<th onclick="r everse_arrow(this)" id=step>Step <img src="/static/images/arrow_up.png" id=step_arrow></th>
+						<th onclick="b.reverse_arrow(this)" id=temp>Temperature <img src="/static/images/arrow_up.png" id=temp_arrow></th>
+						<th onclick="b.reverse_arrow(this)" id=duration>Duration <img src="/static/images/arrow_up.png" id=duration_arrow></th>
 					</tr>
 				</thead>
 				<tbody>				
