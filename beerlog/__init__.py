@@ -63,7 +63,7 @@ url('/entry/<year>/', 'blog.views.list_entries')
 url('/entry/<year>/<month>/', 'blog.views.list_entries')
 url('/entry/<year>/<month>/<day>/', 'blog.views.list_entries')
 url('/entry/<year>/<month>/<day>/<slug>/', 'blog.views.list_entries')
-url('/json/entry/archives/', 'blog.views.list_archives')
+url('/entry/archives/json/', 'blog.views.list_archives')
 url('/entry/edit/', 'blog.views.edit_entry', methods=['POST', 'GET'])
 url('/entry/edit/<entry_id>/', 'blog.views.edit_entry', methods=['POST', 'GET'])
 url('/entry/edit/<entry_id>/delete/', 'blog.views.delete_entry')
@@ -79,7 +79,7 @@ url('/image/<image_id>/delete/', 'image.views.delete_image')
 # BREWERY VIEWS
 ## BJCP
 url('/brewery/bjcp/', 'brewery.bjcp.views.list_styles')
-url('/json/brewery/bjcp/style/<style_id>/', 'brewery.bjcp.views.get_style_json')
+url('/brewery/bjcp/style/<style_id>/json/', 'brewery.bjcp.views.get_style_json')
 ## RECIPE
 url('/brewery/', 'brewery.recipe.views.list_recipes')
 url('/brewery/recipe/', 'brewery.recipe.views.list_recipes')
@@ -87,6 +87,8 @@ url('/brewery/recipe/<recipe_id>/batch/', 'brewery.recipe.views.list_recipes')
 url('/brewery/recipe/edit/', 'brewery.recipe.views.edit_recipe', methods=['POST', 'GET'])
 url('/brewery/recipe/<recipe_id>/', 'brewery.recipe.views.edit_recipe', methods=['POST', 'GET'])
 url('/brewery/recipe/batch/<recipe_id>/', 'brewery.recipe.views.edit_recipe', methods=['POST', 'GET'])
+## INGREIDENTS
+url('/brewery/ingredients/<ingredient>/json/', 'brewery.ingredients.views.list_ingredients')
 
 @app.before_request
 def before_request():

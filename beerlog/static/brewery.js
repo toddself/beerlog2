@@ -3,13 +3,17 @@ Brewery = function(){
 }
 $.extend(Brewery.prototype, {
     orders: {'ingredients': {'1': 'ingredient', '2': 'type', '3': 'use', '4': 'percent', '5': 'time', '6': 'amount'},
-                  'mash': {'1': 'step', '2': 'duration', '3': 'temperature'}
+             'mash': {'1': 'step', '2': 'duration', '3': 'temperature'},
+             'hop': {'1': 'name', '2': 'alpha', '3': 'hop_form', '4': 'hop_type', '5': 'origin', '6': 'description'},
     },
     init: function(){
        this.set_fermentation(1);
+       $.each($('#browsers').children(), function(index, value){
+           $(value).hide();
+       })
     },
     set_style: function(style_id){
-      	$.getJSON('/json/brewery/bjcp/style/'+style_id+'/', function(data) {
+      	$.getJSON('/brewery/bjcp/style/'+style_id+'/json/', function(data) {
 			$('#style_og').val(data.og_range);
 			$('#style_fg').val(data.fg_range);
 			$('#style_srm').val(data.srm_range);
@@ -94,5 +98,14 @@ $.extend(Brewery.prototype, {
         var el = $(document.createElement(type));
         el.attr('id', id);
         return el;
+    },
+    show_ingredients: function(ingredient){
+        $.getJSON('/brewery/ingredients/'+ingredient+'/json/', function(ing){
+            data_grid = ingredient+'_table';
+            this[ingredient] = {};
+            $.each(ing, function(index, value){
+                this[ingredient][value.name] = value;
+            }.bind(this));        	
+        }.bind(this));
     }
 })

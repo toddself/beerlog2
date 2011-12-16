@@ -8,7 +8,7 @@ $().ready(function(){
 });
 
 function display_style(category_id){
-	$.getJSON('/json/brewery/bjcp/style/'+category_id+'/', function(data) {
+	$.getJSON('/brewery/bjcp/style/'+category_id+'/json/', function(data) {
 		$.each(data, function(key, val){
 			if(key == 'category'){
 				$('#'+key).html(val.category_id+". "+val.name)

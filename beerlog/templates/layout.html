@@ -20,7 +20,7 @@
 				return a
 			}
 
-			$.getJSON('/json/entry/archives/', function(data) {
+			$.getJSON('/entry/archives/json/', function(data) {
 				$.each(data, function(key, val) {
 					li = $('<li>');
 					li.html(gen_a('/entry/'+val+'/', val, 'archive_item'))

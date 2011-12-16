@@ -19,6 +19,33 @@
 {% block body %}
 <div class="content_body">
 	<form id=postform action="{{ url_for('edit_recipe', recipe_id=data.recipe.id) }}" method="post" class="entry">
+<!-- modal dialogs -->	
+<div id=browsers>	
+	<div id=hop_browser>
+		<table id=hop_table>
+			<thead>
+				<tr>
+					<th onclick="b.reverse_arrow(this)" id=name>Name</th>
+					<th onclick="b.reverse_arrow(this)" id=alpha>% AA</th>
+					<th onclick="b.reverse_arrow(this)" id=hop_form>Form</th>
+					<th onclick="b.reverse_arrow(this)" id=hop_type>Type</th>					
+					<th onclick="b.reverse_arrow(this)" id=origin>Origin</th>
+					<th onclick="b.reverse_arrow(this)" id=description>Description</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+	<div id=fermentable_browser>
+	</div>
+	<div id=yeast_browser>
+	</div>
+	<div id=misc_browser>
+	</div>
+</div>
+
+
 <!-- hidden fields for internal accounting -->
 {{ data.form.csrf }}{{ data.form.brewer(value=session.get('user_id')) }}{{ data.form.hops }}
 {{ data.form.grains }}{{ data.form.extracts }}{{ data.form.hopped_extracts }}{{ data.form.mineral }}

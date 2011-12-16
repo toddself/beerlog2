@@ -8,7 +8,7 @@ def format_time(value, format="%H:%M %m/%d/%Y"):
     return value.strftime(format)
     
 def sqlobject_to_dict(obj):
-    json_dict = {}
+    obj_dict = {}
     cls_name = type(obj)
     for attr in vars(cls_name):
         if isinstance(getattr(cls_name, attr), property):
@@ -16,13 +16,23 @@ def sqlobject_to_dict(obj):
             attr_class = type(attr_value)
             attr_parent = attr_class.__bases__[0]
             if isinstance(getattr(obj, attr), Decimal):
-                json_dict[attr] = float(getattr(obj, attr))
+                obj_dict[attr] = float(getattr(obj, attr))
+            elif isinstance(getattr(obj, attr), list):
+                dict_list = []
+                for list_item in getattr(obj, attr):
+                    dict_list.append(sqlobject_to_dict(list_item))
+                obj_dict[attr] = dict_list
+            elif isinstance(getattr(obj, attr), dict):
+                dict_dict = {}
+                for key, val in getattr(obj, attr):
+                    dict_dict[key] = sqlobject_to_dict(val)
+                obj_dict[attr] = dict_dict
             elif attr_parent == SQLObject:
-                json_dict[attr] = sqlobject_to_dict(getattr(obj, attr))
+                obj_dict[attr] = sqlobject_to_dict(getattr(obj, attr))
             else:
-                json_dict[attr] = getattr(obj, attr)
+                obj_dict[attr] = getattr(obj, attr)
 
-    return json_dict
+    return obj_dict
 
 class LazyView(object):
     
