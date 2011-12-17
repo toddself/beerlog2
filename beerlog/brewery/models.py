@@ -34,6 +34,18 @@ class Hop(SQLObject):
                               createRelatedTable=True)
     versions = Versioning()
     
+    def _get_hop_type(self):
+        return Hop.hop_types[self._SO_get_hop_type()]
+    
+    def _get_hop_form(self):
+        return Hop.hop_forms[self._SO_get_hop_form()]    
+    
+    def _get_short_description(self):
+        if self.description and len(self.description) > 64:
+            return self.description[:64]+"..."
+        else:
+            return self.description
+    
     def _get_inventory(self):
         try:
             inv = list(Inventory.select(Inventory.q.hop == self.id))[0]
@@ -144,6 +156,15 @@ class Yeast(SQLObject, Measure):
     use_starter = BoolCol(default=False)
     secondary = BoolCol(default=False)
     versions = Versioning()
+
+    def _get_yeast_type(self):
+        return Yeast.yeast_types[self._SO_get_yeast_type()]
+    
+    def _get_flocc(self):
+        return Yeast.yeast_flocculations[self._SO_get_flocc()]
+        
+    def _get_yeast_form(self):
+        return Yeast.yeast_forms[self._SO_get_yeast_form()]
     
     def _get_inventory(self):
         try:

@@ -12,8 +12,6 @@
 		b = new Brewery();
 		b.init();
 	});
-	
-	ing = {'ingredient': 'Cascade', 'ingredient_id': 1, 'type': 'Hop', 'use': 'Boil', 'use_id': 1, 'percent': '65%', 'time': '60 min', 'amount': '4oz'};
 </script>
 {% endblock %}
 {% block body %}
@@ -25,12 +23,13 @@
 		<table id=hop_table>
 			<thead>
 				<tr>
-					<th onclick="b.reverse_arrow(this)" id=name>Name</th>
-					<th onclick="b.reverse_arrow(this)" id=alpha>% AA</th>
-					<th onclick="b.reverse_arrow(this)" id=hop_form>Form</th>
-					<th onclick="b.reverse_arrow(this)" id=hop_type>Type</th>					
-					<th onclick="b.reverse_arrow(this)" id=origin>Origin</th>
-					<th onclick="b.reverse_arrow(this)" id=description>Description</th>
+					<th></th>
+					<th onclick="b.reverse_arrow(this)" id=name>Name <img src="/static/images/arrow_up.png" id=name_arrow></th>
+					<th onclick="b.reverse_arrow(this)" id=alpha>% AA <img src="/static/images/arrow_up.png" id=alpha_arrow></th>
+					<th onclick="b.reverse_arrow(this)" id=hop_form>Form <img src="/static/images/arrow_up.png" id=hop_form_arrow></th>
+					<th onclick="b.reverse_arrow(this)" id=hop_type>Type <img src="/static/images/arrow_up.png" id=hop_type_arrow></th>					
+					<th onclick="b.reverse_arrow(this)" id=origin>Origin <img src="/static/images/arrow_up.png" id=origin_arrow></th>
+					<th onclick="b.reverse_arrow(this)" id=short_description>Description <img src="/static/images/arrow_up.png" id=short_description_arrow></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -38,14 +37,42 @@
 		</table>
 	</div>
 	<div id=fermentable_browser>
+		<table id=fermentable_table>
+			<thead>
+				<tr>
+					<th></th>
+					<th onclick="b.reverse_arrow(this)" id=name>Name <img src="/static/images/arrow_up.png" id=name_arrow></th>
+					<th onclick="b.reverse_arrow(this)" id=color>Color <img src="/static/images/arrow_up.png" id=color_arrow></th>
+					<th onclick="b.reverse_arrow(this)" id=potential>Potential <img src="/static/images/arrow_up.png" id=potential_arrow></th>
+					<th onclick="b.reverse_arrow(this)" id=max_in_batch>Max % <img src="/static/images/arrow_up.png" id=max_in_batch_arrow></th>					
+					<th onclick="b.reverse_arrow(this)" id=must_mash>Use in mash <img src="/static/images/arrow_up.png" id=must_mash_arrow></th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
 	</div>
 	<div id=yeast_browser>
+		<table id=yeast_table>
+			<thead>
+				<tr>
+					<th></th>
+					<th onclick="b.reverse_arrow(this)" id=yeast_id>Yeast ID <img src="/static/images/arrow_up.png" id=yeast_id_arrow></th>
+					<th onclick="b.reverse_arrow(this)" id=lab>Lab <img src="/static/images/arrow_up.png" id=lab_arrow></th>
+					<th onclick="b.reverse_arrow(this)" id=name>Name <img src="/static/images/arrow_up.png" id=name_arrow></th>					
+					<th onclick="b.reverse_arrow(this)" id=yeast_type>Type <img src="/static/images/arrow_up.png" id=yeast_type_arrow></th>
+					<th onclick="b.reverse_arrow(this)" id=flocc>Flocc. <img src="/static/images/arrow_up.png" id=flocc_arrow></th>					
+					<th onclick="b.reverse_arrow(this)" id=avg_attenuation>Avg. Attenuation <img src="/static/images/arrow_up.png" id=avg_attenuation_arrow></th>
+					<th onclick="b.reverse_arrow(this)" id=max_temp>Max Temp <img src="/static/images/arrow_up.png" id=max_temp_arrow></th>					
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
 	</div>
 	<div id=misc_browser>
 	</div>
 </div>
-
-
 <!-- hidden fields for internal accounting -->
 {{ data.form.csrf }}{{ data.form.brewer(value=session.get('user_id')) }}{{ data.form.hops }}
 {{ data.form.grains }}{{ data.form.extracts }}{{ data.form.hopped_extracts }}{{ data.form.mineral }}
@@ -103,10 +130,10 @@
 			</tbody>
 		</table>
 	</div><br>
-	<input type="button" onclick="b.append_row('ingredients', ing)" id="add_hops" value="Add Hops">
-	<input type="button" onclick="add_fermentables()" id="add_fermentables" value="Add Fermentables">
-	<input type="button" onclick="add_misc()" id="add_misc" value="Add Misc">
-	<input type="button" onclick="add_yeast()" id="add_yeast" value="Add Yeast">
+	<input type="button" onclick="b.show_ingredients('hop')" id="add_hops" value="Add Hops">
+	<input type="button" onclick="b.show_ingredients('fermentables')" id="add_fermentables" value="Add Fermentables">
+	<input type="button" onclick="b.show_ingredients('misc')" id="add_misc" value="Add Misc">
+	<input type="button" onclick="b.show_ingredients('yeast')" id="add_yeast" value="Add Yeast">
 	<input type="button" onclick="b.remove_row('ingredients', 0)" id="remove_ingredient" value="Delete Ingredient">
 </div>
 <div class=recipe_section style="float: left; width: 30%;">

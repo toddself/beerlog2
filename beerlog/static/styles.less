@@ -199,6 +199,58 @@ nav{
     }
 }
 
+table {
+    width: 90%;
+    border: 1px solid black;
+    border-collapse: collapse;
+    border-spacing: 0px;
+    
+    th {
+        text-align: left;
+        border-bottom: 1px solid black;
+        border-top: 1px solid black;
+        border-right: 1px solid #c4cbb7; 
+        color: #fff;
+        padding: 3px;
+        background: #b5bdc8; /* Old browsers */
+        background: -moz-linear-gradient(top, #b5bdc8 0%, #828c95 36%, #28343b 100%); /* FF3.6+ */
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#b5bdc8), color-stop(36%,#828c95), color-stop(100%,#28343b)); /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(top, #b5bdc8 0%,#828c95 36%,#28343b 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(top, #b5bdc8 0%,#828c95 36%,#28343b 100%); /* Opera 11.10+ */
+        background: -ms-linear-gradient(top, #b5bdc8 0%,#828c95 36%,#28343b 100%); /* IE10+ */
+        background: linear-gradient(top, #b5bdc8 0%,#828c95 36%,#28343b 100%); /* W3C */
+        filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#b5bdc8', endColorstr='#28343b',GradientType=0 )"; /* IE6-9 */
+        
+        img {
+            width: 5px;
+            height: 5px;
+        }
+        
+        &.select_all {
+            width: 2% !important;
+        }
+        
+        &:last-child {
+            border-right: 1px solid #000;
+        }
+    }
+    
+    tbody {
+        tr {
+            padding: 3px;
+            margin: 0px;
+            &:nth-child(2){
+                background: #eee;
+            }
+        }
+            
+        td {
+            border: 0px;
+            margin: 0px;
+            padding: 3px;
+        }
+    }
+}
 form {
     padding-left: 10px;
     padding-right: 10px;
@@ -244,62 +296,8 @@ form {
 
         div {
             float: left;
-            padding: 5px;
-            
-            table {
-                width: 90%;
-                border: 1px solid black;
-                border-collapse: collapse;
-                border-spacing: 0px;
-                
-                th {
-                    text-align: left;
-                    border-bottom: 1px solid black;
-                    border-top: 1px solid black;
-                    border-right: 1px solid #c4cbb7; 
-                    color: #fff;
-                    padding: 3px;
-                    background: #b5bdc8; /* Old browsers */
-                    background: -moz-linear-gradient(top, #b5bdc8 0%, #828c95 36%, #28343b 100%); /* FF3.6+ */
-                    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#b5bdc8), color-stop(36%,#828c95), color-stop(100%,#28343b)); /* Chrome,Safari4+ */
-                    background: -webkit-linear-gradient(top, #b5bdc8 0%,#828c95 36%,#28343b 100%); /* Chrome10+,Safari5.1+ */
-                    background: -o-linear-gradient(top, #b5bdc8 0%,#828c95 36%,#28343b 100%); /* Opera 11.10+ */
-                    background: -ms-linear-gradient(top, #b5bdc8 0%,#828c95 36%,#28343b 100%); /* IE10+ */
-                    background: linear-gradient(top, #b5bdc8 0%,#828c95 36%,#28343b 100%); /* W3C */
-                    filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#b5bdc8', endColorstr='#28343b',GradientType=0 )"; /* IE6-9 */
-                    
-                    img {
-                        width: 5px;
-                        height: 5px;
-                    }
-                    
-                    &.select_all {
-                        width: 2% !important;
-                    }
-                    
-                    &:last-child {
-                        border-right: 1px solid #000;
-                    }
-                }
-                
-                tbody {
-                    tr {
-                        padding: 3px;
-                        margin: 0px;
-                    }
-                
-                    tr:nth-child(2){
-                        background: #eee;
-                    }
-                
-                    td {
-                        border: 0px;
-                        margin: 0px;
-                        padding: 3px;
-                    }
-                }
-            }
-        }
+            padding: 5px;   
+        }        
         
         br {
             clear: both;

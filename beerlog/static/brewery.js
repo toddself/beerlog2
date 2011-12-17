@@ -4,7 +4,9 @@ Brewery = function(){
 $.extend(Brewery.prototype, {
     orders: {'ingredients': {'1': 'ingredient', '2': 'type', '3': 'use', '4': 'percent', '5': 'time', '6': 'amount'},
              'mash': {'1': 'step', '2': 'duration', '3': 'temperature'},
-             'hop': {'1': 'name', '2': 'alpha', '3': 'hop_form', '4': 'hop_type', '5': 'origin', '6': 'description'},
+             'hop_table': {'1': 'name', '2': 'alpha', '3': 'hop_form', '4': 'hop_type', '5': 'origin', '6': 'short_description'},
+             'fermentable_table': {'1': 'name', '2': 'color', '3': 'potential', '4': 'max_in_batch', '5': 'must_mash'},
+             'yeast_table': {'1': 'yeast_id', '2': 'lab', '3': 'name', '4': 'yeast_type', '5': 'flocc', '6': 'avg_attenuation', '7': 'max_temp'}
     },
     init: function(){
        this.set_fermentation(1);
@@ -73,6 +75,7 @@ $.extend(Brewery.prototype, {
         var tr = this.el('tr', data_grid+tr_id);
         tr.append(checkbox(tr_id));
         var data_grid_order = this.orders[data_grid];
+        console.log(data_grid_order);
         for(var i=1; i<=Object.keys(data_grid_order).length; i++){
             var td = this.el('td', data_grid_order[i]+tr_id);
             td.html(data_row[data_grid_order[i]]);
@@ -101,11 +104,13 @@ $.extend(Brewery.prototype, {
     },
     show_ingredients: function(ingredient){
         $.getJSON('/brewery/ingredients/'+ingredient+'/json/', function(ing){
-            data_grid = ingredient+'_table';
+            var data_grid = ingredient+'_table';
             this[ingredient] = {};
             $.each(ing, function(index, value){
                 this[ingredient][value.name] = value;
-            }.bind(this));        	
+                this.append_row(data_grid, value);
+            }.bind(this));
+            $('#'+ingredient+'_browser').show();
         }.bind(this));
     }
-})
+}) // 8116921 jose

@@ -14,11 +14,16 @@ def list_ingredients(ingredient):
                   'herb': ['Herb',],
                   'spice': ['Spice',],
                   'flavor': ['Flavor',],
-                  'fining': ['Fining',]}
+                  'fining': ['Fining',],
+                  'yeast': ['Yeast',],}
     c['misc'] = c['mineral']+c['herb']+c['spice']+c['fining']+c['flavor']
-    c['fermentables'] = c['grain']+c['extract']+c['hoppedextract']
+    c['fermentable'] = c['grain']+c['extract']+c['hoppedextract']
     data = []
-    for model in c[ingredient]:
-        data += list(globals()[model].select().orderBy('name'))
-    all_ingredients = [sqlobject_to_dict(ing) for ing in data]
+    try:
+        for model in c[ingredient]:
+            data += list(globals()[model].select().orderBy('name'))
+    except KeyError:
+        all_ingredients = {'error': 'No ingredients exist with the name %s' % ingredient}
+    else:
+        all_ingredients = [sqlobject_to_dict(ing) for ing in data]
     return json.dumps(all_ingredients)
