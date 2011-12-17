@@ -1,10 +1,9 @@
 {% from "_formhelper.html" import render_field %}
 {% extends "layout.html" %}
-{% block bodystyle %}class="background_override"{% endblock %}
 {% block flash %}{% endblock %}
 {% block nav %}{% endblock %}
 {% block body %}
-<div class="content_body" style="margin-left: 0px !important; margin-top: 0px !important;">
+<section id="content" style="margin-left: 0px !important; margin-top: 0px !important;">
 	<form method="post" enctype="multipart/form-data" action="{{ url_for('create_image')}}" class=add-entry>
 		<dl>
 			{% if data.filename %}

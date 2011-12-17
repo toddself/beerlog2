@@ -17,6 +17,13 @@ class Hop(SQLObject):
     PLUG = 2
     hop_types = ['Bittering', 'Aroma', 'Both',]
     hop_forms = ['Leaf', 'Pellet', 'Plug',]
+    MASH=0
+    FIRST_WORT=1
+    BOIL=2
+    FLAMEOUT=3
+    WHIRLPOOL=4
+    DRY=5
+    hop_uses = ['Mash', 'First Wort', 'Boil', 'Flameout', 'Whirlpool', 'Dry Hop']
 
     hop_type = IntCol(default=BITTERING)
     hop_form = IntCol(default=LEAF)

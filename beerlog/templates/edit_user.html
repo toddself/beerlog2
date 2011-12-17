@@ -1,9 +1,8 @@
 {% from "_formhelper.html" import render_field %}
 {% extends "layout.html" %}
 {% block body %}
-<div class="content_body">
-	<form id="postform" action="{{ url_for('edit_user', user_id=data.user.id) }}" 
-		  method="post" class="entry">
+<section id=content>
+	<form action="{{ url_for('edit_user', user_id=data.user.id) }}" method="post">
 		<h2>{% if data.user.id is defined %}Edit{% else %}Create{% endif %} User</h2>
 		<dl>
 			{{ data.form.csrf }}
@@ -22,7 +21,6 @@
 		</dl>
 		<p><input type=submit value="{% if data.user.id %}Update{% else %}Create{% endif %} User">
 	</form>
-	
 	<iframe src=/image/add class=upload></iframe>
-</div>
+</section>
 {% endblock %}

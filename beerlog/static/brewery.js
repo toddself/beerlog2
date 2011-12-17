@@ -58,12 +58,18 @@ $.extend(Brewery.prototype, {
             })
         }
     },
-    append_row: function(data_grid, data_row){
-        checkbox = function(id){
+    append_row: function(data_grid, data_row, selector_type){
+        selector = function(id, widget, name){
             var td = this.el('td', 'select'+id);
-            var check = this.el('input', 'checkbox_'+id);
-            check.attr('type', 'checkbox');
-            td.append(check);
+            var select = this.el('input', 'selector_'+id);
+            if(widget !== 'radio'){
+                name = name + id;
+            } else {
+                select.attr('value', id);
+            }
+            select.attr('type', widget);
+            select.attr('name', name+widget);
+            td.append(select);
             return td;        
         }.bind(this);        
         var table = $('table#'+data_grid+' tbody');
@@ -73,9 +79,8 @@ $.extend(Brewery.prototype, {
             --tr_id;
         }
         var tr = this.el('tr', data_grid+tr_id);
-        tr.append(checkbox(tr_id));
+        tr.append(selector(tr_id, selector_type, data_grid));
         var data_grid_order = this.orders[data_grid];
-        console.log(data_grid_order);
         for(var i=1; i<=Object.keys(data_grid_order).length; i++){
             var td = this.el('td', data_grid_order[i]+tr_id);
             td.html(data_row[data_grid_order[i]]);
@@ -102,15 +107,30 @@ $.extend(Brewery.prototype, {
         el.attr('id', id);
         return el;
     },
-    show_ingredients: function(ingredient){
+    show_ingredients: function(el){
+        var ingredient = $(el).attr('id');
+        var bframe = '#'+ingredient+'_browser';
         $.getJSON('/brewery/ingredients/'+ingredient+'/json/', function(ing){
             var data_grid = ingredient+'_table';
             this[ingredient] = {};
             $.each(ing, function(index, value){
                 this[ingredient][value.name] = value;
-                this.append_row(data_grid, value);
+                this.append_row(data_grid, value, 'radio');
             }.bind(this));
-            $('#'+ingredient+'_browser').show();
+            var top = $(el).offset().top + $(el).height()+5;
+            var left = $(el).offset().left;
+            $(bframe).css('top', top);
+            $(bframe).css('left', left);
+            $(bframe).draggable();
+            $(bframe).show();
+
         }.bind(this));
+    },
+    add_ingredient: function(ingredient){
+        var data_grid = '#'+ingredient+"_table";
+        var radio = data_grid+' input[type=radio]:checked';
+        var row = $(radio).attr('value');
+        var name = $(radio).parent().parent().find('#name'+row).html();
+        console.log(b[ingredient][name])
     }
 }) // 8116921 jose

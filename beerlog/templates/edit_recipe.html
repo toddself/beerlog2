@@ -7,189 +7,190 @@
 {% block javascript %}
 {{ super() }}
 <script src="{{ url_for('static', filename='brewery.js') }}"></script>
+<script src="{{ url_for('static', filename='jquery-ui-1.8.16.custom.min.js') }}"></script>
 <script>
 	$().ready(function(){
 		b = new Brewery();
-		b.init();
 	});
 </script>
 {% endblock %}
 {% block body %}
-<div class="content_body">
-	<form id=postform action="{{ url_for('edit_recipe', recipe_id=data.recipe.id) }}" method="post" class="entry">
-<!-- modal dialogs -->	
-<div id=browsers>	
-	<div id=hop_browser>
-		<table id=hop_table>
-			<thead>
-				<tr>
-					<th></th>
-					<th onclick="b.reverse_arrow(this)" id=name>Name <img src="/static/images/arrow_up.png" id=name_arrow></th>
-					<th onclick="b.reverse_arrow(this)" id=alpha>% AA <img src="/static/images/arrow_up.png" id=alpha_arrow></th>
-					<th onclick="b.reverse_arrow(this)" id=hop_form>Form <img src="/static/images/arrow_up.png" id=hop_form_arrow></th>
-					<th onclick="b.reverse_arrow(this)" id=hop_type>Type <img src="/static/images/arrow_up.png" id=hop_type_arrow></th>					
-					<th onclick="b.reverse_arrow(this)" id=origin>Origin <img src="/static/images/arrow_up.png" id=origin_arrow></th>
-					<th onclick="b.reverse_arrow(this)" id=short_description>Description <img src="/static/images/arrow_up.png" id=short_description_arrow></th>
-				</tr>
-			</thead>
-			<tbody>
-			</tbody>
-		</table>
-	</div>
-	<div id=fermentable_browser>
-		<table id=fermentable_table>
-			<thead>
-				<tr>
-					<th></th>
-					<th onclick="b.reverse_arrow(this)" id=name>Name <img src="/static/images/arrow_up.png" id=name_arrow></th>
-					<th onclick="b.reverse_arrow(this)" id=color>Color <img src="/static/images/arrow_up.png" id=color_arrow></th>
-					<th onclick="b.reverse_arrow(this)" id=potential>Potential <img src="/static/images/arrow_up.png" id=potential_arrow></th>
-					<th onclick="b.reverse_arrow(this)" id=max_in_batch>Max % <img src="/static/images/arrow_up.png" id=max_in_batch_arrow></th>					
-					<th onclick="b.reverse_arrow(this)" id=must_mash>Use in mash <img src="/static/images/arrow_up.png" id=must_mash_arrow></th>
-				</tr>
-			</thead>
-			<tbody>
-			</tbody>
-		</table>
-	</div>
-	<div id=yeast_browser>
-		<table id=yeast_table>
-			<thead>
-				<tr>
-					<th></th>
-					<th onclick="b.reverse_arrow(this)" id=yeast_id>Yeast ID <img src="/static/images/arrow_up.png" id=yeast_id_arrow></th>
-					<th onclick="b.reverse_arrow(this)" id=lab>Lab <img src="/static/images/arrow_up.png" id=lab_arrow></th>
-					<th onclick="b.reverse_arrow(this)" id=name>Name <img src="/static/images/arrow_up.png" id=name_arrow></th>					
-					<th onclick="b.reverse_arrow(this)" id=yeast_type>Type <img src="/static/images/arrow_up.png" id=yeast_type_arrow></th>
-					<th onclick="b.reverse_arrow(this)" id=flocc>Flocc. <img src="/static/images/arrow_up.png" id=flocc_arrow></th>					
-					<th onclick="b.reverse_arrow(this)" id=avg_attenuation>Avg. Attenuation <img src="/static/images/arrow_up.png" id=avg_attenuation_arrow></th>
-					<th onclick="b.reverse_arrow(this)" id=max_temp>Max Temp <img src="/static/images/arrow_up.png" id=max_temp_arrow></th>					
-				</tr>
-			</thead>
-			<tbody>
-			</tbody>
-		</table>
-	</div>
-	<div id=misc_browser>
-	</div>
-</div>
-<!-- hidden fields for internal accounting -->
-{{ data.form.csrf }}{{ data.form.brewer(value=session.get('user_id')) }}{{ data.form.hops }}
-{{ data.form.grains }}{{ data.form.extracts }}{{ data.form.hopped_extracts }}{{ data.form.mineral }}
-{{ data.form.fining }}{{ data.form.flavor }}{{ data.form.spice }}{{ data.form.herb }}{{ data.form.mash_data }}
-<span class=section_title>General</span>
-<div class=recipe_section>
-	<div>{{ data.form.name.label }}{{ data.form.name(style="width: 100px;") }}</div>
-	<div>{{ data.form.style.label }}{{ data.form.style(onchange="b.set_style(this.value)") }}</div>
-	<div>{{ data.form.recipe_type.label }}{{ data.form.recipe_type(onchange="b.set_recipe(this.value)") }}</div>
-	<div>{{ data.form.efficiency.label }}{{ data.form.efficiency(style="width: 50px", step="0.1") }}%</div>
-	<br>
-	<div>{{ data.form.boil_volume.label }}{{ data.form.boil_volume(style="width: 50px;", step="0.1") }}{{ data.form.boil_volume_units }}</div>
-	<div>{{ data.form.batch_volume.label }}{{ data.form.batch_volume(style="width: 50px;", step="0.1") }}{{ data.form.batch_volume_units }}</div>
-	<div>{{ data.form.equipment.label }}{{ data.form.equipment }}</div>
-	<div>{{ data.form.base_boil_equipment }}{{ data.form.base_boil_equipment.label }}</div>
-	<br>
-</div>
-
-<span class=section_title>Recipe Stats</span>
-<div class=recipe_section>
-	<div style="float: left">{{ data.form.og.label }}</div><div style="float: left;">{{ data.form.og(disabled="disabled", style="width: 90px;") }}</div>
-	<div style="float: left">{{ data.form.fg.label }}</div><div style="float: left;">{{ data.form.fg(disabled="disabled", style="width: 90px;") }}</div>
-	<div style="float: left">{{ data.form.color.label }}</div><div style="float: left;">{{ data.form.color(disabled="disabled", style="width: 90px;") }}</div>
-	<div style="float: left">{{ data.form.ibu.label }}</div><div style="float: left;">{{ data.form.ibu(disabled="disabled", style="width: 90px;") }}</div>
-	<div style="float: left"><label for="abv">A.B.V.</label></div><div style="float: left;"><input type="text" style="width: 90px;" disabled></div>
-	<div style="float: left"><label for="bitt_ratio">IBU/GU</label></div><div style="float: left;"><input style="width: 90px;" type="text" disabled></div><br style="clear; both;">
-</div>
-<span class=section_title>Style Stats</span>
-<div class=recipe_section>
-		<div style="float: left;"><label for="style_og">O.G.</label></div><div style="float: left;"><input type=text id=style_og disabled style="width: 90px;"></div>
-		<div style="float: left;"><label for="style_fg">F.G.</label></div><div style="float: left;"><input type=text id=style_fg disabled style="width: 90px;"></div>
-		<div style="float: left;"><label for="style_srm">Color</label></div><div style="float: left;"><input type=text id=style_srm disabled style="width: 90px;"></div>
-		<div style="float: left;"><label for="style_ibu">IBUs</label></div><div style="float: left;"><input type=text id=style_ibu disabled style="width: 90px;"></div>
-		<div style="float: left;"><label for="style_abv">A.B.V.</label></div><div style="float: left;"><input type=text id=style_abv style="width: 90px;" disabled></div><br style="clear: both;">
-</div>
-<span class=section_title>Ingredients</span>
-<div class=recipe_section>
-	<div style="width: 100%">
-		<table id=ingredients>
-			<thead>
-				<tr>
-					<th class=select_all><input type=checkbox onclick="b.toggle_select('ingredients')"></th>
-					<th onclick="b.reverse_arrow(this)" id=ingredient>Ingredient <img src="/static/images/arrow_up.png" id=ingredient_arrow></th>
-					<th onclick="b.reverse_arrow(this)" id=type>Type <img src="/static/images/arrow_up.png" id=type_arrow></th>
-					<th onclick="b.reverse_arrow(this)" id=use>Use <img src="/static/images/arrow_up.png" id=use_arrow></th>
-					<th onclick="b.reverse_arrow(this)" id=percent>% <img src="/static/images/arrow_up.png" id=percent_arrow></th>
-					<th onclick="b.reverse_arrow(this)" id=time>Time <img src="/static/images/arrow_up.png" id=time_arrow></th>
-					<th onclick="b.reverse_arrow(this)" id=amount>Amount <img src="/static/images/arrow_up.png" id=amount_arrow></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr id="ingredients_blank_list">
-					<td colspan="7">This list is empty</td>
-				</tr>
-			</tbody>
-		</table>
-	</div><br>
-	<input type="button" onclick="b.show_ingredients('hop')" id="add_hops" value="Add Hops">
-	<input type="button" onclick="b.show_ingredients('fermentables')" id="add_fermentables" value="Add Fermentables">
-	<input type="button" onclick="b.show_ingredients('misc')" id="add_misc" value="Add Misc">
-	<input type="button" onclick="b.show_ingredients('yeast')" id="add_yeast" value="Add Yeast">
-	<input type="button" onclick="b.remove_row('ingredients', 0)" id="remove_ingredient" value="Delete Ingredient">
-</div>
-<div class=recipe_section style="float: left; width: 30%;">
-	<div>
-		<span class=section_title>Carbonation</span>
-		<div style="width: 100%">
-			<div style="width: 100%">
+<section id=content>
+	<form action="{{ url_for('edit_recipe', recipe_id=data.recipe.id) }}" method="post">
+		<!-- modal dialogs -->	
+		<div id=browsers>	
+			<div class=browser id=hop_browser>
+				<div class=close onclick="$(this).parent().hide()">x</div>
+				<h1>Hops</h1>
+				<div class=scroller>
+					<table id=hop_table>
+						<thead>
+							<tr>
+								<th></th>
+								<th onclick="b.reverse_arrow(this)" id=name>Name&nbsp;<img src="/static/images/arrow_up.png" id=name_arrow></th>
+								<th onclick="b.reverse_arrow(this)" id=alpha>%&nbsp;AA&nbsp;<img src="/static/images/arrow_up.png" id=alpha_arrow></th>
+								<th onclick="b.reverse_arrow(this)" id=hop_form>Form&nbsp;<img src="/static/images/arrow_up.png" id=hop_form_arrow></th>
+								<th onclick="b.reverse_arrow(this)" id=hop_type>Type&nbsp;<img src="/static/images/arrow_up.png" id=hop_type_arrow></th>					
+								<th onclick="b.reverse_arrow(this)" id=origin>Origin&nbsp;<img src="/static/images/arrow_up.png" id=origin_arrow></th>
+								<th onclick="b.reverse_arrow(this)" id=short_description>Description <img src="/static/images/arrow_up.png" id=short_description_arrow></th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div><br style="clear: both;">
+				<div class=scroller style="border: 0px !important;">
+					<label for=hop_amount>Amount</label> <input type="text" id=hop_amount>
+					<label for=hop_use>Use in</label> <select id=hop_use><option value="0">Mash</option><option value="1">First Wort</option><option value="2">Boil</option><option value="3">Flameout</option><option value="4">Whirlpool</option><option value="5">Dry Hop</option></select>
+					<label for=hop_time>Time</label> <input type="text" id=hop_time>
+					<input type=button value="Add Hop" onclick="b.add_ingredient('hop')">
+				</div>
+			</div>
+			<div id=fermentable_browser>
+				<table id=fermentable_table>
+					<thead>
+						<tr>
+							<th></th>
+							<th onclick="b.reverse_arrow(this)" id=name>Name <img src="/static/images/arrow_up.png" id=name_arrow></th>
+							<th onclick="b.reverse_arrow(this)" id=color>Color <img src="/static/images/arrow_up.png" id=color_arrow></th>
+							<th onclick="b.reverse_arrow(this)" id=potential>Potential <img src="/static/images/arrow_up.png" id=potential_arrow></th>
+							<th onclick="b.reverse_arrow(this)" id=max_in_batch>Max % <img src="/static/images/arrow_up.png" id=max_in_batch_arrow></th>					
+							<th onclick="b.reverse_arrow(this)" id=must_mash>Use in mash <img src="/static/images/arrow_up.png" id=must_mash_arrow></th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+			<div id=yeast_browser>
+				<table id=yeast_table>
+					<thead>
+						<tr>
+							<th></th>
+							<th onclick="b.reverse_arrow(this)" id=yeast_id>Yeast ID <img src="/static/images/arrow_up.png" id=yeast_id_arrow></th>
+							<th onclick="b.reverse_arrow(this)" id=lab>Lab <img src="/static/images/arrow_up.png" id=lab_arrow></th>
+							<th onclick="b.reverse_arrow(this)" id=name>Name <img src="/static/images/arrow_up.png" id=name_arrow></th>					
+							<th onclick="b.reverse_arrow(this)" id=yeast_type>Type <img src="/static/images/arrow_up.png" id=yeast_type_arrow></th>
+							<th onclick="b.reverse_arrow(this)" id=flocc>Flocc. <img src="/static/images/arrow_up.png" id=flocc_arrow></th>					
+							<th onclick="b.reverse_arrow(this)" id=avg_attenuation>Avg. Attenuation <img src="/static/images/arrow_up.png" id=avg_attenuation_arrow></th>
+							<th onclick="b.reverse_arrow(this)" id=max_temp>Max Temp <img src="/static/images/arrow_up.png" id=max_temp_arrow></th>					
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+			<div id=misc_browser>
+			</div>
+		</div>
+		<!-- hidden fields for internal accounting -->
+		{{ data.form.csrf }}{{ data.form.brewer(value=session.get('user_id')) }}{{ data.form.hops }}
+		{{ data.form.grains }}{{ data.form.extracts }}{{ data.form.hopped_extracts }}{{ data.form.mineral }}
+		{{ data.form.fining }}{{ data.form.flavor }}{{ data.form.spice }}{{ data.form.herb }}{{ data.form.mash_data }}
+		<h1>General</h1>
+		<section>
+			<div>{{ data.form.name.label }}{{ data.form.name(style="width: 100px;") }}</div>
+			<div>{{ data.form.style.label }}{{ data.form.style(onchange="b.set_style(this.value)") }}</div>
+			<div>{{ data.form.recipe_type.label }}{{ data.form.recipe_type(onchange="b.set_recipe(this.value)") }}</div>
+			<div>{{ data.form.efficiency.label }}{{ data.form.efficiency(style="width: 50px", step="0.1") }}%</div>
+			<br>
+			<div>{{ data.form.boil_volume.label }}{{ data.form.boil_volume(style="width: 50px;", step="0.1") }}{{ data.form.boil_volume_units }}</div>
+			<div>{{ data.form.batch_volume.label }}{{ data.form.batch_volume(style="width: 50px;", step="0.1") }}{{ data.form.batch_volume_units }}</div>
+			<div>{{ data.form.equipment.label }}{{ data.form.equipment }}</div>
+			<div>{{ data.form.base_boil_equipment }}{{ data.form.base_boil_equipment.label }}</div>
+			<br>
+		</section>
+		<h1>Statistics</h1>
+		<section>
+			<h3>Recipe</h3>
+			<div>{{ data.form.og.label }}</div><div>{{ data.form.og(disabled="disabled", style="width: 90px;") }}</div>
+			<div>{{ data.form.fg.label }}</div><div>{{ data.form.fg(disabled="disabled", style="width: 90px;") }}</div>
+			<div>{{ data.form.color.label }}</div><div>{{ data.form.color(disabled="disabled", style="width: 90px;") }}</div>
+			<div>{{ data.form.ibu.label }}</div><div>{{ data.form.ibu(disabled="disabled", style="width: 90px;") }}</div>
+			<div><label for="abv">A.B.V.</label></div><div><input type="text" style="width: 90px;" disabled></div>
+			<div><label for="bitt_ratio">IBU/GU</label></div><div><input style="width: 90px;" type="text" disabled></div>
+			<br>
+			<h3>Style</h3>
+			<div><label for="style_og">O.G.</label></div><div><input type=text id=style_og disabled style="width: 90px;"></div>
+			<div><label for="style_fg">F.G.</label></div><div><input type=text id=style_fg disabled style="width: 90px;"></div>
+			<div><label for="style_srm">Color</label></div><div><input type=text id=style_srm disabled style="width: 90px;"></div>
+			<div><label for="style_ibu">IBUs</label></div><div><input type=text id=style_ibu disabled style="width: 90px;"></div>
+			<div><label for="style_abv">A.B.V.</label></div><div><input type=text id=style_abv style="width: 90px;" disabled></div>
+			<br>
+		</section>
+		<h1>Ingredients</h1>
+		<section>
+			<div>
+				<table id=ingredients>
+					<thead>
+						<tr>
+							<th class=select_all><input type=checkbox onclick="b.toggle_select('ingredients')"></th>
+							<th onclick="b.reverse_arrow(this)" id=ingredient>Ingredient <img src="/static/images/arrow_up.png" id=ingredient_arrow></th>
+							<th onclick="b.reverse_arrow(this)" id=type>Type <img src="/static/images/arrow_up.png" id=type_arrow></th>
+							<th onclick="b.reverse_arrow(this)" id=use>Use <img src="/static/images/arrow_up.png" id=use_arrow></th>
+							<th onclick="b.reverse_arrow(this)" id=percent>% <img src="/static/images/arrow_up.png" id=percent_arrow></th>
+							<th onclick="b.reverse_arrow(this)" id=time>Time <img src="/static/images/arrow_up.png" id=time_arrow></th>
+							<th onclick="b.reverse_arrow(this)" id=amount>Amount <img src="/static/images/arrow_up.png" id=amount_arrow></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr id="ingredients_blank_list">
+							<td colspan="7">This list is empty</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<br>
+			<input type="button" onclick="b.show_ingredients(this)" id="hop" value="Add Hops">
+			<input type="button" onclick="b.show_ingredients(this)" id="fermentable" value="Add Fermentables">
+			<input type="button" onclick="b.show_ingredients(this)" id="misc" value="Add Misc">
+			<input type="button" onclick="b.show_ingredients(this)" id="yeast" value="Add Yeast">
+			<input type="button" onclick="b.remove_row('ingredients', 0)" id="remove_ingredient" value="Delete Ingredient">
+			<br>
+		</section>
+		<div style="float: left; width: 33%; padding-right: 5px;">
+			<h1>Carbonation</h1>
+			<section>
 				<div style="width: 30%">{{ data.form.carbonation_type.label }}</div><div>{{ data.form.carbonation_type }}</div><br>
 				<div style="width: 30%">{{ data.form.carbonation_sugar_amount.label }}</div><div>{{ data.form.carbonation_sugar_amount }}{{ data.form.carbonation_sugar_units }}</div><br>
 				<div style="width: 30%">{{ data.form.carbonation_volume.label }}</div><div>{{ data.form.carbonation_volume }}</div><br>
-			</div>
+			</section>
 		</div>
-	</div>
-</div>
-<div class=recipe_section style="float: left; margin-left: 5px; width: 30%;">
-	<div style="width: 100%;">
-		<span class=section_title>Fermentation &amp; Aging</span><br>
-		<div style="width: 100%;">
-			<div style="width: 23%">{{ data.form.fermentation_type.label }}</div><div>{{ data.form.fermentation_type(onchange="set_fermentation(this.value)") }}</div><br>
-			<div style="width: 20%" id=stage_1_label>{{ data.form.stage_1_temp.label }}</div><div id=stage_1_data>{{ data.form.stage_1_temp(style="width: 50px;")}}{{ data.form.stage_1_temp_units}}</div><div id=stage_1_time>{{ data.form.stage_1_time(style="width: 50px;")}}{{ data.form.stage_1_time_units }}</div><br>
-			<div style="width: 20%" id=stage_2_label>{{ data.form.stage_2_temp.label }}</div><div id=stage_2_data>{{ data.form.stage_2_temp(style="width: 50px;")}}{{ data.form.stage_2_temp_units}}</div><div id=stage_2_time>{{ data.form.stage_2_time(style="width: 50px;")}}{{ data.form.stage_2_time_units }}</div><br>
-			<div style="width: 20%" id=stage_3_label>{{ data.form.stage_3_temp.label }}</div><div id=stage_3_data>{{ data.form.stage_3_temp(style="width: 50px;")}}{{ data.form.stage_3_temp_units}}</div><div id=stage_3_time>{{ data.form.stage_3_time(style="width: 50px;")}}{{ data.form.stage_3_time_units }}</div><br>
-		</div><br>
-	</div>
-</div>
-<div class=recipe_section id=mash_section style="float: left; margin-left: 5px; width: 38%;">
-	<div>
-		<span class=section_title>Mash</span><br>
-		<div>
-			<div>{{ data.form.mash.label }}{{ data.form.mash }}</div><div>{{ data.form.adjust_mash_temp_equipment }}{{ data.form.adjust_mash_temp_equipment.label }}</div><br>
-		</div><br>
-		<div style="width: 100%;">
-			<table id=mashes>
-				<thead>
-					<tr>
-						<th class=select_all><input type=checkbox onclick="b.toggle_select('mashes')"></th>
-						<th onclick="r everse_arrow(this)" id=step>Step <img src="/static/images/arrow_up.png" id=step_arrow></th>
-						<th onclick="b.reverse_arrow(this)" id=temp>Temperature <img src="/static/images/arrow_up.png" id=temp_arrow></th>
-						<th onclick="b.reverse_arrow(this)" id=duration>Duration <img src="/static/images/arrow_up.png" id=duration_arrow></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr id="ingredients_blank_list">
-						<td colspan="4">This list is empty</td>
-					</tr>
-					
-				</tbody>
-			</table>
-		</div><br>
-		<input type="button" value="add step">
-		<input type="button" value="remove step">
-		<input type="button" value="move up">
-		<input type="button" value="move down">
-	</div>
-</div>
-<br style="clear: both;">
+		<div style="float: left; width: 33%; padding-right: 5px;">
+			<h1>Fermentation &amp; Aging</h1>
+			<section>
+				<div style="width: 23%">{{ data.form.fermentation_type.label }}</div><div>{{ data.form.fermentation_type(onchange="b.set_fermentation(this.value)") }}</div><br>
+				<div style="width: 20%" id=stage_1_label>{{ data.form.stage_1_temp.label }}</div><div id=stage_1_data>{{ data.form.stage_1_temp(style="width: 50px;")}}{{ data.form.stage_1_temp_units}}</div><div id=stage_1_time>{{ data.form.stage_1_time(style="width: 50px;")}}{{ data.form.stage_1_time_units }}</div><br>
+				<div style="width: 20%" id=stage_2_label>{{ data.form.stage_2_temp.label }}</div><div id=stage_2_data>{{ data.form.stage_2_temp(style="width: 50px;")}}{{ data.form.stage_2_temp_units}}</div><div id=stage_2_time>{{ data.form.stage_2_time(style="width: 50px;")}}{{ data.form.stage_2_time_units }}</div><br>
+				<div style="width: 20%" id=stage_3_label>{{ data.form.stage_3_temp.label }}</div><div id=stage_3_data>{{ data.form.stage_3_temp(style="width: 50px;")}}{{ data.form.stage_3_temp_units}}</div><div id=stage_3_time>{{ data.form.stage_3_time(style="width: 50px;")}}{{ data.form.stage_3_time_units }}</div><br>
+			</section>
+		</div>
+		<div style="float: left; width: 33%;">
+			<h1>Mash</h1>
+			<section id=mash_section style="padding-left: 5px; padding-right: 5px;">
+				<div>{{ data.form.mash.label }}{{ data.form.mash }}</div><div>{{ data.form.adjust_mash_temp_equipment }}{{ data.form.adjust_mash_temp_equipment.label }}</div><br>
+				<table id=mashes>
+					<thead>
+						<tr>
+							<th class=select_all><input type=checkbox onclick="b.toggle_select('mashes')"></th>
+							<th onclick="b.reverse_arrow(this)" id=step>Step <img src="/static/images/arrow_up.png" id=step_arrow></th>
+							<th onclick="b.reverse_arrow(this)" id=temp>Temperature <img src="/static/images/arrow_up.png" id=temp_arrow></th>
+							<th onclick="b.reverse_arrow(this)" id=duration>Duration <img src="/static/images/arrow_up.png" id=duration_arrow></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr id="ingredients_blank_list">
+							<td colspan=4>This list is empty</td>
+						</tr>
+					</tbody>
+				</table><br>
+				<input type=button value="add step">
+				<input type=button value="remove step">
+				<input type=button value="move up">
+				<input type=button value="move down">
+			</section>
+		</div>
+		<br style="clear: both;">
 		<p><input type=submit value="{% if data.recipe.id %}Edit{% else %}Create{% endif %} Recipe">
 	</form>
 </div>

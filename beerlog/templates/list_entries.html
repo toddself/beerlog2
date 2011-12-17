@@ -9,7 +9,7 @@
 </script>
 {% endblock %}
 {% block body %}
-<div class="content_body">
+<section id=content>
 	<ul>
 		{% for entry in entries %}
 			<li>
@@ -36,11 +36,10 @@
 					</form>
 				</div>
 			</li>
-			<hr>
 		{% else %}
 			<li>No entries matched your request</li>
 		{% endfor %}
 	</ul>
-</div>
+</section>
 {% endblock %}
 {% block iframe %}{% endblock %}	

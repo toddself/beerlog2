@@ -31,17 +31,19 @@
 		</script>
 		{% endblock %}
 	</head>
-	<body {% block bodystyle %}{% endblock %}>
+	<body>
 		<a name="pagetop"></a>
 		{% block flash %}
 		{% for message in get_flashed_messages() %}
-			<div class="flash">{{ message|safe }}<div style="float: right; margin-right: 20px;"><a href="#" onclick="$('.flash').hide('fast')">x</a></div></div>
+			<section class=flash>{{ message|safe }}<div class=close><a href="#" onclick="$('.flash').hide('fast')">x</a></div></section>
 		{% endfor %}
 		{% endblock %}
 		{% block nav %}
 		<nav>
-			<a href="/"><img src="/static/images/logo_top2.png" class="logo" alt="Gute Saufen"></a><hr>
-			<a href="/"><img src="/static/images/logo_bottom.png" class="logo" alt="Gute Saufen"></a><br>
+			<ul>
+				<li><a href="/"><img src="/static/images/logo_top2.png" alt="Gute"></a>
+				<li><a href="/"><img src="/static/images/logo_bottom.png" alt="Saufen"></a>
+			</ul>
 			<h1>Recipes</h1>
 			<ul>
 				<li><a href="/brewery/">browse</a>
@@ -49,7 +51,7 @@
 				<li><a href="/brewery/recipe/edit/">create</a>
 			    {% endif %}
 			</ul>
-			<hr>
+			<br>
 			<h1>Blog</h1>
 			<ul>
 				<li><a href="{{ url_for('list_entries') }}">latest</a>
@@ -59,7 +61,7 @@
 				<li><a href="{{ url_for('edit_entry') }}">create</a>
 				{% endif %}
 			</ul>
-			<hr><br>
+			<br>
 			<h1>Admin</h1>
 			<ul>
 				{% if not session.logged_in %}
@@ -68,7 +70,7 @@
 				<li><a href="{{ url_for('edit_user', user_id=session.user_id) }}">edit profile</a>
 				<li><a href="{{ url_for('list_users') }}">list users</a>
 				<li><a href="{{ url_for('create_user') }}">create user</a>
-				<li><a href="{{ url_for('logout') }}">log out</a><br>
+				<li><a href="{{ url_for('logout') }}">log out</a>
 				{% endif %}
 			</ul>
 		</nav>

@@ -23,7 +23,8 @@ function display_style(category_id){
 </script>
 {% endblock %}
 {% block body %}
-<div class="content_body" style="width: 25%;">
+<section id="content">
+	<div style="width: 25%; float: left;">
 	<h2>BJCP Styles</h2>
 	<ul>
 		{% for category in styles %}
@@ -37,7 +38,7 @@ function display_style(category_id){
 		{% endfor %}
 	</ul>
 </div>
-<div class="content_body" style="width: 50%;">
+<div style="width: 50%; float: left;">
 	<a name="description"></a>
 	<dl class="subcat" id="bjcp_data">
 		<dt>Category</dt>

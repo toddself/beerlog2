@@ -1,24 +1,24 @@
 {% extends "layout.html" %}
 {% block title %}&#187; User Admin{% endblock %}
 {% block body %}
-<div class="content_body">
+<section id=content>
 <ul>
-	<li class="row header">&nbsp;
-		<div class="column">Name</div>
-		<div class="column">E-Mail</div>
-		<div class="column">Alias</div>
-		<div class="column">Last Login</div>
+	<li class=row>&nbsp;
+		<div class=column>Name</div>
+		<div class=column>E-Mail</div>
+		<div class=column>Alias</div>
+		<div class=column>Last Login</div>
 	</li>
 	{% for user in data.users %}
-		<li class="row">&nbsp;
-			<div class="column"><a href="{{ url_for('edit_user', user_id=user.id) }}">{{ user.first_name }} {{ user.last_name }}</a></div>
-			<div class="column">{{ user.email }}</div>
-			<div class="column">{{ user.alias }}</div>
-			<div class="column">{{ user.last_login|dateformat }}</div>
+		<li class=row>&nbsp;
+			<div class=column><a href="{{ url_for('edit_user', user_id=user.id) }}">{{ user.first_name }} {{ user.last_name }}</a></div>
+			<div class=column>{{ user.email }}</div>
+			<div class=column>{{ user.alias }}</div>
+			<div class=column>{{ user.last_login|dateformat }}</div><br>
 		</li>
 	{% else %}
-		<li class="row">
-			<div class="column">No entries matched your request</div>
+		<li class=row>
+			<div class=column>No entries matched your request</div>
 		</li>
 	{% endfor %}
 </ul>

@@ -1,6 +1,5 @@
 {% from "_formhelper.html" import render_field %}
 {% extends "layout.html" %}
-{% block bodystyle %}class="background_override"{% endblock %}
 {% block flash %}{% endblock %}
 {% block nav %}{% endblock %}
 {% block body %}
@@ -18,7 +17,7 @@
 		}
 		
 	</script>
-		<div class="content_body" style="margin-left: 0px !important;">
+		<section id=content style="margin-left: 0px !important;">
 			<p>
 			{% for image in data.images %}
 				<a href="#">
@@ -29,6 +28,6 @@
 					     onclick="return_image(this.id)">
 					</a>
 			{% endfor %}
-		</div>
+		</content>
 		<input type=hidden id=image>
 {% endblock %}
