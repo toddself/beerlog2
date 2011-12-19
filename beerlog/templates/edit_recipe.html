@@ -42,7 +42,7 @@
 					<label for=hop_amount>Amount</label> <input type="text" id=hop_amount><select id=hop_amount_measure><option value=6>g</option><option value=7>oz</option></select>
 					<label for=hop_use>Use in</label> <select id=hop_use><option value="0">Mash</option><option value="1">First Wort</option><option value="2" selected>Boil</option><option value="3">Flameout</option><option value="4">Whirlpool</option><option value="6">Dry Hop</option></select>
 					<label for=hop_time>Time</label> <input type="text" id=hop_time><select id=hop_time_measure><option value=0>Minutes</option><option value=6>Days</option></select>
-					<input type=button value="Add Hop" onclick="b.add_ingredient('hop')">
+					<input type=button value="Add Hop" onclick="b.add_hop();">
 				</div>
 			</div>
 			<div class=browser id=fermentable_browser>
@@ -65,6 +65,7 @@
 				</div><br style="clear: both;">
 				<div class=scroller style="border: 0px !important;">
 					<label for=fermentable_amount>Amount</label> <input type="text" id=fermentable_amount><select id=fermentable_amount_measure><option value=6>g</option><option value=14>kg</option><option value=7>oz</option><option value=11>lbs</option></select>
+					<input onclick="$('#late_boil_info').toggle();" type=checkbox id=late_boil_enable><label for=late_boil_enable>Late boil</label> <span id=late_boil_info><label for=fermentable_late_boil_> for:</label> <input type=text id=fermentable_late_boil_time> minutes</span>
 					<input type=button value="Add Fermentable" onclick="b.add_ingredient('fermentable')">
 				</div>
 			</div>
@@ -89,6 +90,8 @@
 					</table>
 				</div><br style="clear: both;">
 				<div class=scroller style="border: 0px !important;">
+					<input onclick="$('#yeast_starter_info').toggle();" type=checkbox value=yes id=yeast_starter> <label for=yeast_starter>Make starter</label> <span id=yeast_starter_info><label for=yeast_starter_size> size: <input type=text id=yeast_starter_size><select id=yeast_starter_size_measure><option value=34>qt</option><option value=37>l</option></select></span>
+					
 					<input type=button value="Add Yeast" onclick="b.add_ingredient('yeast')">
 				</div>
 			</div>

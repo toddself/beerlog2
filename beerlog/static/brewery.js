@@ -1,3 +1,9 @@
+function dynamicSort(property) {
+    return function (a,b) {
+        return (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+    }
+}
+
 Brewery = function(){
     this.init();
 }
@@ -17,11 +23,15 @@ $.extend(Brewery.prototype, {
                 'tbsp', 'tablespoon', 'tablespoons', 'cup', 'cups', 'pt',
                 'pint', 'pints', 'qt', 'quart', 'quarts', 'l', 'liter',
                 'liters', 'gal', 'gallon', 'gallons', 'items', 'item'],
+    ingredients: [],
+    mashes: [],
     init: function(){
        this.set_fermentation(1);
        $.each($('#browsers').children(), function(index, value){
            $(value).hide();
        })
+       $('#yeast_starter_info').hide();
+       $('#late_boil_info').hide();
     },
     set_style: function(style_id){
       	$.getJSON('/brewery/bjcp/style/'+style_id+'/json/', function(data) {
@@ -66,6 +76,33 @@ $.extend(Brewery.prototype, {
                 }
             })
         }
+    },
+    clear_table: function(table){
+        $.each($('#'+table+' tbody tr'), function(idx, val){
+            this.remove_row(table, val);
+        })
+        
+    }, 
+    populate_table: function(table){
+        for(var i=1; i<=Object.keys(this[table]); i++){
+            this.append_row(table, this[table][i], true, true);
+        }
+    },
+    add_ingredient: function(ingredient){
+        this.append_row('ingredients', ingredient, true, true);      
+        this.add_ingredient_to_kind_list(ingredient.type.toLowerCase(), ingredient)
+        this.ingredients.push(ingredient);
+        this.recalculate_recipe();
+    },
+    delete_ingredient: function(ingredient){
+        $.each($('#'+data_grid).find('tr.selected'), function(row_index, row_value){
+            var row_num = this.get_selected_row_id(row_value);
+            var obj = this[data_grid][row_num];
+            var ingredient = obj.type.toLowerCase();
+            this.ingredients.split(row_num, 1);
+            remove_row('ingredients', row_num);
+            this.delete_ingredient_from_kind_list(ingredient.type, ingredient)
+        });
     },
     append_row: function(data_grid, data_row, multiple, checkbox){
         selector = function(id, widget, name){
@@ -138,19 +175,41 @@ $.extend(Brewery.prototype, {
 
         }.bind(this));
     },
-    add_ingredient: function(ingredient){
-        var data_grid = '#'+ingredient+"_table";
-        var item_row = $(data_grid+' tr.selected').attr('id')
-        var item_number = item_row[item_row.length-1];
-        var item_name = $('#name'+item_number).html();
-        var item_obj = b[ingredient][item_name];
-        var usage = $('#'+ingredient+'_use').val();
-        var time = $('#'+ingredient+'_time').val();
-        var time_measure = $('#'+ingredient+'_time_measure').val();
-        var amount = $('#'+ingredient+'_amount').val();
-        var amount_measure = $('#'+ingredient+'_amount_measure').val();
+    add_ingredient_to_kind_list: function(ingredient, obj){
+        if($('#'+ingredient).val()){
+            var ingredients_store = JSON.parse($('#'+ingredient).val());
+        } else {
+            var ingredients_store = [];
+        }
+        ingredients_store.push(obj);
+        $('#'+ingredient).val(JSON.stringify(ingredients_store));        
+    },
+    delete_ingredient_from_kind_list: function(ingredient, obj){
+        if($('#'+ingredient).val()){
+            var ingredients_store = JSON.parse($('#'+ingredient).val());
+            $.each(ingredients_store, function(idx, val){
+                if((val.name === obj.name) &&
+                   (val.amount === obj.amount) &&
+                   (val.time === obj.time) &&
+                   (val.use == obj.use)){
+                       ingredients_store.splice(idx, 1);
+               }
+           });
+        }
+    },
+    get_selected_row_id: function(row_identifier){
+      var item_row = $(row_identifier).attr('id');
+      return item_row[item_row.length-1];  
+    },
+    add_hop: function(){
+        var item_name = $('#name'+this.get_selected_row_id('#hop_table tr.selected')).html();
+        var usage = $('#hop_use').val();
+        var time = $('#hop_time').val();
+        var time_measure = $('#hop_time_measure').val();
+        var amount = $('#hop_amount').val();
+        var amount_measure = $('#hop_amount_measure').val();
         var percentage = this.calculate_percentage(ingredient, amount);
-        var ing_obj = b[ingredient][item_name];
+        var ing_obj = b.hop[item_name];
         ing_obj['amount'] = amount+' '+this.amounts[amount_measure];
         ing_obj['amount_measure'] = amount_measure;
         ing_obj['time'] = time+' '+this.timing[time_measure];
@@ -159,15 +218,8 @@ $.extend(Brewery.prototype, {
         ing_obj['usage_id'] = usage;
         ing_obj['use'] = this.uses[usage];
         ing_obj['ingredient'] = item_name;
-        ing_obj['type'] = ingredient[0].toUpperCase()+ingredient.substr(1, ingredient.length);
-        if($('#'+ingredient).val()){
-            var ingredients_store = JSON.parse($('#'+ingredient).val());
-        } else {
-            var ingredients_store = [];
-        }
-        ingredients_store.push(ing_obj);
-        $('#'+ingredient).val(JSON.stringify(ingredients_store));
-        this.append_row('ingredients', ing_obj, true, true);
+        ing_obj['type'] = "Hop";
+        this.add_ingredient(ing_obj)
     },
     select_row: function(row, multiple, checkbox){        
         if($(row).attr('class') === 'selected'){
@@ -179,9 +231,15 @@ $.extend(Brewery.prototype, {
                 })
             }
             $(row).addClass('selected');
+            if(checkbox === true){
+                $(row).find('input[type=checkbox]').click();
+            }
         }
     },
     calculate_percentage: function(){
         return '100%';
+    },
+    recalculate_recipe: function(){
+        return '';
     }
 })
