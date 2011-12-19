@@ -17,13 +17,6 @@ class Hop(SQLObject):
     PLUG = 2
     hop_types = ['Bittering', 'Aroma', 'Both',]
     hop_forms = ['Leaf', 'Pellet', 'Plug',]
-    MASH=0
-    FIRST_WORT=1
-    BOIL=2
-    FLAMEOUT=3
-    WHIRLPOOL=4
-    DRY=5
-    hop_uses = ['Mash', 'First Wort', 'Boil', 'Flameout', 'Whirlpool', 'Dry Hop']
 
     hop_type = IntCol(default=BITTERING)
     hop_form = IntCol(default=LEAF)
@@ -141,7 +134,7 @@ class Yeast(SQLObject, Measure):
     MEDIUM = 1
     HIGH = 2
     VERY_HIGH = 3
-    yeast_flocculations = ['Low','Medium','High','Very High', ]
+    yeast_flocculations = ['Low', 'Medium', 'High', 'Very High', ]
 
     name = UnicodeCol(length=64, default=None)
     lab = UnicodeCol(length=255, default=None)
@@ -213,11 +206,15 @@ class Misc(SQLObject, Measure):
     WATER_AGENT = 5
     misc_types = ['Spice', 'Fining', 'Herb', 'Flavor', 'Other', 'Water Agent']
     MASH = 0
-    BOIL = 1
-    PRIMARY = 2
-    SECONDARY = 3
-    BOTTLING = 4
-    misc_use_ins = ['Mash', 'Boil', 'Primary', 'Secondary', 'Bottling']
+    FIRST_WORT = 1
+    BOIL = 2
+    FLAMEOUT = 3
+    WHIRLPOOL = 4
+    PRIMARY = 5
+    SECONDARY = 6
+    BOTTLING = 7
+    misc_use_ins = ['Mash', 'First Wort', 'Boil', 'Flameout', 'Whirlpool', 
+                    'Primary', 'Secondary', 'Bottling']
 
     name = UnicodeCol(length=64, default=None)
     use_for = UnicodeCol(default=None)

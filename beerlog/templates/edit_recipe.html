@@ -39,50 +39,65 @@
 					</table>
 				</div><br style="clear: both;">
 				<div class=scroller style="border: 0px !important;">
-					<label for=hop_amount>Amount</label> <input type="text" id=hop_amount>
-					<label for=hop_use>Use in</label> <select id=hop_use><option value="0">Mash</option><option value="1">First Wort</option><option value="2" selected>Boil</option><option value="3">Flameout</option><option value="4">Whirlpool</option><option value="5">Dry Hop</option></select>
-					<label for=hop_time>Time</label> <input type="text" id=hop_time>
+					<label for=hop_amount>Amount</label> <input type="text" id=hop_amount><select id=hop_amount_measure><option value=6>g</option><option value=7>oz</option></select>
+					<label for=hop_use>Use in</label> <select id=hop_use><option value="0">Mash</option><option value="1">First Wort</option><option value="2" selected>Boil</option><option value="3">Flameout</option><option value="4">Whirlpool</option><option value="6">Dry Hop</option></select>
+					<label for=hop_time>Time</label> <input type="text" id=hop_time><select id=hop_time_measure><option value=0>Minutes</option><option value=6>Days</option></select>
 					<input type=button value="Add Hop" onclick="b.add_ingredient('hop')">
 				</div>
 			</div>
-			<div id=fermentable_browser>
-				<table id=fermentable_table>
-					<thead>
-						<tr>
-							<th onclick="b.reverse_arrow(this)" id=name>Name <img src="/static/images/arrow_up.png" id=name_arrow></th>
-							<th onclick="b.reverse_arrow(this)" id=color>Color <img src="/static/images/arrow_up.png" id=color_arrow></th>
-							<th onclick="b.reverse_arrow(this)" id=potential>Potential <img src="/static/images/arrow_up.png" id=potential_arrow></th>
-							<th onclick="b.reverse_arrow(this)" id=max_in_batch>Max % <img src="/static/images/arrow_up.png" id=max_in_batch_arrow></th>					
-							<th onclick="b.reverse_arrow(this)" id=must_mash>Use in mash <img src="/static/images/arrow_up.png" id=must_mash_arrow></th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
+			<div class=browser id=fermentable_browser>
+				<div class=close onclick="$(this).parent().hide()">x</div>
+				<h1>Fermentables</h1>
+				<div class=scroller>
+					<table id=fermentable_table>
+						<thead>
+							<tr>
+								<th onclick="b.reverse_arrow(this)" id=name>Name <img src="/static/images/arrow_up.png" id=name_arrow></th>
+								<th onclick="b.reverse_arrow(this)" id=color>Color <img src="/static/images/arrow_up.png" id=color_arrow></th>
+								<th onclick="b.reverse_arrow(this)" id=potential>Potential <img src="/static/images/arrow_up.png" id=potential_arrow></th>
+								<th onclick="b.reverse_arrow(this)" id=max_in_batch>Max % <img src="/static/images/arrow_up.png" id=max_in_batch_arrow></th>					
+								<th onclick="b.reverse_arrow(this)" id=must_mash>Use in mash <img src="/static/images/arrow_up.png" id=must_mash_arrow></th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div><br style="clear: both;">
+				<div class=scroller style="border: 0px !important;">
+					<label for=fermentable_amount>Amount</label> <input type="text" id=fermentable_amount><select id=fermentable_amount_measure><option value=6>g</option><option value=14>kg</option><option value=7>oz</option><option value=11>lbs</option></select>
+					<input type=button value="Add Fermentable" onclick="b.add_ingredient('fermentable')">
+				</div>
 			</div>
-			<div id=yeast_browser>
-				<table id=yeast_table>
-					<thead>
-						<tr>
-							<th onclick="b.reverse_arrow(this)" id=yeast_id>Yeast ID <img src="/static/images/arrow_up.png" id=yeast_id_arrow></th>
-							<th onclick="b.reverse_arrow(this)" id=lab>Lab <img src="/static/images/arrow_up.png" id=lab_arrow></th>
-							<th onclick="b.reverse_arrow(this)" id=name>Name <img src="/static/images/arrow_up.png" id=name_arrow></th>					
-							<th onclick="b.reverse_arrow(this)" id=yeast_type>Type <img src="/static/images/arrow_up.png" id=yeast_type_arrow></th>
-							<th onclick="b.reverse_arrow(this)" id=flocc>Flocc. <img src="/static/images/arrow_up.png" id=flocc_arrow></th>					
-							<th onclick="b.reverse_arrow(this)" id=avg_attenuation>Avg. Attenuation <img src="/static/images/arrow_up.png" id=avg_attenuation_arrow></th>
-							<th onclick="b.reverse_arrow(this)" id=max_temp>Max Temp <img src="/static/images/arrow_up.png" id=max_temp_arrow></th>					
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
+			<div id=yeast_browser class=browser>
+				<div class=close onclick="$(this).parent().hide()">x</div>
+				<h1>Yeast</h1>
+				<div class=scroller>
+					<table id=yeast_table>
+						<thead>
+							<tr>
+								<th onclick="b.reverse_arrow(this)" id=yeast_id>Yeast ID <img src="/static/images/arrow_up.png" id=yeast_id_arrow></th>
+								<th onclick="b.reverse_arrow(this)" id=lab>Lab <img src="/static/images/arrow_up.png" id=lab_arrow></th>
+								<th onclick="b.reverse_arrow(this)" id=name>Name <img src="/static/images/arrow_up.png" id=name_arrow></th>					
+								<th onclick="b.reverse_arrow(this)" id=yeast_type>Type <img src="/static/images/arrow_up.png" id=yeast_type_arrow></th>
+								<th onclick="b.reverse_arrow(this)" id=flocc>Flocc. <img src="/static/images/arrow_up.png" id=flocc_arrow></th>					
+								<th onclick="b.reverse_arrow(this)" id=avg_attenuation>Avg. Attenuation <img src="/static/images/arrow_up.png" id=avg_attenuation_arrow></th>
+								<th onclick="b.reverse_arrow(this)" id=max_temp>Max Temp <img src="/static/images/arrow_up.png" id=max_temp_arrow></th>					
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div><br style="clear: both;">
+				<div class=scroller style="border: 0px !important;">
+					<input type=button value="Add Yeast" onclick="b.add_ingredient('yeast')">
+				</div>
 			</div>
 			<div id=misc_browser>
 			</div>
 		</div>
 		<!-- hidden fields for internal accounting -->
-		{{ data.form.csrf }}{{ data.form.brewer(value=session.get('user_id')) }}{{ data.form.hops }}
-		{{ data.form.grains }}{{ data.form.extracts }}{{ data.form.hopped_extracts }}{{ data.form.mineral }}
+		{{ data.form.csrf }}{{ data.form.brewer(value=session.get('user_id')) }}{{ data.form.hop }}
+		{{ data.form.grain }}{{ data.form.extract }}{{ data.form.hopped_extract }}{{ data.form.mineral }}
 		{{ data.form.fining }}{{ data.form.flavor }}{{ data.form.spice }}{{ data.form.herb }}{{ data.form.mash_data }}
 		<h1>General</h1>
 		<section>

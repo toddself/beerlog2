@@ -8,7 +8,15 @@ $.extend(Brewery.prototype, {
              'fermentable_table': {'1': 'name', '2': 'color', '3': 'potential', '4': 'max_in_batch', '5': 'must_mash'},
              'yeast_table': {'1': 'yeast_id', '2': 'lab', '3': 'name', '4': 'yeast_type', '5': 'flocc', '6': 'avg_attenuation', '7': 'max_temp'}
     },
-    uses: ['Mash', 'First Wort', 'Boil', 'Flameout', 'Whirlpool', 'Dry Hop'],
+    uses: ['Mash', 'First Wort', 'Boil', 'Flameout', 'Whirlpool', 'Primary', 'Secondary', 'Bottling'],
+    timing: ['min', 'minute', 'minutes', 'hrs', 'hour', 'hours', 'days', 'day', 'weeks', 'week', 'hr'],
+    amounts: ['mg', 'milligram', 'milligrams', 'gm', 'grams', 'gram', 'g', 
+                'oz', 'ounces', 'ounce', 'lb', 'lbs', 'pounds', 'pound', 'kg', 
+                'kilos', 'kilograms', 'kilogram', 'ml', 'milliliters',
+                'milliliter', 'mils', 'tsp', 'teaspoon', 'teaspoons', 'tbls', 
+                'tbsp', 'tablespoon', 'tablespoons', 'cup', 'cups', 'pt',
+                'pint', 'pints', 'qt', 'quart', 'quarts', 'l', 'liter',
+                'liters', 'gal', 'gallon', 'gallons', 'items', 'item'],
     init: function(){
        this.set_fermentation(1);
        $.each($('#browsers').children(), function(index, value){
@@ -138,14 +146,27 @@ $.extend(Brewery.prototype, {
         var item_obj = b[ingredient][item_name];
         var usage = $('#'+ingredient+'_use').val();
         var time = $('#'+ingredient+'_time').val();
+        var time_measure = $('#'+ingredient+'_time_measure').val();
         var amount = $('#'+ingredient+'_amount').val();
+        var amount_measure = $('#'+ingredient+'_amount_measure').val();
         var percentage = this.calculate_percentage(ingredient, amount);
-        var ing_obj = {'ingredient': item_name, 
-                       'type': ingredient,
-                       'use': this.uses[usage],
-                       'percent': percentage,
-                       'time': time,
-                       'amount': amount};        
+        var ing_obj = b[ingredient][item_name];
+        ing_obj['amount'] = amount+' '+this.amounts[amount_measure];
+        ing_obj['amount_measure'] = amount_measure;
+        ing_obj['time'] = time+' '+this.timing[time_measure];
+        ing_obj['time_measure'] = time_measure;
+        ing_obj['percent'] = percentage;
+        ing_obj['usage_id'] = usage;
+        ing_obj['use'] = this.uses[usage];
+        ing_obj['ingredient'] = item_name;
+        ing_obj['type'] = ingredient[0].toUpperCase()+ingredient.substr(1, ingredient.length);
+        if($('#'+ingredient).val()){
+            var ingredients_store = JSON.parse($('#'+ingredient).val());
+        } else {
+            var ingredients_store = [];
+        }
+        ingredients_store.push(ing_obj);
+        $('#'+ingredient).val(JSON.stringify(ingredients_store));
         this.append_row('ingredients', ing_obj, true, true);
     },
     select_row: function(row, multiple, checkbox){        
@@ -163,4 +184,4 @@ $.extend(Brewery.prototype, {
     calculate_percentage: function(){
         return '100%';
     }
-}) // 8116921 jose
+})

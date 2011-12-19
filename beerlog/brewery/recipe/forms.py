@@ -152,10 +152,10 @@ class RecipeForm(Form):
     #            "amount": ingredient amount & unit}
     #            "use": where ingredient is used
     #            "time": amount of time from end of boil thing should be used}]
-    hops = TextField(widget=HiddenInput())
-    grains = TextField(widget=HiddenInput())
-    extracts = TextField(widget=HiddenInput())
-    hopped_extracts = TextField(widget=HiddenInput())
+    hop = TextField(widget=HiddenInput())
+    grain = TextField(widget=HiddenInput())
+    extract = TextField(widget=HiddenInput())
+    hopped_extract = TextField(widget=HiddenInput())
     mineral = TextField(widget=HiddenInput())
     fining = TextField(widget=HiddenInput())
     flavor = TextField(widget=HiddenInput())
