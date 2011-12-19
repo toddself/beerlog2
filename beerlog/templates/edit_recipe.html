@@ -26,7 +26,6 @@
 					<table id=hop_table>
 						<thead>
 							<tr>
-								<th></th>
 								<th onclick="b.reverse_arrow(this)" id=name>Name&nbsp;<img src="/static/images/arrow_up.png" id=name_arrow></th>
 								<th onclick="b.reverse_arrow(this)" id=alpha>%&nbsp;AA&nbsp;<img src="/static/images/arrow_up.png" id=alpha_arrow></th>
 								<th onclick="b.reverse_arrow(this)" id=hop_form>Form&nbsp;<img src="/static/images/arrow_up.png" id=hop_form_arrow></th>
@@ -41,7 +40,7 @@
 				</div><br style="clear: both;">
 				<div class=scroller style="border: 0px !important;">
 					<label for=hop_amount>Amount</label> <input type="text" id=hop_amount>
-					<label for=hop_use>Use in</label> <select id=hop_use><option value="0">Mash</option><option value="1">First Wort</option><option value="2">Boil</option><option value="3">Flameout</option><option value="4">Whirlpool</option><option value="5">Dry Hop</option></select>
+					<label for=hop_use>Use in</label> <select id=hop_use><option value="0">Mash</option><option value="1">First Wort</option><option value="2" selected>Boil</option><option value="3">Flameout</option><option value="4">Whirlpool</option><option value="5">Dry Hop</option></select>
 					<label for=hop_time>Time</label> <input type="text" id=hop_time>
 					<input type=button value="Add Hop" onclick="b.add_ingredient('hop')">
 				</div>
@@ -50,7 +49,6 @@
 				<table id=fermentable_table>
 					<thead>
 						<tr>
-							<th></th>
 							<th onclick="b.reverse_arrow(this)" id=name>Name <img src="/static/images/arrow_up.png" id=name_arrow></th>
 							<th onclick="b.reverse_arrow(this)" id=color>Color <img src="/static/images/arrow_up.png" id=color_arrow></th>
 							<th onclick="b.reverse_arrow(this)" id=potential>Potential <img src="/static/images/arrow_up.png" id=potential_arrow></th>
@@ -66,7 +64,6 @@
 				<table id=yeast_table>
 					<thead>
 						<tr>
-							<th></th>
 							<th onclick="b.reverse_arrow(this)" id=yeast_id>Yeast ID <img src="/static/images/arrow_up.png" id=yeast_id_arrow></th>
 							<th onclick="b.reverse_arrow(this)" id=lab>Lab <img src="/static/images/arrow_up.png" id=lab_arrow></th>
 							<th onclick="b.reverse_arrow(this)" id=name>Name <img src="/static/images/arrow_up.png" id=name_arrow></th>					

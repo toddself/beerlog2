@@ -8,6 +8,7 @@ $.extend(Brewery.prototype, {
              'fermentable_table': {'1': 'name', '2': 'color', '3': 'potential', '4': 'max_in_batch', '5': 'must_mash'},
              'yeast_table': {'1': 'yeast_id', '2': 'lab', '3': 'name', '4': 'yeast_type', '5': 'flocc', '6': 'avg_attenuation', '7': 'max_temp'}
     },
+    uses: ['Mash', 'First Wort', 'Boil', 'Flameout', 'Whirlpool', 'Dry Hop'],
     init: function(){
        this.set_fermentation(1);
        $.each($('#browsers').children(), function(index, value){
@@ -58,7 +59,7 @@ $.extend(Brewery.prototype, {
             })
         }
     },
-    append_row: function(data_grid, data_row, selector_type){
+    append_row: function(data_grid, data_row, multiple, checkbox){
         selector = function(id, widget, name){
             var td = this.el('td', 'select'+id);
             var select = this.el('input', 'selector_'+id);
@@ -78,8 +79,11 @@ $.extend(Brewery.prototype, {
             table.find('#'+data_grid+'_blank_list').remove();
             --tr_id;
         }
-        var tr = this.el('tr', data_grid+tr_id);
-        tr.append(selector(tr_id, selector_type, data_grid));
+        var tr = this.el('tr', data_grid+'_'+tr_id);
+        tr.attr('onclick', 'b.select_row(this, '+multiple+', '+checkbox+')');
+        if(checkbox === true){
+            tr.append(selector(tr_id, 'checkbox', data_grid));
+        }
         var data_grid_order = this.orders[data_grid];
         for(var i=1; i<=Object.keys(data_grid_order).length; i++){
             var td = this.el('td', data_grid_order[i]+tr_id);
@@ -115,7 +119,7 @@ $.extend(Brewery.prototype, {
             this[ingredient] = {};
             $.each(ing, function(index, value){
                 this[ingredient][value.name] = value;
-                this.append_row(data_grid, value, 'radio');
+                this.append_row(data_grid, value, false, false);
             }.bind(this));
             var top = $(el).offset().top + $(el).height()+5;
             var left = $(el).offset().left;
@@ -128,9 +132,35 @@ $.extend(Brewery.prototype, {
     },
     add_ingredient: function(ingredient){
         var data_grid = '#'+ingredient+"_table";
-        var radio = data_grid+' input[type=radio]:checked';
-        var row = $(radio).attr('value');
-        var name = $(radio).parent().parent().find('#name'+row).html();
-        console.log(b[ingredient][name])
+        var item_row = $(data_grid+' tr.selected').attr('id')
+        var item_number = item_row[item_row.length-1];
+        var item_name = $('#name'+item_number).html();
+        var item_obj = b[ingredient][item_name];
+        var usage = $('#'+ingredient+'_use').val();
+        var time = $('#'+ingredient+'_time').val();
+        var amount = $('#'+ingredient+'_amount').val();
+        var percentage = this.calculate_percentage(ingredient, amount);
+        var ing_obj = {'ingredient': item_name, 
+                       'type': ingredient,
+                       'use': this.uses[usage],
+                       'percent': percentage,
+                       'time': time,
+                       'amount': amount};        
+        this.append_row('ingredients', ing_obj, true, true);
+    },
+    select_row: function(row, multiple, checkbox){        
+        if($(row).attr('class') === 'selected'){
+            $(row).removeClass('selected');
+        } else {
+            if((multiple === false) && $(row).parent().find('.selected')){
+                $.each($(row).parent().find('.selected'), function(index, value){
+                    $(value).removeClass('selected')
+                })
+            }
+            $(row).addClass('selected');
+        }
+    },
+    calculate_percentage: function(){
+        return '100%';
     }
 }) // 8116921 jose
