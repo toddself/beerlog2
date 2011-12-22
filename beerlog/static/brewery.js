@@ -1,3 +1,28 @@
+// safari you have no fucking bind?
+if (Function.prototype.bind == null) {
+    Function.prototype.bind = (function (slice){
+        // (C) WebReflection - Mit Style License
+        function bind(context) {
+            var self = this; // "trapped" function reference
+            if (1 < arguments.length) {
+                var $arguments = slice.call(arguments, 1);
+                return function () {
+                    return self.apply(
+                        context,
+                        arguments.length ?
+                            $arguments.concat(slice.call(arguments)) :
+                            $arguments
+                    );
+                };
+            }
+            return function () {
+                return arguments.length ? self.apply(context, arguments) : self.call(context);
+            };
+        }
+       return bind;
+    }(Array.prototype.slice));
+}
+
 function dynamicSort(property) {
     return function (a,b) {
         return (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
@@ -159,7 +184,8 @@ $.extend(Brewery.prototype, {
     show_ingredients: function(el){
         var ingredient = $(el).attr('id');
         var bframe = '#'+ingredient+'_browser';
-        $.getJSON('/brewery/ingredients/'+ingredient+'/json/', function(ing){
+        $.getJSON('/brewery/ingredients/'+ingredient+'/json/', 
+        function(ing){
             var data_grid = ingredient+'_table';
             this[ingredient] = {};
             $.each(ing, function(index, value){
@@ -172,7 +198,6 @@ $.extend(Brewery.prototype, {
             $(bframe).css('left', left);
             $(bframe).draggable();
             $(bframe).show();
-
         }.bind(this));
     },
     add_ingredient_to_kind_list: function(ingredient, obj){

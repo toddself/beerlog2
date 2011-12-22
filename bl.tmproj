@@ -40,28 +40,28 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>24</integer>
+				<integer>36</integer>
 				<key>line</key>
-				<integer>142</integer>
+				<integer>183</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>123</integer>
+			<integer>155</integer>
 		</dict>
 		<key>beerlog/templates/edit_recipe.html</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>203</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>92</integer>
+				<integer>183</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>39</integer>
+			<integer>162</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
@@ -73,6 +73,6 @@
 	<key>showFileHierarchyDrawer</key>
 	<false/>
 	<key>windowFrame</key>
-	<string>{{10, 62}, {1333, 808}}</string>
+	<string>{{-5, 0}, {1333, 778}}</string>
 </dict>
 </plist>
