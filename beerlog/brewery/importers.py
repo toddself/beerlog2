@@ -17,6 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from xml.dom import minidom
+import os
 
 from sqlobject import *
 from sqlobject.dberrors import DuplicateEntryError
@@ -26,10 +27,11 @@ from beerlog.brewery.models import Hop, Grain, Extract, HoppedExtract, Yeast,\
                                    Fining, Mineral, Flavor, Spice, Herb,\
                                    Misc, BJCPCategory, BJCPStyle
 from beerlog.brewery.beerutils import sg_from_yield, c2f
+from beerlog.settings import data_dir
 
 def process_bjcp_styles():
     # import the XML
-    styledoc = minidom.parse('/var/www_apps/styleguide2008.xml')
+    styledoc = minidom.parse(os.path.join(data_dir, 'styleguide2008.xml'))
     # generate categories
     for beer_class in styledoc.getElementsByTagName('class'):
         this_class = unicode(beer_class.getAttribute('type'))
@@ -171,7 +173,7 @@ def process_bjcp_styles():
                     abv_high = abv_high)
                     
 def process_bt_database():
-    d = minidom.parse('/var/www_apps/beer_data.xml')
+    d = minidom.parse(os.path.join(data_dir, '/beer_data.xml'))
     #print "adding hops"
     process_hops(d)
     #print "adding fermentables"

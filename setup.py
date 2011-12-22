@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+from beerlog.settings import data_dir
 
 setup(
     name='beerlog',
@@ -15,9 +16,9 @@ setup(
              'beerlog.comment'],
     include_package_data=True,
     zip_safe=False,
-    data_files=[('/var/www_apps/', ['beerlog.wsgi',
-                                    'beer_data.xml',
-                                    'styleguide2008.xml'])],
+    data_files=[(data_dir, ['beerlog.wsgi',
+                            'beer_data.xml',
+                            'styleguide2008.xml'])],
     install_requires=['Flask',
                       'PIL',
                       'WTForms',
