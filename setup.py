@@ -1,4 +1,6 @@
+import platform
 from setuptools import setup, find_packages
+
 # data directory for windows
 if platform.system() == "Windows":
     data_dir = 'c:\\www\\'
