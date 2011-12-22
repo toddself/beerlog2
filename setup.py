@@ -3,7 +3,7 @@ from beerlog.settings import data_dir
 
 setup(
     name='beerlog',
-    version='0.57.9',
+    version='0.57.911',
     long_description=__doc__,
     packages=['beerlog',
              'beerlog.blog',

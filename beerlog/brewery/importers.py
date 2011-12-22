@@ -173,7 +173,7 @@ def process_bjcp_styles():
                     abv_high = abv_high)
                     
 def process_bt_database():
-    d = minidom.parse(os.path.join(data_dir, '/beer_data.xml'))
+    d = minidom.parse(os.path.join(data_dir, 'beer_data.xml'))
     #print "adding hops"
     process_hops(d)
     #print "adding fermentables"
