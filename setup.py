@@ -1,5 +1,9 @@
 from setuptools import setup, find_packages
-from beerlog.settings import data_dir
+# data directory for windows
+if platform.system() == "Windows":
+    data_dir = 'c:\\www\\'
+else:
+    data_dir = '/var/www_apps/'
 
 setup(
     name='beerlog',
