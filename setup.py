@@ -4,8 +4,10 @@ from setuptools import setup, find_packages
 # data directory for windows
 if platform.system() == "Windows":
     data_dir = 'c:\\www\\'
+    fab = ''
 else:
     data_dir = '/var/www_apps/'
+    fab = 'Fabric'
 
 setup(
     name='beerlog',
@@ -31,6 +33,6 @@ setup(
                       'Flask-WTF',
                       'Boto',
                       'SQLObject',
-                      'Fabric',
+                      fab,
                       'python-dateutil==1.5',], 
     )
