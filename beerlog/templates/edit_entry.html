@@ -6,12 +6,18 @@
 
 {% block stylesheet %}
 {{ super() }}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='editor.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='jquery-ui-1.8.16.custom.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='jquery.tagsinput.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='rte.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='timePicker.css') }}">
 {% endblock %}
 
 {% block javascript %}
 {{ super() }}
-<script src="{{ url_for('static', filename='editor.min.js' )}}"></script>
+<script src="{{ url_for('static', filename='jquery.rte.js' )}}"></script>
+<script src="{{ url_for('static', filename='jquery-ui-1.8.16.custom.min.js' )}}"></script>
+<script src="{{ url_for('static', filename='jquery.tagsinput.min.js' )}}"></script>
+<script src="{{ url_for('static', filename='jquery.timePicker.min.js' )}}"></script>
 <script>
 	jQuery(function(){
 		$("#time").timePicker({
