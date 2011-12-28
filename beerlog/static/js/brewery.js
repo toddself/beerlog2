@@ -1,3 +1,14 @@
+$(function(){
+    window.Brewery = Backbone.Model.extend({
+        
+    })
+    
+})
+
+
+
+
+
 // safari you have no fucking bind?
 if (Function.prototype.bind == null) {
     Function.prototype.bind = (function (slice){
@@ -29,7 +40,7 @@ function dynamicSort(property) {
     }
 }
 
-Brewery = function(){
+var Brewery = function(){
     this.init();
 }
 $.extend(Brewery.prototype, {
