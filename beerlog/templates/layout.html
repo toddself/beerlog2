@@ -8,12 +8,20 @@
 	    {% endblock %}
 
 		{% block javascript %}
-		<script src="{{ url_for('static', filename='js/less-1.1.5.min.js') }}"></script>
-		<script src="{{ url_for('static', filename='js/jquery-1.7.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='js/LAB.js') }}"></script>
 		<script>
+		$LAB;
+		.script('js/es5-shim.min.js');
+		.script('/js/less-1.1.5.min.js');
+		.script('/js/jquery-1.7.min.ks');
+		.script('/js/spine.js').wait();
+		.script('/js/local.js');
+		.script('/js/route.js');
+		.script('/js/ajax.js');	
+
 		$().ready(function(){
 			function gen_a(dest, text, cls){
-				a = $('<a>');
+				a = $(document.createElement('a'));
 				a.attr('href', dest)
 				a.attr('class', cls)
 				a.html(text)

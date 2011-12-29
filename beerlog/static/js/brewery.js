@@ -1,3 +1,17 @@
+var Brewery = new Class;
+
+Brewery.extend({
+    
+})
+
+Brewery.include({
+    
+})
+
+
+
+
+
 $(function(){
     window.Brewery = Backbone.Model.extend({
         
