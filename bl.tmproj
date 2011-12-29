@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>beerlog/static/js/class.js</string>
+	<string>beerlog/templates/layout.html</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -35,14 +35,14 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>beerlog/static/js/class.js</key>
+		<key>beerlog/static/js/brewery.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>24</integer>
 				<key>line</key>
-				<integer>19</integer>
+				<integer>31</integer>
 			</dict>
 			<key>columnSelection</key>
 			<false/>
@@ -53,27 +53,72 @@
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>20</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>31</integer>
 			</dict>
 			<key>selectTo</key>
 			<dict>
 				<key>column</key>
+				<integer>29</integer>
+				<key>line</key>
+				<integer>31</integer>
+			</dict>
+		</dict>
+		<key>beerlog/static/js/class.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
 				<integer>1</integer>
 				<key>line</key>
-				<integer>41</integer>
+				<integer>35</integer>
 			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>beerlog/static/js/models/hop.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>34</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>beerlog/templates/layout.html</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>20</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
 		<string>beerlog/static/js/backbone.js</string>
 		<string>beerlog/static/js/class.js</string>
+		<string>beerlog/static/js/brewery.js</string>
+		<string>beerlog/static/js/models/hop.js</string>
+		<string>beerlog/templates/layout.html</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<false/>
 	<key>windowFrame</key>
-	<string>{{15, 48}, {1546, 995}}</string>
+	<string>{{63, 44}, {1546, 995}}</string>
 </dict>
 </plist>
