@@ -89,6 +89,8 @@ url('/brewery/recipe/<recipe_id>/', 'brewery.recipe.views.edit_recipe', methods=
 url('/brewery/recipe/batch/<recipe_id>/', 'brewery.recipe.views.edit_recipe', methods=['POST', 'GET'])
 ## INGREIDENTS
 url('/brewery/ingredients/<ingredient>/json/', 'brewery.ingredients.views.list_ingredients')
+## MODELS
+url('/brewery/models/<model>/json/', 'brewery.recipe.views.pymodel_as_json')
 
 @app.before_request
 def before_request():

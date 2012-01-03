@@ -29,6 +29,10 @@ function dynamicSort(property) {
     }
 }
 
+
+
+
+
 Brewery = function(){
     this.init();
 }
@@ -50,6 +54,10 @@ $.extend(Brewery.prototype, {
                 'liters', 'gal', 'gallon', 'gallons', 'items', 'item'],
     ingredients: [],
     mashes: [],
+    weights: {
+        hop: 0,
+        fermentable: 0
+    },
     init: function(){
        this.set_fermentation(1);
        $.each($('#browsers').children(), function(index, value){
@@ -233,7 +241,7 @@ $.extend(Brewery.prototype, {
         var time_measure = $('#hop_time_measure').val();
         var amount = $('#hop_amount').val();
         var amount_measure = $('#hop_amount_measure').val();
-        var percentage = this.calculate_percentage(ingredient, amount);
+        var percentage = this.calculate_percentage('hop', amount);
         var ing_obj = b.hop[item_name];
         ing_obj['amount'] = amount+' '+this.amounts[amount_measure];
         ing_obj['amount_measure'] = amount_measure;
@@ -244,7 +252,13 @@ $.extend(Brewery.prototype, {
         ing_obj['use'] = this.uses[usage];
         ing_obj['ingredient'] = item_name;
         ing_obj['type'] = "Hop";
-        this.add_ingredient(ing_obj)
+        this.add_ingredient(ing_obj);
+    },
+    recalculate_recipe: function(){
+        
+    },
+    add_fermentable: function(){
+        
     },
     select_row: function(row, multiple, checkbox){        
         if($(row).attr('class') === 'selected'){
@@ -261,10 +275,8 @@ $.extend(Brewery.prototype, {
             }
         }
     },
-    calculate_percentage: function(){
-        return '100%';
+    calculate_percentage: function(ingredient, amount){
+        var total_weight = this.weights[ingredient];
+        return (amount/total_weight);
     },
-    recalculate_recipe: function(){
-        return '';
-    }
 })
