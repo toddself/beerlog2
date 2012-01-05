@@ -11,6 +11,7 @@ from beerlog.blog.forms import EntryForm
 from beerlog.settings import *
 from beerlog.admin.views import require_auth
 from beerlog.comment.models import Comment
+from beerlog.comment.forms import EntryCommentForm
 
 def list_entries(entry_id=None, day=None, month=None, year=None, slug=None):
     entries = None
@@ -49,7 +50,9 @@ def list_entries(entry_id=None, day=None, month=None, year=None, slug=None):
                                        Entry.q.deleted == False)
                                    ).orderBy("-post_on")
 
-    return render_template('list_entries.html', entries=entries)
+    comment_form = EntryCommentForm()
+    return render_template('list_entries.html', data={'entries': entries,
+                                                      'cform': comment_form})
 
 def list_archives():
     year_list = {}

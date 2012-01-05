@@ -1,10 +1,11 @@
 from __future__ import division
 from __future__ import absolute_import
 import re
-
 from datetime import datetime
 
 from sqlobject import *
+
+from beerlog.comment.models import Comment
 
 class Entry(SQLObject):
     title = UnicodeCol(length=255)
@@ -17,14 +18,13 @@ class Entry(SQLObject):
     draft = BoolCol(default=False)
     author = ForeignKey('Users')
     deleted = BoolCol(default=False)
-    comments = RelatedJoin('Comment')
     
     def _set_title(self, value):
         self._SO_set_title(value)
         self._SO_set_slug(get_slug_from_title(value))
         
     def _get_comment_count(self):
-        return len(self.comments)
+        return len(list(Comment.select(Comment.q.object_type=="Entry")))
 
 class Tag(SQLObject):
     name = UnicodeCol(length=255)

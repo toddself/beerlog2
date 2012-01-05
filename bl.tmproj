@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>beerlog/helpers.py</string>
+	<string>beerlog/blog/models.py</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -21,72 +21,56 @@
 	<integer>200</integer>
 	<key>metaData</key>
 	<dict>
-		<key>beerlog/brewery/models.py</key>
+		<key>beerlog/blog/models.py</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>19</integer>
+				<integer>68</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>26</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>78</integer>
+			<integer>0</integer>
 		</dict>
-		<key>beerlog/helpers.py</key>
+		<key>beerlog/blog/views.py</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>75</integer>
 				<key>line</key>
-				<integer>9</integer>
+				<integer>54</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>2</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>40</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>9</integer>
-			</dict>
 		</dict>
-		<key>beerlog/static/js/brewery.js</key>
+		<key>beerlog/templates/list_entries.html</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>36</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>41</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>beerlog/static/js/models.js</key>
+		<key>runserver.py</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>71</integer>
+				<integer>23</integer>
 				<key>line</key>
-				<integer>7</integer>
+				<integer>0</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -96,10 +80,10 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>beerlog/static/js/brewery.js</string>
-		<string>beerlog/static/js/models.js</string>
-		<string>beerlog/brewery/models.py</string>
-		<string>beerlog/helpers.py</string>
+		<string>beerlog/templates/list_entries.html</string>
+		<string>runserver.py</string>
+		<string>beerlog/blog/views.py</string>
+		<string>beerlog/blog/models.py</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<false/>

@@ -8,4 +8,5 @@ class Comment(SQLObject):
     posted_by_email = UnicodeCol(length=255)
     posted_on = DateTimeCol(default=datetime.now())
     ip_address = UnicodeCol(length=15)
-    entry = RelatedJoin('Entry')
+    comment_object = IntCol(default=0)
+    comment_type = UnicodeCol(default=None)

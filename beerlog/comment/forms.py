@@ -8,4 +8,3 @@ class EntryCommentForm(Form):
     posted_by_name = TextField("Name", [Length(min=4, max=128, message="Required")])
     posted_by_email = EmailField("E-Mail", [Email("Invalid e-mail address"),
                                             Required("Required")])
-    entry_id = IntegerField(widget=HiddenInput())

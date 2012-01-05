@@ -68,8 +68,8 @@ url('/entry/edit/', 'blog.views.edit_entry', methods=['POST', 'GET'])
 url('/entry/edit/<entry_id>/', 'blog.views.edit_entry', methods=['POST', 'GET'])
 url('/entry/edit/<entry_id>/delete/', 'blog.views.delete_entry')
 
-# COMMENT VIEWS
-url('/entry/<entry_id>/comment/add/', 'comment.views.add_comment')
+# COMMENT ADDING
+url('/<object_type>/<object_id>/comment/add/', 'comment.views.add_comment')
 
 # IMAGE VIEWS
 url('/image/', 'image.views.list_images')
