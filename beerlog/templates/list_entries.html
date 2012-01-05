@@ -21,24 +21,35 @@
 					{% set lister = joiner(", ") %}
 					<p>File under: {% for tag in entry.tags %}{{ lister() }}<a href="/tag/{{ tag.name }}/">{{ tag.name }}</a>{% endfor %}
 					{% endif %}
-					<p><a href="#" onclick="$('#{{ entry.id }}comments').toggle()">{{ entry.comment_count }} comments</a> </p>
+					<p><a href="#" onclick="$('#{{ entry.id }}comments').toggle()">
+						{% if entry.comment_count == 1%}
+							{{ entry.comment_count }} comment
+						{% else %}
+							{{ entry.comment_count }} comments
+						{% endif %}						
+						</a> </p>
 				</article>
 				<div class="comments" id="{{ entry.id }}comments">
 					<h2>Comments</h2>
 					<ul>
 					{% for comment in entry.comments %}
-						<li>comment.body
+						<li>
+							<cite>{{ comment.posted_by_name }}</cite> said at <time pubdate>{{ comment.posted_on|dateformat }}</time>
+							<blockquote>{{ comment.body }}</blockquote>
 					{% else %}
 						<li>No comments yet
 					{% endfor %}
 					</ul>
-					<form method="{{ url_for('add_comment', object_id=entry.id, object_type='Entry') }}" method="post">
-						{{ data.cform.csrf }}
+					<form action="{{ url_for('add_comment', object_id=entry.id, object_type='Entry') }}" method="POST">
 						<dl>
-							{{ render_field(data.cform.posted_by_name) }}
-							{{ render_field(data.cform.posted_by_email) }}
-							{{ render_field(data.cform.body) }}
+							{{ render_field(data.cform.posted_by_name, size=40) }}
+							{{ render_field(data.cform.posted_by_email, size=40) }}
+							{{ render_field(data.cform.body, rows=10, cols=40) }}
+							<div style="width: 40%;">{{ render_field(data.cform.recaptcha) }}</div>	
 						</dl>
+						
+						{{ data.cform.csrf }}
+						<input type=hidden value="/entry/{{ entry.id }}/" name=return_to>
 						<input type=submit value=Post>
 					</form>
 				</div>
