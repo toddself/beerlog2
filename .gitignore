@@ -1,3 +1,4 @@
 local_settings.py
 settings.py
 env
+*pyc
