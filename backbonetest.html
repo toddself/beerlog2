@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+		<script src="http://documentcloud.github.com/underscore/underscore-min.js"></script>
+		<script src="http://documentcloud.github.com/backbone/backbone-min.js"></script>
+
+	</head>
+	<body>
+		title: <input type="text" id="title"><br>
+		content: <textarea id="content"></textarea><br>
+		<button id="add">Add blog entry</button>
+		<ul></ul>
+		<script type="text/template" id="tmpl_entry">
+			<article>
+				<h1><%= title %></h1>
+				<cite><%= author %></cite><br>
+				<time pubdate><%= pub_date %></time>
+				<p><%= content %></p>
+			</article>
+		</script>
+		
+		<script>
+		(function($){
+			Backbone.sync = function(method, model, success, error){
+				success();
+			}
+			
+			var Entry = Backbone.Model.extend({
+				defaults: {
+					author: "Todd",
+					pub_date: new Date(),
+					content: "",
+					title: "",
+				}
+			});
+			
+			var List = Backbone.Collection.extend({
+				model: Entry
+			});
+						
+			var EntryView = Backbone.View.extend({
+				tagName: 'li',
+
+				initialize: function(){
+					_.bindAll(this, 'render', 'unrender')
+					this.model.bind('change', this.render); // if the item that is attached through this instance of this view is changed, recall render
+					this.model.bind('remove', this.unrender); // if the item that is attached through this instance of this view is deleted, call remove
+				},
+
+				render: function(){
+					var tmpl = _.template($("#tmpl_entry").html());
+					$(this.el).html(tmpl(this.model.toJSON()));
+					return this;
+				},
+				
+				unrender: function(){
+					$(this.el).remove(); // this is a jquery call
+				},
+								
+				remove: function(){
+					this.model.destroy();
+				}
+			});
+			
+			var BlogView = Backbone.View.extend({
+				el: $('body'),
+				events: {
+					'click button#add': 'addItem'
+				},
+				
+				initialize: function(){
+					_.bindAll(this, 'render', 'addItem', 'appendItem');
+					
+					this.collection = new List();
+					this.collection.bind('add', this.appendItem); // this makes it so that whenever 'add' is called on the collection, appendItem is subsequently called
+
+					this.counter = 0;
+					this.render();
+				},
+				
+				render: function(){
+					var self = this;
+					_(this.collection.models).each(function(item){ // using underscore, iterate through the models in the collection, calling appendItem on each one
+						self.appendItem(item);
+					}, this);
+				},
+				
+				addItem: function(){
+					this.counter++;
+					var title = $("#title").val();
+					var content = $("#content").val();
+					var entry = new Entry({title: title, content: content});
+					this.collection.add(entry);
+				},
+				
+				appendItem: function(entry){
+					var entryView = new EntryView({
+						model: entry
+					});
+					$('ul', this.el).append(entryView.render().el); // using the view for the item which returns itself, append the element we created to the dom
+				}
+			});
+			
+			var blogView = new BlogView();
+		})(jQuery);
+		</script>
+	</body>
+</html>
