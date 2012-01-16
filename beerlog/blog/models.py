@@ -24,7 +24,10 @@ class Entry(SQLObject):
         self._SO_set_slug(get_slug_from_title(value))
         
     def _get_comment_count(self):
-        return len(list(Comment.select(Comment.q.object_type=="Entry")))
+        return len(list(Comment.select(AND(Comment.q.comment_type=="Entry", Comment.q.comment_object==self.id))))
+        
+    def _get_comments(self):
+        return list(Comment.select(AND(Comment.q.comment_type=="Entry", Comment.q.comment_object==self.id)))
 
 class Tag(SQLObject):
     name = UnicodeCol(length=255)

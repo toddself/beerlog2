@@ -39,7 +39,7 @@ try:
     app.static_folder = app.config['%s_STATIC_FOLDER' % prefix]
 except KeyError:
     pass
-
+app.jinja_options = ({'extensions': ['jinja2.ext.i18n']})
 app.jinja_env.filters['dateformat'] = format_time
 
 def url(url_rule, import_name, **options):
@@ -69,7 +69,7 @@ url('/entry/edit/<entry_id>/', 'blog.views.edit_entry', methods=['POST', 'GET'])
 url('/entry/edit/<entry_id>/delete/', 'blog.views.delete_entry')
 
 # COMMENT ADDING
-url('/<object_type>/<object_id>/comment/add/', 'comment.views.add_comment')
+url('/<object_type>/<object_id>/comment/add/', 'comment.views.add_comment', methods=['POST', 'GET'])
 
 # IMAGE VIEWS
 url('/image/', 'image.views.list_images')
@@ -101,15 +101,11 @@ def teardown_request(exception):
     pass
 
 def connect_db(config):
-    init = False
-    if not os.path.exists(config['DB_NAME']):
-        init = True
     connection = connectionForURI("%s%s%s" % (config['DB_DRIVER'],
                                               config['DB_PROTOCOL'],
                                               config['DB_NAME']))
     sqlhub.processConnection = connection
-    if init:
-        init_db(config)
+    init_db(config)
 
 def init_db(config):
     tables = [Entry, Users, Tag, Image, Hop, Grain, Extract, HoppedExtract,
@@ -122,20 +118,20 @@ def init_db(config):
             table.createTable()
         except OperationalError:
             pass
-    
-
-    adef = config['ADMIN_USERNAME']
-    admin = Users(email=adef, first_name=adef, last_name=adef, alias=adef)
-    admin.set_pass(config['PASSWORD_SALT'], config['ADMIN_PASSWORD'])
-    admin.admin = True
-    # uncomment when you're sorted out your little permissions thingy
-    # for role in config['SYSTEM_ROLES']:
-    #     r = Role(name=role)
-    # admin.addRole(config['SYSTEM_ROLES'].index(config['ADMIN']))
-
-
-    process_bjcp_styles()
-    process_bt_database()
+        else: # NEED TO FIX THIS
+            if table.__name__ == 'Users':
+                adef = config['ADMIN_USERNAME']
+                admin = Users(email=adef, first_name=adef, last_name=adef, alias=adef)
+                admin.set_pass(config['PASSWORD_SALT'], config['ADMIN_PASSWORD'])
+                admin.admin = True
+                # uncomment when you're sorted out your little permissions thingy
+                # for role in config['SYSTEM_ROLES']:
+                #     r = Role(name=role)
+                # admin.addRole(config['SYSTEM_ROLES'].index(config['ADMIN']))
+            if table.__name__ == 'BJCPCategory':
+                process_bjcp_styles()
+            if table.__name__ == 'Inventory':
+                process_bt_database()
 
 if __name__ == '__main__':
     app.run()

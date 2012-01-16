@@ -1,11 +1,37 @@
 {% from "_formhelper.html" import render_field %}
 {% extends "layout.html" %}
+
+{% block stylesheet %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jquery-ui-1.8.16.custom.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jquery.tagsinput.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/rte.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/timePicker.css') }}">
+{% endblock %}
+
 {% block javascript %}
 {{ super() }}
+<script src="{{ url_for('static', filename='js/jquery.rte.js' )}}"></script>
+<script src="{{ url_for('static', filename='js/jquery-ui-1.8.16.custom.min.js' )}}"></script>
+<script src="{{ url_for('static', filename='js/jquery.tagsinput.min.js' )}}"></script>
+<script src="{{ url_for('static', filename='js/jquery.timePicker.min.js' )}}"></script>
 <script>
 	$().ready(function(){
 		$('.comments').hide()
 	});
+	
+	function edit_entry(entry_id){
+		var title = $('#title_'+entry_id);
+		var titleInput = $('<input type="text>"').attr({
+			name: 'title',
+			id: 'title',
+			value: title.children().html()});
+		titleInput.blur(function(){
+			title.children().html(this.value);
+		}).bind(this);
+		title.children().replaceWith(titleInput);
+	}
+	
 </script>
 {% endblock %}
 {% block body %}
@@ -13,32 +39,49 @@
 	<ul>
 		{% for entry in data.entries %}
 			<li>
-				<article>
-					<h2><a href="{{ url_for('list_entries', entry_id=entry.id) }}">{{ entry.title }}</a></h2>
-					<p><time pubdate>{{ entry.post_on|dateformat }}</time> | posted by {{ entry.author.alias }} {% if session.user_id == entry.author.id %} | <a href="{{ url_for('edit_entry', entry_id=entry.id )}}">edit post</a> {% endif %}
-					<p>{{ entry.body|safe }}				
-					{% if entry.tags %}
-					{% set lister = joiner(", ") %}
-					<p>File under: {% for tag in entry.tags %}{{ lister() }}<a href="/tag/{{ tag.name }}/">{{ tag.name }}</a>{% endfor %}
-					{% endif %}
-					<p><a href="#" onclick="$('#{{ entry.id }}comments').toggle()">{{ entry.comment_count }} comments</a> </p>
+				<article id="article_{{ entry.id }}">
+					<h2 id="title_{{ entry.id }}">
+						<a href="{{ url_for('list_entries', entry_id=entry.id) }}">{{ entry.title }}</a>
+					</h2>
+					<p>
+						<time pubdate>{{ entry.post_on|dateformat }}</time> | posted by {{ entry.author.alias }} {% if session.user_id == entry.author.id %} | <a href="#" onclick="edit_entry(this)">edit post</a> {% endif %}
+					<p id="body_{{ entry.id }}">
+						{{ entry.body|safe }}				
+					<p id="tags_{{ entry.id }}">
+						{% if entry.tags %}
+						{% set lister = joiner(", ") %}
+						File under: {% for tag in entry.tags %}{{ lister() }}<a href="/tag/{{ tag.name }}/">{{ tag.name }}</a>{% endfor %}
+						{% endif %}
+					<p>
+						<a href="#" onclick="$('#{{ entry.id }}comments').toggle()">
+						{% if entry.comment_count == 1%}
+							{{ entry.comment_count }} comment
+						{% else %}
+							{{ entry.comment_count }} comments
+						{% endif %}						
+						</a> </p>
 				</article>
 				<div class="comments" id="{{ entry.id }}comments">
 					<h2>Comments</h2>
 					<ul>
 					{% for comment in entry.comments %}
-						<li>comment.body
+						<li>
+							<cite>{{ comment.posted_by_name }}</cite> said at <time pubdate>{{ comment.posted_on|dateformat }}</time>
+							<blockquote>{{ comment.body }}</blockquote>
 					{% else %}
 						<li>No comments yet
 					{% endfor %}
 					</ul>
-					<form method="{{ url_for('add_comment', object_id=entry.id, object_type='Entry') }}" method="post">
-						{{ data.cform.csrf }}
+					<form action="{{ url_for('add_comment', object_id=entry.id, object_type='Entry') }}" method="POST">
 						<dl>
-							{{ render_field(data.cform.posted_by_name) }}
-							{{ render_field(data.cform.posted_by_email) }}
-							{{ render_field(data.cform.body) }}
+							{{ render_field(data.cform.posted_by_name, size=40) }}
+							{{ render_field(data.cform.posted_by_email, size=40) }}
+							{{ render_field(data.cform.body, rows=10, cols=40) }}
+							<div style="width: 40%;">{{ render_field(data.cform.recaptcha) }}</div>	
 						</dl>
+						
+						{{ data.cform.csrf }}
+						<input type=hidden value="/entry/{{ entry.id }}/" name=return_to>
 						<input type=submit value=Post>
 					</form>
 				</div>

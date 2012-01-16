@@ -11,7 +11,7 @@ else:
 
 setup(
     name='beerlog',
-    version='0.57.911',
+    version='0.58.1',
     long_description=__doc__,
     packages=['beerlog',
              'beerlog.blog',

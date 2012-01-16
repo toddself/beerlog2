@@ -2,7 +2,8 @@
 {% extends "layout.html" %}
 {% block body %}
 <section id=content>
-	<form action="{{ url_for('edit_user', user_id=data.user.id) }}" method="post">
+
+	<form action="{% if data.user.id %}{{ url_for('edit_user', user_id=data.user.id) }}{% else %}{{ url_for('create_user') }}{% endif %}" method="post">
 		<h2>{% if data.user.id is defined %}Edit{% else %}Create{% endif %} User</h2>
 		<dl>
 			{{ data.form.csrf }}

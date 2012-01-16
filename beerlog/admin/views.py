@@ -153,10 +153,10 @@ def create_user():
                      last_name = user_form.last_name.data,
                      email = user_form.email.data,
                      password = generate_password(user_form.password.data),
-                     avatar = user_form.avatar.data)
-        if user_form.alias.data:
+                     alias = user_form.alias.data)
+        if user_form.avatar.data:
             i = Image(url=user_form.alias.data)
-            user.alias = i
+            user.avatar = i
         flash("%s %s has been created" % (user.first_name, user.last_name))
         return redirect(url_for('list_users'))
     else:
