@@ -4,11 +4,11 @@
 		<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 		<script src="http://documentcloud.github.com/underscore/underscore-min.js"></script>
 		<script src="http://documentcloud.github.com/backbone/backbone-min.js"></script>
-
 	</head>
 	<body>
 		title: <input type="text" id="title"><br>
 		content: <textarea id="content"></textarea><br>
+		tags (separated by a ','): <input type="text" id="tags"><br>
 		<button id="add">Add blog entry</button>
 		<ul></ul>
 		<script type="text/template" id="tmpl_entry">
@@ -17,15 +17,62 @@
 				<cite><%= author %></cite><br>
 				<time pubdate><%= pub_date %></time>
 				<p><%= content %></p>
+				Tags: <ul class="tags"></ul>
 				<p><button class="delete" style="color: red;">[delete]</button></p>
 			</article>
 		</script>
 		
+		<script type="text/template" id="tmpl_tag">
+			<%= name %><button class="tag_delete">[delete]</button>
+		</script>
+		
 		<script>
-		(function($){
 			Backbone.sync = function(method, model, success, error){
 				success();
 			}
+			
+			var Tag = Backbone.Model.extend({
+				defaults: {
+					name: ''
+				},
+				validate: function(atts){
+					if(!atts.name || atts.name.length < 2){
+						return "You must provide a name that's longer than 2 characters";
+					}
+				}
+			});
+			
+			var TagList = Backbone.Collection.extend({
+				model: Tag
+			})
+			
+			var TagView = Backbone.View.extend({
+				tagName: 'li',
+				
+				events: {
+					'click button.tag_delete': 'remove'
+				},
+				
+				initialize: function(){
+					_.bindAll(this, 'render', 'unrender');
+					this.model.bind('change', this.render);
+					this.model.bind('remove', this.unrender);
+				},
+				
+				render: function(){
+					var tmpl = _.template($("#tmpl_tag").html());
+					$(this.el).html(tmpl(this.model.toJSON()));
+					return this;
+				},
+				
+				unrender: function(){
+					$(this.el).remove();
+				},
+				
+				remove: function(){
+					this.model.destroy();
+				}
+			});
 			
 			var Entry = Backbone.Model.extend({
 				defaults: {
@@ -33,10 +80,22 @@
 					pub_date: new Date(),
 					content: "",
 					title: "",
+					tags: new TagList()
+				},
+				add_tag: function(tag){
+					var tag_collection = this.get('tags');
+					tag_collection.add({name: tag});
+					this.set({tags: tag_collection});
+				},
+				remove_tag: function(tag){
+					tag.destroy();
+				},
+				tags: function(){
+					return this.get('tags').models;
 				}
 			});
 			
-			var List = Backbone.Collection.extend({
+			var EntryList = Backbone.Collection.extend({
 				model: Entry
 			});
 						
@@ -54,8 +113,13 @@
 				},
 
 				render: function(){
+					var self = this
 					var tmpl = _.template($("#tmpl_entry").html());
 					$(this.el).html(tmpl(this.model.toJSON()));
+ 					_(this.model.tags()).each(_.bind(function(tag){
+						var tagView = new TagView({model: tag});
+						$('ul.tags', self.el).append(tagView.render().el)
+					}), self);
 					return this;
 				},
 				
@@ -78,7 +142,7 @@
 				initialize: function(){
 					_.bindAll(this, 'render', 'addItem', 'appendItem');
 					
-					this.collection = new List();
+					this.collection = new EntryList();
 					this.collection.bind('add', this.appendItem); // this makes it so that whenever 'add' is called on the collection, appendItem is subsequently called
 
 					this.counter = 0;
@@ -97,6 +161,10 @@
 					var title = $("#title").val();
 					var content = $("#content").val();
 					var entry = new Entry({title: title, content: content});
+					var tag_list = entry.get('tags');
+					_($("#tags").val().split(',')).each(_.bind(function(tag){
+						tag_list.add({name: tag});
+					}), tag_list);
 					this.collection.add(entry);
 				},
 				
@@ -109,7 +177,6 @@
 			});
 			
 			var blogView = new BlogView();
-		})(jQuery);
 		</script>
 	</body>
 </html>
