@@ -17,6 +17,7 @@
 				<cite><%= author %></cite><br>
 				<time pubdate><%= pub_date %></time>
 				<p><%= content %></p>
+				<p><button class="delete" style="color: red;">[delete]</button></p>
 			</article>
 		</script>
 		
@@ -42,6 +43,10 @@
 			var EntryView = Backbone.View.extend({
 				tagName: 'li',
 
+				events: {
+					"click button.delete": "remove"
+				},
+
 				initialize: function(){
 					_.bindAll(this, 'render', 'unrender')
 					this.model.bind('change', this.render); // if the item that is attached through this instance of this view is changed, recall render
@@ -65,8 +70,9 @@
 			
 			var BlogView = Backbone.View.extend({
 				el: $('body'),
+				
 				events: {
-					'click button#add': 'addItem'
+					'click button#add': 'addItem',
 				},
 				
 				initialize: function(){
